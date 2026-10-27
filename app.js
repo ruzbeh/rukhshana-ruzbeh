@@ -33,7 +33,12 @@
   if (guest) {
     $('env-for').hidden = false;
     $('env-name').textContent = guest;
-    $('env-name').classList.toggle('is-long', guest.length > 16);
+    $('env-name').classList.add('is-guest');
+    $('env-name').classList.toggle('is-long', guest.length > 18);
+    $('p-guest').textContent = guest;
+    $('p-guest').classList.add('is-named');
+    $('p-guest').classList.toggle('is-long', guest.length > 18);
+    document.title = `For ${guest} · ${document.title}`;
     envelope.setAttribute('aria-label', `Open the invitation for ${guest}`);
     $('rsvp-name').value = guest;
   }

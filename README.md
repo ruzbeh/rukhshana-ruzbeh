@@ -17,7 +17,7 @@ Add the guest or family name to the link:
 
     https://your-host/?guest=Meher%20%26%20family
 
-The envelope reads "For Meher & family" and the RSVP name is prefilled.
+The envelope reads "Specially for Meher & family", page 1 reads "invite Meher & family to share their joy", and the RSVP name is prefilled.
 
 ## RSVP delivery
 
