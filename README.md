@@ -41,7 +41,7 @@ The portrait slots appear automatically when a file exists.
 - `index.html`, `styles.css`, `app.js` — the whole card
 - `assets/card-1..4.webp` — the printed card pages (PNG originals alongside)
 - `assets/opening.mp4` — 9.4 s opening film, cut from the watercolor car clips
-- `assets/our-story-wc.mp4`, `assets/our-story-mobile-wc.mp4` — the full film, landscape and portrait
-- `assets/score.m4a` — the score played during the opening
+- `assets/our-story-wc3.mp4`, `assets/our-story-mobile-wc3.mp4` — the full film, landscape and portrait
+- `assets/score.m4a` — bright piano-led score (`wedding-film/motion-v3/music/bright-piano-v3g.wav`, rebuild with `wan-film/scripts/swap_score.py`), plays from the envelope tap through the film; the films carry the same cue as their fallback audio
 - `assets/wedding.ics` — calendar file
 - `assets/fonts/` — Great Vibes and Libre Baskerville (OFL licences included)

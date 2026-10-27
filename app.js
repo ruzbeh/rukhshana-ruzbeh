@@ -169,7 +169,7 @@
 
   function chooseStoryLayout() {
     const portrait = window.innerHeight >= window.innerWidth;
-    const wanted = portrait ? 'assets/our-story-mobile-wc2.mp4' : 'assets/our-story-wc2.mp4';
+    const wanted = portrait ? 'assets/our-story-mobile-wc3.mp4' : 'assets/our-story-wc3.mp4';
     filmScreen.dataset.layout = portrait ? 'portrait' : 'landscape';
     storyVideo.poster = portrait ? 'assets/story-mobile-poster-wc2.webp' : 'assets/story-poster-wc2.webp';
     if (storySource.getAttribute('src') !== wanted && storyVideo.paused) {
