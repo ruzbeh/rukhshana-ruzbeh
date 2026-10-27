@@ -117,8 +117,8 @@ h1,h2,h3,p,figure,ul{margin:0}
 .flap-face--front svg{position:absolute;inset:0;width:100%;height:100%}
 .flap-face--back{transform:rotateX(180deg);background:#efd3cb url("assets/art/liner.webp") center top/cover no-repeat}
 .flap-face--back::after{content:"";position:absolute;inset:0;box-shadow:inset 0 -18px 24px rgba(120,60,60,.18)}
-.env-seal{position:absolute;left:50%;top:48%;z-index:8;width:31%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 36% 30%,#f2dba4 0,#d2a85c 42%,#b58a44 70%,#9a7230 100%);box-shadow:0 4px 10px rgba(90,60,20,.38),inset 0 0 0 2px rgba(255,238,195,.6),inset 0 0 0 6px rgba(150,110,45,.28),inset 0 -6px 10px rgba(120,80,20,.25);will-change:transform,opacity}
-.env-seal img{width:72%;height:auto;filter:brightness(.72) sepia(.2) drop-shadow(0 1px 0 rgba(255,240,200,.5));mix-blend-mode:multiply}
+.env-seal{position:absolute;left:50%;top:46.5%;z-index:8;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);display:block;will-change:transform,opacity}
+.env-seal img{display:block;width:100%;height:100%;filter:drop-shadow(0 1px 1px rgba(90,55,20,.45)) drop-shadow(0 5px 9px rgba(90,55,20,.3))}
 .env-to{position:absolute;left:8%;right:8%;top:64%;bottom:4%;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4cqw}
 .env-for{font-size:3.4cqw;margin:0;color:#8a6f62}
 .env-name{font-family:var(--script);font-size:9cqw;line-height:1.1;color:var(--ink);overflow-wrap:anywhere;max-width:100%}
