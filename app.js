@@ -196,27 +196,52 @@
     }
   }
 
-  // ---------- hummingbird ----------
-  function flyBird() {
-    const bird = $('bird');
+  // ---------- hummingbirds ----------
+  const flock = $('flock');
+  // the lead bird carries the sprig; the followers are smaller, further back, and out of step with each other
+  const flockPlan = [
+    {lead: true, size: 1, dy: 0, swoop: 1, delay: 0, flap: 85, duration: 3400, bob: 5, bobPeriod: 420, alpha: 1},
+    {size: 0.56, dy: -0.09, swoop: 1.2, delay: 220, flap: 72, duration: 3650, bob: 4, bobPeriod: 360, alpha: 0.95},
+    {size: 0.42, dy: 0.11, swoop: 0.8, delay: 480, flap: 96, duration: 3850, bob: 3, bobPeriod: 470, alpha: 0.85},
+    {size: 0.33, dy: -0.17, swoop: 1.35, delay: 700, flap: 66, duration: 3750, bob: 3, bobPeriod: 330, alpha: 0.72, far: true},
+    {size: 0.47, dy: 0.03, swoop: 0.9, delay: 950, flap: 80, duration: 3500, bob: 4, bobPeriod: 400, alpha: 0.9}
+  ];
+  const birds = flockPlan.map(plan => {
+    const bird = document.createElement('div');
+    bird.className = `bird${plan.lead ? ' bird--lead' : ''}${plan.far ? ' bird--far' : ''}`;
+    bird.style.setProperty('--flap', `${plan.flap}ms`);
+    bird.style.setProperty('--phase', `${-Math.round(Math.random() * plan.flap)}ms`);
+    bird.style.setProperty('--sway', `${plan.lead ? 1.5 : 2.5}deg`);
+    bird.innerHTML = `<img class="bird-body" src="assets/art/${plan.lead ? 'hb-body' : 'hb-body-plain'}.webp" alt="" draggable="false">` +
+      '<img class="bird-wing" src="assets/art/hb-wing.webp" alt="" draggable="false">' +
+      '<img class="bird-wing bird-wing--blur" src="assets/art/hb-wing.webp" alt="" draggable="false">';
+    flock.appendChild(bird);
+    return {element: bird, plan};
+  });
+
+  function flyFlock() {
     const width = sealed.clientWidth;
     const height = sealed.clientHeight;
-    const birdWidth = bird.getBoundingClientRect().width || 140;
-    const y = height * 0.5;
-    // the bird is drawn facing left, so it enters from the right, swoops close past the envelope, climbs away top-left
-    const hover = (x, yy, rot, scale) => `translate(${x}px, ${yy}px) rotate(${rot}deg) scale(${scale})`;
-    animate(bird, [
-      {opacity: 0, transform: hover(width + 20, y + height * 0.02, 6, 0.5)},
-      {opacity: 1, transform: hover(width * 0.78, y - height * 0.02, 10, 0.62), offset: 0.12},
-      {opacity: 1, transform: hover(width * 0.6, y - height * 0.1, 4, 0.8), offset: 0.3},
-      {opacity: 1, transform: hover(width * 0.42, y - height * 0.16, -2, 1), offset: 0.48},
-      {opacity: 1, transform: hover(width * 0.24, y - height * 0.2, 0, 1.12), offset: 0.62},
-      {opacity: 1, transform: hover(width * 0.06, y - height * 0.3, 9, 1.08), offset: 0.78},
-      {opacity: 1, transform: hover(-width * 0.1, y - height * 0.44, 16, 0.95), offset: 0.9},
-      {opacity: 0, transform: hover(-birdWidth - 80, y - height * 0.6, 22, 0.8)}
-    ], {duration: 3400, easing: 'cubic-bezier(.35,.05,.5,.95)'});
-    // hover bob, like a real hummingbird holding position between beats
-    animate(bird, [{marginTop: '0px'}, {marginTop: '-5px'}, {marginTop: '0px'}], {duration: 420, iterations: 8, easing: 'ease-in-out', composite: 'add'});
+    const baseWidth = birds[0].element.getBoundingClientRect().width || 140;
+    // the birds are drawn facing left, so they enter from the right, swoop close past the envelope, climb away top-left
+    birds.forEach(({element, plan}) => {
+      const y = height * (0.5 + plan.dy);
+      const lift = height * plan.swoop;
+      const hover = (x, yy, rot, scale) => `translate(${x}px, ${yy}px) rotate(${rot}deg) scale(${scale * plan.size})`;
+      animate(element, [
+        {opacity: 0, transform: hover(width + 20, y + lift * 0.02, 6, 0.5)},
+        {opacity: plan.alpha, transform: hover(width * 0.78, y - lift * 0.02, 10, 0.62), offset: 0.12},
+        {opacity: plan.alpha, transform: hover(width * 0.6, y - lift * 0.1, 4, 0.8), offset: 0.3},
+        {opacity: plan.alpha, transform: hover(width * 0.42, y - lift * 0.16, -2, 1), offset: 0.48},
+        {opacity: plan.alpha, transform: hover(width * 0.24, y - lift * 0.2, 0, 1.12), offset: 0.62},
+        {opacity: plan.alpha, transform: hover(width * 0.06, y - lift * 0.3, 9, 1.08), offset: 0.78},
+        {opacity: plan.alpha, transform: hover(-width * 0.1, y - lift * 0.44, 16, 0.95), offset: 0.9},
+        {opacity: 0, transform: hover(-baseWidth - 80, y - lift * 0.6, 22, 0.8)}
+      ], {duration: plan.duration, delay: plan.delay, easing: 'cubic-bezier(.35,.05,.5,.95)'});
+      // hover bob, like a real hummingbird holding position between beats; each bird on its own rhythm
+      animate(element, [{marginTop: '0px'}, {marginTop: `${-plan.bob}px`}, {marginTop: '0px'}],
+        {duration: plan.bobPeriod, delay: plan.delay, iterations: Math.round(plan.duration / plan.bobPeriod), easing: 'ease-in-out', composite: 'add'});
+    });
   }
 
   // ---------- opening ----------
@@ -265,7 +290,7 @@
         {opacity: 0.32, transform: 'translate(-50%,-56%) scale(1)', offset: 0.4},
         {opacity: 0, transform: 'translate(-50%,-60%) scale(1.25)'}
       ], {duration: 2600, easing: 'ease-in-out'});
-      flyBird();
+      flyFlock();
       await wait(400);
 
       const envRect = envelope.getBoundingClientRect();
@@ -413,7 +438,7 @@
   // ---------- close: fold the card back into its envelope ----------
   function resetEnvelope() {
     const flap = $('env-flap'), letter = $('env-letter'), seal = $('env-seal');
-    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), $('bird'), ...sealedLayers].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
+    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), ...birds.map(bird => bird.element), ...sealedLayers].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
     envWrap.style.transform = '';
     sealedLayers.forEach(layer => { layer.style.transform = ''; });
     flap.style.visibility = '';

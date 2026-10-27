@@ -17,8 +17,8 @@
   <link rel="preload" href="assets/fonts/PinyonScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/card-1.webp" as="image">
-  <link rel="stylesheet" href="styles.css?v=17">
-  <script src="app.js?v=17" defer></script>
+  <link rel="stylesheet" href="styles.css?v=19">
+  <script src="app.js?v=19" defer></script>
 </head>
 <body class="is-sealed">
 
@@ -42,7 +42,7 @@
     <header class="sealed-head" id="sealed-head" data-depth="0.2">
       <img class="sealed-emblem" src="assets/art/emblem-relief.webp" alt="">
       <p class="caps">Together with our families</p>
-      <img class="sealed-names" src="assets/art/names-block.webp" alt="Rukhshana with Ruzbeh">
+      <img class="sealed-names" src="assets/art/names-block.webp?v=18" alt="Rukhshana with Ruzbeh">
       <p class="caps sealed-date">Friday · 26 February 2027 · Mumbai</p>
     </header>
 
@@ -74,11 +74,7 @@
 
     <p class="tap-hint" id="tap-hint">Tap to open</p>
     <div class="petals petals--near" id="petals-near" aria-hidden="true"></div>
-    <div class="bird" id="bird" aria-hidden="true">
-      <img class="bird-body" src="assets/art/hb-body.webp" alt="" draggable="false">
-      <img class="bird-wing" src="assets/art/hb-wing.webp" alt="" draggable="false">
-      <img class="bird-wing bird-wing--blur" src="assets/art/hb-wing.webp" alt="" draggable="false">
-    </div>
+    <div class="flock" id="flock" aria-hidden="true"></div>
   </div>
 
   <div class="film-screen" id="film-screen" hidden>
@@ -218,7 +214,7 @@
     </div>
   </main>
 
-  <audio id="score" src="assets/score.m4a?v=16" preload="auto"></audio>
+  <audio id="score" src="assets/score.m4a?v=15" preload="auto"></audio>
   <div class="sr-only" id="live" aria-live="polite"></div>
 </body>
 </html>

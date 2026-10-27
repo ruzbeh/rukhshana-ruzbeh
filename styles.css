@@ -73,9 +73,9 @@ h1,h2,h3,p,figure,ul{margin:0}
 .sealed-head{position:relative;z-index:2;transition:opacity .6s ease;will-change:transform;display:flex;flex-direction:column;align-items:center}
 .sealed-emblem{width:clamp(86px,26vw,128px);height:auto;margin-bottom:10px;filter:drop-shadow(0 6px 10px rgba(120,80,20,.18))}
 .sealed-names{width:min(66vw,300px);height:auto;margin:2px 0 6px}
-.sealed-date{margin:0}
 @media (max-width:400px){.sealed-head .caps{letter-spacing:.18em}}
 @media (max-width:340px){.sealed-head .caps{font-size:12px;letter-spacing:.12em}}
+.sealed-head .sealed-date{margin:0;font-size:clamp(12.5px,4vw,17px);letter-spacing:.12em;white-space:nowrap;font-variant-numeric:lining-nums;color:#5a3d15;text-shadow:0 1px 0 rgba(255,250,246,.7)}
 .petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .petals--far{z-index:1}
 .petals--near{z-index:6}
@@ -131,11 +131,16 @@ h1,h2,h3,p,figure,ul{margin:0}
 .tap-hint.is-hidden{animation:none;opacity:0}
 @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
 
-.bird{position:absolute;left:0;top:0;z-index:60;width:clamp(110px,32vw,190px);aspect-ratio:178/172;opacity:0;pointer-events:none;will-change:transform;filter:drop-shadow(0 10px 14px rgba(80,40,70,.3))}
+.flock{position:absolute;inset:0;z-index:60;pointer-events:none}
+.bird{position:absolute;left:0;top:0;width:clamp(110px,32vw,190px);aspect-ratio:178/172;opacity:0;pointer-events:none;will-change:transform;--flap:.085s;--phase:0s;--sway:2deg}
+.bird--lead{filter:drop-shadow(0 10px 14px rgba(80,40,70,.3))}
+.bird--far{filter:blur(.6px)}
 .bird img{position:absolute;inset:0;width:100%;height:100%}
-.bird-wing{transform-origin:57% 50%;animation:flap .085s cubic-bezier(.45,0,.55,1) infinite alternate}
-.bird-wing--blur{opacity:.45;filter:blur(1.5px);animation-delay:-.04s}
+.bird-body{transform-origin:62% 56%;animation:sway calc(var(--flap) * 7) ease-in-out var(--phase) infinite alternate}
+.bird-wing{transform-origin:57% 50%;animation:flap var(--flap) cubic-bezier(.45,0,.55,1) var(--phase) infinite alternate}
+.bird-wing--blur{opacity:.45;filter:blur(1.5px);animation-delay:calc(var(--phase) - var(--flap) / 2)}
 @keyframes flap{from{transform:rotate(-26deg) scaleY(1.02)}to{transform:rotate(22deg) scaleY(.82)}}
+@keyframes sway{from{transform:rotate(calc(var(--sway) * -1)) translateY(1%)}to{transform:rotate(var(--sway)) translateY(-1%)}}
 .p-ses{position:absolute;left:3%;bottom:7%;width:72%;height:auto;z-index:1;pointer-events:none;will-change:transform;filter:drop-shadow(0 14px 18px rgba(120,60,70,.25)) drop-shadow(0 2px 3px rgba(120,60,70,.18))}
 .flying-card{position:fixed;z-index:70;transform-origin:0 0;pointer-events:none;box-shadow:0 24px 60px rgba(80,30,40,.32);border-radius:4px;will-change:transform,clip-path}
 
