@@ -282,3 +282,15 @@
 #rsvp:has(.p-error:not([hidden])) .rs-footer{padding-top:0}
 #rsvp:has(.p-error:not([hidden])) .rsvp-person>legend{display:none}
 #rsvp .rs-step:not([hidden]){animation:none}
+
+/* Guest reactions remain visible and replace the question, rather than flashing over it. */
+#rsvp:has(#party-reaction:not([hidden])) :is(.rs-masthead,.p-rsvp-head){display:none}
+#rsvp .party-reaction{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:100%;height:92px;margin:0 0 12px;padding:8px 12px;border:2px solid var(--gold);border-radius:12px;background:var(--ink);color:#fff7e7;text-align:center;font:600 23px/1.12 var(--serif);box-shadow:0 5px 14px #1c2c5b12}
+#rsvp:has(#party-reaction:not([hidden])) .guest-table{max-width:220px}
+#rsvp:has(#party-reaction:not([hidden])) #seat-summary{display:none}
+#rsvp .table-person.is-newest .seat-back{fill:#eacb82;stroke:var(--ink);stroke-width:2.5}
+#rsvp .table-person.is-newest .table-person-icon{transform:scale(1.18)}
+@container(max-height:490px){
+ #rsvp .party-reaction{font-size:21px;height:92px;margin-bottom:8px;padding:8px 10px}
+ #rsvp:has(#party-reaction:not([hidden])) .guest-table{max-width:160px}
+}

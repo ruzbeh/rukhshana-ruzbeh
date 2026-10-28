@@ -33,12 +33,14 @@
     guestDanceAnimations.forEach(animation => animation.cancel());
     guestDanceAnimations = [];
     $('card-surprise').hidden = true;
+    $('party-reaction').hidden = true;
     $('card-sparkles').replaceChildren();
   }
-  function celebrateCard(message, {dance = false} = {}) {
+  function celebrateCard(message, {dance = false, persistent = false} = {}) {
     clearCardSurprise();
-    $('card-surprise').textContent = message;
-    $('card-surprise').hidden = false;
+    const reaction = persistent ? $('party-reaction') : $('card-surprise');
+    reaction.textContent = message;
+    reaction.hidden = false;
     if (!reducedMotion.matches) {
       for (let i = 0; i < 14; i++) {
         const sparkle = document.createElement('span');
@@ -58,7 +60,13 @@
         ], {duration: 420, iterations: 6, delay: index % 3 * 70, easing: 'ease-in-out'}));
       }
     }
-    surpriseTimer = setTimeout(clearCardSurprise, 3200);
+    surpriseTimer = setTimeout(() => {
+      if (persistent) {
+        guestDanceAnimations.forEach(animation => animation.cancel());
+        guestDanceAnimations = [];
+        $('card-sparkles').replaceChildren();
+      } else clearCardSurprise();
+    }, 3200);
   }
   document.querySelectorAll('.card-luck').forEach(button => {
     button.addEventListener('click', () => celebrateCard('A little luck. A lot of love.'));
@@ -1020,7 +1028,7 @@
     'Full house! Nobody escapes the dance floor.'
   ];
   function celebrateGuestCount(count) {
-    if (guestSurprises[count - 1]) celebrateCard(guestSurprises[count - 1], {dance: count >= 6});
+    if (guestSurprises[count - 1]) celebrateCard(guestSurprises[count - 1], {dance: count >= 6, persistent: true});
   }
 
   function syncTable(count) {
@@ -1038,6 +1046,7 @@
       const angle = -Math.PI / 2 + i * 2 * Math.PI / count;
       person.setAttribute('transform', `translate(${150 + 123 * Math.cos(angle)} ${95 + 70 * Math.sin(angle)})`);
     }
+    [...people.children].forEach((person, index) => person.classList.toggle('is-newest', index === count - 1));
     $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'}`;
     $('seat-remove').disabled = count <= 1;
     $('seat-add').disabled = count >= 20;
