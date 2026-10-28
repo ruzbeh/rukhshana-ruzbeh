@@ -90,3 +90,15 @@
 .print-invitation--groom .print-name--bride{left:24%;top:66%;width:52%}
 .print-invitation--groom:has(#p-guest span:nth-child(4)) .print-name--groom{top:55.5%}
 .print-invitation--groom:has(#p-guest span:nth-child(4)) .print-name--bride{top:69.5%}
+
+/* Shahenshahi date and event details leave the complete original ses unobstructed. */
+.print-details .print-day{top:22.3%}
+.print-details .print-date{top:25%;height:7.5%}
+.print-details .print-date b{font-size:calc(11.5 * var(--w))}
+.print-parsi-date{left:8%;top:33.5%;width:84%;font-size:max(10px,calc(3.55 * var(--w)));line-height:1.2;font-weight:600;white-space:nowrap;color:var(--ink)}
+.print-details .print-time{top:37%;font-size:max(14px,calc(4.7 * var(--w)));line-height:1.2}
+.print-details .print-venue{top:41.5%;font-size:max(16px,calc(5.5 * var(--w)));line-height:1.1}
+.print-details .print-address{top:46%;font-size:max(11px,calc(4 * var(--w)));line-height:1.2}
+.print-details .print-cocktails{left:8%;top:49.5%;width:84%;font:400 max(14px,calc(4.3 * var(--w)))/1 var(--script);white-space:nowrap}
+.print-details .print-actions{top:53.5%}
+.print-details .venue-action{min-height:44px;padding:5px calc(1.7 * var(--w))}
