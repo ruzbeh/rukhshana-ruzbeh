@@ -78,3 +78,8 @@ Page-turn controls are visually hidden until keyboard focus, and remain availabl
 ## RSVP screens
 
 The RSVP moves through attendance, party size with an illustrated table, individual names and meals, and a final review. Back preserves entries. Declines skip party and meal screens. The table illustrates party size; it does not assign seating. `rsvp.css` contains the RSVP-specific layout and must be included alongside `styles.css` and `app.js`.
+
+
+## Film-to-card handoff
+
+The site plays `our-story-wc7.mp4` / `our-story-mobile-wc7.mp4` (16.75 seconds). These end on the moving coastal scene and reveal the live HTML invitation directly. The earlier wc6 files contain a four-second static invitation ending and are retained only as source history. Rebuild using `../scripts/remove_static_film_ending.py`.

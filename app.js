@@ -286,7 +286,7 @@
 
   function chooseStoryLayout() {
     const portrait = window.innerHeight >= window.innerWidth;
-    const wanted = portrait ? 'assets/our-story-mobile-wc6.mp4' : 'assets/our-story-wc6.mp4';
+    const wanted = portrait ? 'assets/our-story-mobile-wc7.mp4' : 'assets/our-story-wc7.mp4';
     filmScreen.dataset.layout = portrait ? 'portrait' : 'landscape';
     storyVideo.poster = portrait ? 'assets/story-mobile-poster-wc4.jpg' : 'assets/story-poster-wc4.jpg';
     if (storySource.getAttribute('src') !== wanted && storyVideo.paused) {
@@ -914,7 +914,7 @@
       const angle = -Math.PI / 2 + i * 2 * Math.PI / count;
       person.setAttribute('transform', `translate(${150 + 123 * Math.cos(angle)} ${95 + 70 * Math.sin(angle)})`);
     }
-    $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'} joining the celebration`;
+    $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'}`;
     $('seat-remove').disabled = count <= 1;
     $('seat-add').disabled = count >= 20;
   }
@@ -928,9 +928,9 @@
       const row = document.createElement('fieldset');
       row.className = 'rsvp-person';
       const legend = document.createElement('legend');
-      legend.textContent = `Guest ${i + 1}`;
+      legend.textContent = `Guest ${i + 1} of ${count}`;
       const nameLabel = document.createElement('label');
-      nameLabel.textContent = 'Name';
+      nameLabel.textContent = 'Guest name';
       const input = document.createElement('input');
       input.type = 'text'; input.maxLength = 100; input.required = true;
       input.autocomplete = 'off'; input.name = `guestName${i + 1}`;
@@ -939,7 +939,7 @@
       const mealGroup = document.createElement('fieldset');
       mealGroup.className = 'meal-options';
       const mealLegend = document.createElement('legend');
-      mealLegend.textContent = 'Meal preference';
+      mealLegend.textContent = 'Meal';
       mealGroup.append(mealLegend);
       meals.forEach((meal, mealIndex) => {
         const label = document.createElement('label');
@@ -996,17 +996,17 @@
     }
   }
   function updateNextLabel() {
-    $('rs-next').textContent = flowStep === 0 ? 'Let’s RSVP →' : flowStep === 1 ? 'Choose our meals →' : activeGuest < guestRows.children.length - 1 ? 'Next guest →' : 'Review our reply →';
+    $('rs-next').textContent = flowStep === 2 && activeGuest < guestRows.children.length - 1 ? 'Next guest →' : flowStep === 2 ? 'Review →' : 'Next →';
   }
   function showReplyStep(step) {
     flowStep = step;
     form.querySelectorAll('.rs-step').forEach(panel => { panel.hidden = Number(panel.dataset.step) !== step; panel.scrollTop = 0; });
-    const titles = ['We saved you a place.', 'Your people. Our joy.', 'Made for your taste.', 'Sealed with love.'];
+    const titles = ['Will you join us?', 'How many guests?', 'Name & meal', 'Your reply'];
     const subtitles = ['The best part of our day? Sharing it with you.', 'Add your favourite people to the celebration.', 'Your name. Your favourite meal.', 'One last look, then send your love our way.'];
     $('rs-heading').textContent = titles[step];
     $('rs-subtitle').textContent = subtitles[step];
     document.querySelectorAll('.rs-progress span').forEach((item, index) => { item.classList.toggle('is-current', index === Math.min(step, 2)); item.classList.toggle('is-complete', index < Math.min(step, 2)); });
-    document.querySelector('.rs-progress span:last-child').textContent = step === 3 ? '03 · Ready to send' : '03 · The menu';
+    document.querySelector('.rs-progress span:last-child').textContent = step === 3 ? 'Review' : 'Meals';
     document.querySelectorAll('.rs-progress span').forEach((item, index) => {
       if (index === Math.min(step, 2)) item.setAttribute('aria-current', 'step');
       else item.removeAttribute('aria-current');
@@ -1019,8 +1019,8 @@
     if (step === 3) {
       const attending = form.attending.value === 'yes';
       const people = [...guestRows.children].map(readGuest);
-      $('rs-review-summary').textContent = attending ? `${people.length} ${people.length === 1 ? 'lovely person' : 'lovely people'}. One beautiful celebration.` : 'You’ll be with us in spirit.';
-      $('rs-review-meals').textContent = attending ? people.map(person => `${person.name} · ${person.meal}`).join('\n') : 'Thank you for letting us know. We’ll miss you.';
+      $('rs-review-summary').textContent = attending ? `${people.length} ${people.length === 1 ? 'guest attending' : 'guests attending'}` : 'Unable to attend';
+      $('rs-review-meals').textContent = attending ? meals.map(meal => { const count = people.filter(person => person.meal === meal).length; return count ? `${count} × ${meal}` : ''; }).filter(Boolean).join('\n') : 'We’ll miss you.';
     }
     updateNextLabel();
     $('rs-heading').focus({preventScroll: true});

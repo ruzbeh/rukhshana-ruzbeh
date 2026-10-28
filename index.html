@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="styles.css?v=release-20261029-1">
   <link rel="stylesheet" href="card-layout.css?v=release-20261029-1">
   <link rel="stylesheet" href="rsvp.css?v=release-20261029-1">
-  <script src="app.js?v=release-20261029-1" defer></script>
+  <script src="app.js?v=film-handoff-20261029-2" defer></script>
 </head>
 <body class="is-sealed">
 
@@ -86,7 +86,7 @@
 
   <div class="film-screen" id="film-screen" hidden>
     <video id="story-video" playsinline muted preload="none" poster="assets/story-mobile-poster-wc4.jpg" aria-label="Our story: Rukhshana, Ruzbeh, and the road they are taking together">
-      <source id="story-source" src="assets/our-story-mobile-wc6.mp4" type="video/mp4">
+      <source id="story-source" src="assets/our-story-mobile-wc7.mp4" type="video/mp4">
     </video>
     <div class="film-controls">
       <button class="chip chip--ghost" id="sound-toggle" type="button" aria-pressed="true">♪ Sound on</button>
@@ -174,17 +174,16 @@
           <section class="page page--rsvp" id="rsvp" aria-label="Page 4 of 4">
             <img class="p-scene" src="assets/art/scene-4.webp" alt="The couple drive away together in their flower-covered blue car." draggable="false">
             <img class="frame frame--petals" data-depth="0.5" src="assets/art/petals-4.webp" alt="" draggable="false">
-            <a class="original-invitation" href="assets/original-invitation.pdf" target="_blank" rel="noopener">View original invitation (PDF)</a>
             <div class="rs-masthead"><img class="rs-card-emblem" src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"><span>Rukhshana &amp; Ruzbeh</span></div>
-            <div class="rs-progress" aria-label="RSVP progress"><span class="is-current">01 · Your reply</span><span>02 · Your party</span><span>03 · The menu</span></div>
-            <h2 class="p-rsvp-head" id="rs-heading" tabindex="-1">We saved you a place.</h2>
+            <div class="rs-progress" aria-label="RSVP progress"><span class="is-current">Reply</span><span>Guests</span><span>Meals</span></div>
+            <h2 class="p-rsvp-head" id="rs-heading" tabindex="-1">Will you join us?</h2>
             <p id="rs-subtitle" class="rs-subtitle">The best part of our day? Sharing it with you.</p>
             <form id="rsvp-form" class="p-form" novalidate>
               <section class="rs-step" data-step="0" aria-label="Your reply">
                 <label class="rsvp-field"><span>Your name or family</span><input id="rsvp-name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="The name on your invitation" required></label>
               <div class="p-choices" role="radiogroup" aria-label="Will you be attending?">
-                <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b><small>With bells on</small></span></label>
-                <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Sending our love</b><small>Celebrating from afar</small></span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b></span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Can’t make it</b></span></label>
               </div>
               </section>
               <section class="rs-step" data-step="1" aria-label="Your party" hidden>
@@ -193,8 +192,7 @@
                   <svg class="guest-table" viewBox="0 0 300 190" aria-hidden="true"><ellipse class="table-shadow" cx="150" cy="101" rx="96" ry="45"/><ellipse class="table-top" cx="150" cy="95" rx="96" ry="45"/><ellipse class="table-inlay" cx="150" cy="95" rx="87" ry="36"/><path class="table-heart" d="M150 91c-18-13-22 10 0 20 22-10 18-33 0-20Z"/><text x="150" y="80" class="table-caption">Room for love</text><g id="table-people"></g></svg>
                   <p id="seat-summary" role="status" aria-live="polite" aria-atomic="true">1 guest joining the celebration</p>
                 </div>
-                <div class="p-count"><span id="seat-label">How many of you?<small>You, your favourite people &amp; the little ones.</small></span><div class="seat-stepper"><button id="seat-remove" type="button" aria-label="Remove a guest">−</button><input id="rsvp-count" name="partySize" type="number" min="1" max="20" step="1" inputmode="numeric" value="1" aria-labelledby="seat-label"><button id="seat-add" type="button" aria-label="Add a guest">+</button></div></div>
-                <p class="rs-footnote">A little illustration of your party. We’ll arrange the seating.</p>
+                <div class="p-count"><span id="seat-label">Guests<small>Including children</small></span><div class="seat-stepper"><button id="seat-remove" type="button" aria-label="Remove a guest">−</button><input id="rsvp-count" name="partySize" type="number" min="1" max="20" step="1" inputmode="numeric" value="1" aria-labelledby="seat-label"><button id="seat-add" type="button" aria-label="Add a guest">+</button></div></div>
                 </div>
               </section>
               <section class="rs-step" data-step="2" aria-label="Guest names and meals" hidden>
@@ -203,11 +201,11 @@
               </section>
               <section class="rs-step" data-step="3" aria-label="Review your reply" hidden>
                 <div class="rs-review"><span class="rs-review-heart" aria-hidden="true">♡</span><p id="rs-review-summary"></p><p id="rs-review-meals"></p></div>
-                <label class="rsvp-field"><span>A little love for the couple <small>optional</small></span><input id="rsvp-message" name="message" type="text" maxlength="300" placeholder="We can’t wait to celebrate…"></label>
+                <label class="rsvp-field"><span>A note for us <small>optional</small></span><input id="rsvp-message" name="message" type="text" maxlength="300" placeholder="We can’t wait to celebrate…"></label>
               </section>
               <div class="rs-footer">
                 <p class="p-error" id="rsvp-error" role="alert" hidden></p>
-                <div class="rs-navigation"><button id="rs-back" class="rs-back" type="button" hidden>← Back</button><button id="rs-next" class="chip chip--primary" type="button">Let’s RSVP <span aria-hidden="true">→</span></button><button class="chip chip--primary" id="rsvp-submit" type="submit" hidden>Send our reply</button></div>
+                <div class="rs-navigation"><button id="rs-back" class="rs-back" type="button" hidden>← Back</button><button id="rs-next" class="chip chip--primary" type="button">Next <span aria-hidden="true">→</span></button><button class="chip chip--primary" id="rsvp-submit" type="submit" hidden>Send our reply</button></div>
                 <p class="rsvp-signoff">With love, Rukhshana &amp; Ruzbeh</p>
               </div>
             </form>
@@ -216,6 +214,7 @@
               <p class="p-line" id="rsvp-done-text"></p>
               <pre class="p-copy" id="rsvp-copy" hidden></pre>
               <div class="p-actions" id="rsvp-done-actions"></div>
+              <a class="original-invitation" href="assets/original-invitation.pdf" target="_blank" rel="noopener">View original invitation (PDF)</a>
             </div>
           </section>
         </div>
