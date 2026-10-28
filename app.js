@@ -127,12 +127,12 @@
         return person;
       }));
     };
-    // Remaining blessings names and the spelling of Soultan are pending.
+    // Remaining blessings names will be supplied later.
     replacePeople('.print-people--blessings', [
-      'Rustom and Soultan Irani', 'Perin and Minoo Pithawala', 'Katy and Polly'
+      'Rustom and Soultoon Irani', 'Perin and Minoo Pithawala', 'Katy and Polly'
     ]);
     replacePeople('.print-people--compliments', [
-      'Zenia Irani', 'Hanoz Daruwala', 'Muna’s'
+      'Zenia Irani', 'Hanoz and Monaz Khambatta'
     ]);
   }
 
