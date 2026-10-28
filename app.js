@@ -119,11 +119,23 @@
     invitation.insertBefore(groomName, and);
     invitation.insertBefore(brideName, and.nextSibling);
     invitation.querySelector('.print-parents').textContent = 'daughter of Naazlina and Zarir Patwa';
+    const familyPortraits = {
+      'Zenia Irani': 'zenia-caricature-v2.png',
+      'Hanoz and Monaz Khambatta': 'hanoz-caricature-v3.png'
+    };
     const replacePeople = (selector, names) => {
       document.querySelector(selector).replaceChildren(...names.map(name => {
         const person = document.createElement('li');
         person.className = 'person';
         person.textContent = name;
+        if (familyPortraits[name]) {
+          const portrait = document.createElement('img');
+          portrait.src = `assets/family/${familyPortraits[name]}`;
+          portrait.alt = '';
+          portrait.className = 'family-cameo';
+          person.classList.add('person--cameo');
+          person.prepend(portrait);
+        }
         return person;
       }));
     };

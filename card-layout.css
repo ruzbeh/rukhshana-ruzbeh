@@ -102,3 +102,7 @@
 .print-details .print-cocktails{left:8%;top:49.5%;width:84%;font:400 max(14px,calc(4.3 * var(--w)))/1 var(--script);white-space:nowrap}
 .print-details .print-actions{top:53.5%}
 .print-details .venue-action{min-height:44px;padding:5px calc(1.7 * var(--w))}
+
+/* Small family portraits sit beside their names within the printed card. */
+.print-people .person--cameo{display:flex;align-items:center;justify-content:center;gap:calc(1.7 * var(--w));margin-bottom:calc(.5 * var(--w))}
+.print-people img.family-cameo{flex:none;width:calc(10 * var(--w));height:calc(12 * var(--w));object-fit:cover;object-position:50% 18%;border-radius:50%;border:1px solid var(--gold);background:var(--card-paper)}
