@@ -229,3 +229,56 @@
 /* Keep reply choices readable where the full original illustration sits beneath them. */
 #rsvp .p-choice{background:rgba(255,247,242,.96)}
 #rsvp .p-choice:has(input:checked){background:var(--ink)}
+
+/* A short, readable reply inside the printed card, without nested scrolling. */
+#rsvp .rs-masthead{padding-bottom:8px;background:none;gap:0}
+#rsvp .rs-masthead span,#rsvp .rs-subtitle,#rsvp .rsvp-signoff,#rsvp .guest-tabs,#rsvp .table-caption{display:none}
+#rsvp .rs-card-emblem{width:34px}
+#rsvp .rs-progress{max-width:230px;align-self:center;margin:5px 0 10px;font-size:11px;line-height:1.2}
+#rsvp .rs-progress .is-current::after{margin-top:4px}
+#rsvp .p-rsvp-head{font-size:36px;line-height:1.05;margin:0 0 12px}
+#rsvp .rs-step{overflow:hidden;padding:12px;background:rgba(255,247,242,.98);border-radius:10px;scrollbar-width:none}
+#rsvp .rs-step::-webkit-scrollbar{display:none}
+#rsvp .p-choices{margin-top:14px;gap:9px}
+#rsvp .p-choice{min-height:112px;padding:14px 8px;gap:12px;justify-content:center;border-radius:42px 42px 10px 10px}
+#rsvp .p-choice .attendance-icon{width:34px;height:34px;margin:0}
+#rsvp .p-choice b{font-size:19px}
+#rsvp .p-choice input{top:10px;right:9px;bottom:auto}
+#rsvp .rs-footer{padding-top:9px;margin-top:8px}
+#rsvp .rs-navigation .chip{min-height:46px;font-size:18px;padding:10px 15px}
+#rsvp .guest-table{max-width:230px}
+#rsvp .p-more{gap:10px}
+#rsvp .p-count{font-size:21px}
+#rsvp .rsvp-person>legend{font-size:21px;margin-bottom:4px}
+#rsvp .rsvp-person label{margin-bottom:0}
+#rsvp input[type=text]{min-height:44px;font-size:19px;padding:6px 0}
+#rsvp .meal-options{margin-top:10px;gap:8px}
+#rsvp .meal-options legend{margin-bottom:6px}
+#rsvp .meal-choice>span{min-height:61px;padding:7px 6px;gap:5px;font-size:17px}
+#rsvp .meal-choice svg{width:22px;height:22px}
+#rsvp .rs-review{margin:0 0 14px}
+#rsvp .rs-review-heart{font-size:48px}
+#rsvp #rs-review-summary{font-size:24px;margin:8px 0}
+#rsvp #rs-review-meals{font-size:17px;line-height:1.3}
+@container (max-height:490px){
+ #rsvp{padding:8px 14px 12px}
+ #rsvp .rs-card-emblem{width:25px}
+ #rsvp .rs-masthead{padding-bottom:4px}
+ #rsvp .rs-progress{margin:3px 0 7px;font-size:10px}
+ #rsvp .p-rsvp-head{font-size:30px;margin-bottom:8px}
+ #rsvp .rs-step{padding:9px}
+ #rsvp .p-choices{margin-top:10px}
+ #rsvp .p-choice{min-height:96px;padding:10px 7px;gap:8px}
+ #rsvp .p-choice b{font-size:17px}
+ #rsvp .p-choice .attendance-icon{width:27px;height:27px}
+ #rsvp .guest-table{max-width:180px}
+ #rsvp .meal-choice>span{min-height:48px;font-size:15px;padding:5px 6px;gap:5px;flex-direction:row;justify-content:flex-start}
+ #rsvp .meal-choice svg{width:18px;height:18px}
+ #rsvp .rs-footer{padding-top:6px;margin-top:5px}
+ #rsvp .rs-review-heart{font-size:34px}
+ #rsvp #rs-review-summary{font-size:22px}
+}
+#rsvp .p-error{background:#fff7f2;padding:5px 7px;border-radius:6px;font-size:12px;line-height:1.3}
+#rsvp:has(.p-error:not([hidden])) .rs-footer{padding-top:0}
+#rsvp:has(.p-error:not([hidden])) .rsvp-person>legend{display:none}
+#rsvp .rs-step:not([hidden]){animation:none}

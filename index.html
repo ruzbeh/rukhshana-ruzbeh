@@ -22,7 +22,7 @@
   <link rel="preload" href="assets/card-1.webp" as="image">
   <link rel="stylesheet" href="styles.css?v=release-20261029-1">
   <link rel="stylesheet" href="card-layout.css?v=release-20261029-1">
-  <link rel="stylesheet" href="rsvp.css?v=release-20261029-1">
+  <link rel="stylesheet" href="rsvp.css?v=complete-release-20261029-4">
   <script src="app.js?v=swipe-envelope-20261029-3" defer></script>
 </head>
 <body class="is-sealed">
@@ -95,6 +95,8 @@
   </div>
 
   <main class="stage" id="stage" aria-label="Wedding invitation">
+    <div class="card-sparkles" id="card-sparkles" aria-hidden="true"></div>
+    <p class="card-surprise" id="card-surprise" role="status" aria-live="polite" hidden></p>
     <div class="book" id="book" tabindex="0" aria-roledescription="carousel" aria-label="The invitation card, four pages. Swipe or use keyboard arrow keys to turn.">
 
       <div class="leaf" data-page="1" style="--i:0">
@@ -102,7 +104,7 @@
           <section class="page print-page" aria-label="Page 1 of 4">
             <div class="print-canvas print-invitation">
               <img class="print-frame" src="assets/art/frame-unified-1.svg?v=farohar-1" alt="" draggable="false">
-              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
               <p class="print-intro">Naazlina and Zarir Patwa<br>invite <span id="p-guest">you</span> to share their joy<br>as they celebrate the wedding<br>of their daughter</p>
               <h1 class="print-name print-name--bride"><img src="assets/art/name-rukhshana.webp" alt="Rukhshana" draggable="false"></h1>
               <p class="print-and"><span aria-hidden="true"></span>and<span aria-hidden="true"></span></p>
@@ -119,7 +121,7 @@
             <div class="print-canvas print-details">
               <img class="print-frame" src="assets/art/frame-unified-2.svg?v=farohar-1" alt="A floral garland, hummingbird, and traditional wedding ses." draggable="false">
               <img class="print-hummingbird" src="assets/art/hummingbird.webp" alt="" draggable="false">
-              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
               <h2 class="print-wedding">Wedding</h2>
               <p class="print-day">Friday</p>
               <p class="print-date"><span>February</span><b>26</b><span>2027</span></p>
@@ -147,7 +149,7 @@
           <section class="page print-page" id="families" aria-label="Page 3 of 4">
             <div class="print-canvas print-families">
               <img class="print-frame" src="assets/art/frame-unified-3.svg?v=farohar-1" alt="" draggable="false">
-              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
               <h2 class="print-heading print-heading--blessings"><img src="assets/art/word-blessings.webp" alt="Blessings" draggable="false"></h2>
               <img class="print-flourish print-flourish--blessings" src="assets/art/divider-flourish.webp" alt="" draggable="false">
             <ul class="print-people print-people--blessings">
