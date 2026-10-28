@@ -83,3 +83,8 @@ The RSVP moves through attendance, party size with an illustrated table, individ
 ## Film-to-card handoff
 
 The site plays `our-story-wc7.mp4` / `our-story-mobile-wc7.mp4` (16.75 seconds). These end on the moving coastal scene and reveal the live HTML invitation directly. The earlier wc6 files contain a four-second static invitation ending and are retained only as source history. Rebuild using `../scripts/remove_static_film_ending.py`.
+
+
+## Return to the envelope
+
+A deliberate backward swipe on the first page closes the invitation into its envelope. The same gesture on later pages returns to the previous page. Arrow Left and the accessible Previous/Close control follow the same rule. Small drags, vertical scrolling and cancelled touches leave the card open. Reopening starts at page 1 and preserves the RSVP draft.

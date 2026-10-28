@@ -586,7 +586,7 @@
     state = 'closing';
     fadeOutScore(500);
     try {
-      await animate(stage, [{opacity: 1, transform: getComputedStyle(stage).transform === 'none' ? 'scale(1)' : getComputedStyle(stage).transform}, {opacity: 0, transform: 'scale(.92)'}], {duration: 450, easing: 'ease-in'}).finished;
+      await animate(stage, [{opacity: 1, transform: getComputedStyle(stage).transform === 'none' ? 'scale(1)' : getComputedStyle(stage).transform}, {opacity: 0, transform: 'scale(.92)'}], {duration: reducedMotion.matches ? 0 : 450, easing: 'ease-in'}).finished;
     } catch (error) { /* fine */ }
     resetEnvelope();
     body.classList.add('is-sealed');
@@ -597,6 +597,7 @@
     stage.style.transform = '';
     stage.inert = true;
     goToPage(1);
+    envelope.focus({preventScroll: true});
     live.textContent = 'The card is back in its envelope. Tap the envelope to open it again.';
   }
   $('close-card').addEventListener('click', closeCard);
@@ -653,7 +654,8 @@
       dot.classList.toggle('is-active', index === n - 1);
       dot.setAttribute('aria-selected', String(index === n - 1));
     });
-    $('deck-prev').disabled = n === 1;
+    $('deck-prev').disabled = false;
+    $('deck-prev').setAttribute('aria-label', n === 1 ? 'Close the invitation into its envelope' : 'Previous page');
     $('deck-next').disabled = n === pageCount;
     leaves.forEach((leaf, index) => { leaf.setAttribute('aria-hidden', String(index !== n - 1)); leaf.inert = index !== n - 1; });
     $('rsvp-button').classList.toggle('is-hidden', n === pageCount);
@@ -786,7 +788,7 @@
     }
   }
 
-  const turn = {pointerId: null, startX: 0, startY: 0, active: false, forward: true, index: -1, t: 0, lift: 0, lastX: 0, lastTime: 0, velocity: 0};
+  const turn = {pointerId: null, startX: 0, startY: 0, active: false, closing: false, forward: true, index: -1, t: 0, lift: 0, lastX: 0, lastTime: 0, velocity: 0};
   book.addEventListener('pointerdown', event => {
     cancelPageHint();
     if (state !== 'deck' || event.button !== 0 || turn.pointerId !== null || flights.size > 0) return;
@@ -799,6 +801,7 @@
     turn.lastTime = event.timeStamp;
     turn.velocity = 0;
     turn.active = false;
+    turn.closing = false;
     turn.index = -1;
   });
   book.addEventListener('pointermove', event => {
@@ -809,13 +812,14 @@
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
       if (Math.abs(dy) > Math.abs(dx)) { turn.pointerId = null; schedulePageHint(5000); return; }
       turn.forward = dx < 0;
+      turn.closing = !turn.forward && currentPage === 1;
       turn.index = turn.forward ? currentPage - 1 : currentPage - 2;
-      if (turn.index < 0 || (turn.forward && currentPage === pageCount)) { turn.pointerId = null; schedulePageHint(5000); return; }
+      if ((!turn.closing && turn.index < 0) || (turn.forward && currentPage === pageCount)) { turn.pointerId = null; schedulePageHint(5000); return; }
       turn.active = true;
       turning = true;
       const localY = event.clientY - book.getBoundingClientRect().top;
       turn.lift = clamp((book.clientHeight - localY) * 0.5, book.clientHeight * 0.08, book.clientHeight * 0.55);
-      leaves[turn.index].classList.add('is-turning');
+      if (!turn.closing) leaves[turn.index].classList.add('is-turning');
       try { book.setPointerCapture(event.pointerId); } catch (error) { /* pointer already gone */ }
     }
     const elapsed = event.timeStamp - turn.lastTime;
@@ -824,19 +828,29 @@
     turn.lastTime = event.timeStamp;
     const travel = book.clientWidth * 0.9;
     turn.t = turn.forward ? clamp(-dx / travel, 0, 1) : 1 - clamp(dx / travel, 0, 1);
-    paintCurl(turn.index, turn.t, turn.lift);
+    if (!turn.closing) paintCurl(turn.index, turn.t, turn.lift);
     event.preventDefault();
   });
   const endTurn = event => {
     if (event.pointerId !== turn.pointerId) { schedulePageHint(5000); return; }
     turn.pointerId = null;
-    if (!turn.active || turn.index < 0) { schedulePageHint(5000); return; }
+    if (!turn.active || (!turn.closing && turn.index < 0)) { schedulePageHint(5000); return; }
     turn.active = false;
     const flung = Math.abs(turn.velocity) > 0.45;
     let complete;
     if (event.type === 'pointercancel') complete = false;
     else if (turn.forward) complete = flung ? turn.velocity < 0 : turn.t > 0.3;
     else complete = flung ? turn.velocity > 0 : turn.t < 0.7;
+    if (turn.closing) {
+      // A deliberate backward swipe closes the cover; small drags and cancelled
+      // touches leave it open, even if a short movement reports a high velocity.
+      const enoughTravel = turn.lastX - turn.startX >= Math.max(36, book.clientWidth * 0.18);
+      turn.closing = false;
+      turning = false;
+      if (complete && enoughTravel) closeCard();
+      else schedulePageHint(5000);
+      return;
+    }
     const target = turn.forward ? (complete ? 1 : 0) : (complete ? 0 : 1);
     const distance = Math.abs(target - turn.t);
     if (complete) pageGuideLearned = true;
@@ -849,6 +863,7 @@
   book.addEventListener('pointercancel', endTurn);
   book.addEventListener('click', event => { if (turn.active) event.preventDefault(); }, true);
   function turnFromPageControl(direction) {
+    if (direction < 0 && currentPage === 1) { closeCard(); return; }
     goToPage(currentPage + direction, {animate: false});
     book.focus({preventScroll: true});
     live.textContent = `Page ${currentPage} of ${pageCount}: ${['Invitation', 'Wedding details', 'Blessings and compliments', 'RSVP'][currentPage - 1]}.`;
@@ -858,7 +873,11 @@
   book.addEventListener('keydown', event => {
     if (event.target.closest('input, textarea, select')) return;
     if (event.key === 'ArrowRight') { goToPage(currentPage + 1); event.preventDefault(); }
-    if (event.key === 'ArrowLeft') { goToPage(currentPage - 1); event.preventDefault(); }
+    if (event.key === 'ArrowLeft') {
+      if (currentPage === 1) closeCard();
+      else goToPage(currentPage - 1);
+      event.preventDefault();
+    }
   });
 
   function showDeck(page = 1) {
@@ -1028,7 +1047,7 @@
   function replyError(message, input) {
     $('rsvp-error').textContent = message;
     $('rsvp-error').hidden = false;
-    input?.focus();
+    input?.focus({preventScroll: true});
   }
   function advanceReply() {
     if (flowStep === 0) {
@@ -1086,7 +1105,7 @@
       ? `Thank you, ${reply.name}. Your reply has reached us.`
       : whatsapp
         ? `Thank you, ${reply.name}. Your reply opened in WhatsApp; tap send there to finish.`
-        : `Thank you, ${reply.name}. Your reply hasn’t reached us yet: please send it on WhatsApp to whoever shared this card with you.`;
+        : 'Your reply is ready. Send it on WhatsApp to finish.';
     const actions = $('rsvp-done-actions');
     actions.replaceChildren();
     const copyBox = $('rsvp-copy');
