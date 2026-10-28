@@ -1,0 +1,231 @@
+/* The RSVP is a sequence of small, personal moments inside the invitation. */
+#rsvp{padding:26px 28px 20px;overflow:hidden;background:var(--card-paper);background-image:radial-gradient(ellipse at 50% 40%,#fff5f2 0,transparent 60%),radial-gradient(ellipse at 20% 90%,#f8dcd9 0,transparent 50%);gap:0}
+#rsvp .frame--petals{opacity:.85;transform:none!important}
+#rsvp .p-scene{opacity:.5;height:32%;mask-image:linear-gradient(transparent,#000 45%);-webkit-mask-image:linear-gradient(transparent,#000 45%)}
+#rsvp .rs-masthead{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font:400 23px/1.2 var(--script);color:var(--ink);padding-bottom:12px;border:0;background:url("assets/art/divider-flourish.webp") center bottom/100px auto no-repeat}
+.rs-card-emblem{width:32px;height:auto;flex-shrink:0}
+
+.rs-progress{display:flex;justify-content:space-between;gap:6px;width:100%;margin:9px 0 12px;font:500 10px/1.5 system-ui,sans-serif;color:#a29486}
+.rs-progress .is-current{color:var(--ink)}
+.rs-progress .is-current::after{content:'';display:block;width:24px;height:2px;margin-top:6px;background:#b18c50}
+.rs-progress .is-complete{color:#8c714a}
+#rsvp .p-rsvp-head{font:400 43px/1.02 var(--script);text-align:center;width:100%;max-width:100%;margin:0 0 10px;color:var(--ink);outline:none}
+.rs-subtitle{width:100%;margin:0 0 22px;text-align:center;font:400 17px/1.3 var(--serif);color:var(--muted);max-width:100%;align-self:center}
+#rsvp .p-form{flex:1;min-height:0;display:flex;flex-direction:column;gap:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;width:100%;text-align:left}
+#rsvp .rs-step{flex:1;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#d8c2a4 transparent;padding:0 3px 10px}
+#rsvp .rsvp-field>span,#rsvp .rsvp-person label,#rsvp .meal-options legend{font:500 12px/1.5 system-ui,sans-serif;color:#736552;letter-spacing:0}
+#rsvp .rsvp-field{gap:4px}
+#rsvp input[type=text]{font:500 21px/1.3 var(--serif);min-height:46px;padding:8px 0;border-bottom-color:#cdbb9f;user-select:text;-webkit-user-select:text}
+#rsvp input::placeholder{font-size:19px;color:#a08c7a}
+#rsvp .p-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:25px}
+#rsvp .p-choice{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:18px;min-height:174px;padding:22px 15px 18px;border:1px solid #d7c4a9;border-radius:80px 80px 14px 14px;background:rgba(255,247,242,.8);box-shadow:none;text-align:center}
+#rsvp .p-choice>span{width:100%;gap:6px}
+#rsvp .p-choice b{font:600 21px/1.1 var(--serif)}
+#rsvp .p-choice small{font:400 10px/1.3 system-ui,sans-serif;color:#887762}
+#rsvp .p-choice .attendance-icon{width:47px;height:47px;align-self:center;margin:5px 0 0;stroke:#a8834b;stroke-width:1.1}
+#rsvp .p-choice input{top:auto;right:12px;bottom:12px;width:13px;height:13px}
+#rsvp .p-choice:has(input:checked){background:var(--ink);border-color:var(--ink);box-shadow:0 7px 18px #24325218;color:#fff5e3}
+#rsvp .p-choice:has(input:checked) :is(small,.attendance-icon){color:#e0c9a1;stroke:#e0c9a1}
+#rsvp .rs-footer{flex-shrink:0;padding-top:12px;border-top:1px solid var(--line);margin-top:8px}
+.rs-navigation{display:flex;align-items:center;gap:12px}
+#rsvp .rs-navigation .chip{flex:1;border-radius:8px;min-height:50px;background:var(--ink);color:#fff5e3;font:500 19px/1.2 var(--serif);box-shadow:none;border:1px solid var(--ink);display:flex;align-items:center;justify-content:space-between;padding:12px 19px}
+#rsvp .rs-navigation #rsvp-submit{justify-content:center}
+.rs-back{border:0;padding:10px 0;background:none;font:500 14px/1.3 system-ui,sans-serif;color:#736552;white-space:nowrap}
+#rsvp .rsvp-signoff{font:400 19px/1.2 var(--script);margin:13px 0 0;color:#8c714a}
+#rsvp .p-error{font:500 12px/1.35 system-ui,sans-serif;margin:0 0 9px}
+#rsvp .p-more{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+#rsvp .guest-table{width:100%;max-width:330px;height:auto;margin:0 auto;overflow:visible}
+#rsvp .seat-preview{margin:0}
+#rsvp .table-top{fill:#ead9bd;stroke:#ad8b52;stroke-width:1}
+#rsvp .table-caption{font-size:20px;fill:#82663f}
+#rsvp .table-heart{stroke:#a8834b}
+#rsvp #seat-summary{font:500 12px/1.4 system-ui,sans-serif;margin:4px 0 0;color:#78654b}
+#rsvp .p-count{display:flex;justify-content:space-between;flex-wrap:nowrap;gap:14px;font:600 22px/1.1 var(--serif)}
+#rsvp .p-count small{font:400 11px/1.4 system-ui,sans-serif;max-width:170px;margin-top:6px}
+#rsvp .seat-stepper{flex-shrink:0;background:#f8eee0;border-color:#dbc7aa;padding:4px}
+#rsvp .seat-stepper button{width:38px;height:38px;background:var(--ink)}
+#rsvp .seat-stepper input{font-size:24px;width:34px}
+#rsvp .seat-stepper button:disabled{color:#b7a68e;background:transparent}
+.rs-footnote{margin:0;text-align:center;font:400 10px/1.4 system-ui,sans-serif;color:#988672}
+#rsvp .rsvp-person{border:0;padding:0;margin:0;background:none;border-radius:0;min-width:0}
+#rsvp .rsvp-person>legend{font:italic 26px/1.2 var(--serif);padding:0;margin:0 0 8px;color:#9a7847}
+.guest-tabs{display:flex;gap:7px;overflow-x:auto;padding:0 0 10px;margin-bottom:0;scrollbar-width:thin}
+.guest-tabs button{flex-shrink:0;width:34px;height:34px;border:1px solid #dac6a7;background:transparent;border-radius:50%;font:500 13px/1 system-ui,sans-serif;color:#897255}
+.guest-tabs button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff8ed}
+.guest-tabs button.is-complete:not([aria-pressed=true]){background:#eee1cb;border-color:#ac8b51;color:#6c5433}
+#rsvp .meal-options{gap:10px;margin-top:14px}
+#rsvp .meal-options legend{margin-bottom:10px}
+#rsvp .rsvp-person .meal-choice{margin:0}
+#rsvp .meal-choice>span{min-height:82px;padding:12px 8px;flex-direction:column;justify-content:center;gap:7px;border-color:#dbc7aa;border-radius:10px;background:rgba(255,247,242,.85);font:600 19px/1.1 var(--serif);text-align:center}
+#rsvp .meal-choice svg{width:27px;height:27px;stroke:#9c7948;stroke-width:1.2}
+#rsvp .meal-choice input:checked+span{background:var(--ink);color:#fff5e3;border-color:var(--ink)}
+#rsvp .meal-choice input:checked+span svg{stroke:#dec89f}
+.rs-review{text-align:center;margin:2px 0 30px}
+.rs-review-heart{display:block;font:400 78px/1 var(--serif);color:#ad8b52}
+#rs-review-summary{font:500 26px/1.15 var(--serif);color:var(--ink);margin:14px 0}
+#rs-review-meals{white-space:pre-line;font:400 17px/1.5 var(--serif);color:#7a6954;margin:0}
+#rsvp .p-done{background:none;border:0;padding:18px 0;overflow:auto;min-height:0}
+#rsvp .p-done .p-line{font-size:19px}
+#rsvp .p-done .chip{min-height:44px;font-size:17px}
+#rsvp .p-copy{max-height:200px;font-size:16px}
+@container (max-width:359px) or (max-height:690px){
+ #rsvp{padding:18px 20px 14px}
+ .rs-masthead{font-size:9px;padding-bottom:10px}
+ .rs-progress{margin:6px 0 8px;font-size:9px}
+ #rsvp .p-rsvp-head{font-size:36px;margin-bottom:6px}
+ .rs-subtitle{font-size:16px;margin-bottom:16px}
+ #rsvp .p-choices{margin-top:18px;gap:9px}
+ #rsvp .p-choice{min-height:149px;padding:16px 10px 18px;gap:12px}
+ #rsvp .p-choice b{font-size:19px}
+ #rsvp .p-choice .attendance-icon{width:39px;height:39px}
+ #rsvp .guest-table{max-width:260px}
+ #rsvp .p-count{font-size:20px;gap:8px}
+ #rsvp .p-count small{font-size:10px}
+ #rsvp .seat-stepper button{width:31px;height:34px}
+ #rsvp .seat-stepper input{width:27px}
+ #rsvp .meal-choice>span{min-height:70px;font-size:17px;padding:9px 7px;gap:5px}
+ #rsvp .meal-choice svg{width:24px;height:24px}
+ #rsvp .meal-options{margin-top:12px;gap:8px}
+ #rsvp .rsvp-person>legend{margin-bottom:10px}
+ .guest-tabs{padding-bottom:10px;margin-bottom:0}
+ #rsvp .rsvp-signoff{margin-top:9px;font-size:17px}
+}
+@media(prefers-reduced-motion:no-preference){.rs-step:not([hidden]){animation:reply-appears .3s ease-out}@keyframes reply-appears{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}}
+
+/* Keep the reply usable when the invitation retains its printed proportions. */
+@container (max-height:600px){
+ #rsvp{padding:12px 16px 12px}
+ #rsvp :is(.rs-masthead,.rs-progress,.p-rsvp-head,.rs-subtitle){flex-shrink:0}
+ #rsvp .rs-masthead{font-size:9px;padding-bottom:7px}
+ #rsvp .rs-progress{margin:7px 0 9px;font-size:9px}
+ #rsvp .rs-progress .is-current::after{margin-top:4px}
+ #rsvp .p-rsvp-head{font-size:32px;line-height:1.05;margin-bottom:5px}
+ #rsvp .rs-subtitle{font-size:16px;line-height:1.2;margin-bottom:10px}
+ #rsvp .rs-step{overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:0 2px 8px}
+ #rsvp input[type=text]{font-size:18px;min-height:44px;padding:7px 0}
+ #rsvp input::placeholder{font-size:16px}
+ #rsvp .p-choices{margin-top:12px;gap:8px}
+ #rsvp .p-choice{min-height:110px;padding:13px 8px 10px;gap:7px;border-radius:45px 45px 12px 12px}
+ #rsvp .p-choice>span{gap:3px}
+ #rsvp .p-choice b{font-size:17px;line-height:1.1}
+ #rsvp .p-choice small{font-size:10px}
+ #rsvp .p-choice .attendance-icon{width:26px;height:26px;margin:0}
+ #rsvp .p-choice input{top:12px;right:9px;bottom:auto}
+ #rsvp .rs-footer{padding-top:8px;margin-top:6px}
+ #rsvp .rs-navigation{gap:10px}
+ #rsvp .rs-navigation .chip{min-height:44px;padding:9px 13px;font-size:17px;margin-top:0}
+ #rsvp .rs-back{min-height:44px;padding:8px 0}
+ #rsvp .rsvp-signoff{font-size:16px;margin-top:6px}
+ #rsvp .p-error{margin-bottom:6px}
+ #rsvp .p-more{gap:10px}
+ #rsvp .guest-table{max-width:200px}
+ #rsvp .p-count{font-size:18px;gap:8px}
+ #rsvp .seat-stepper button{width:44px;height:44px}
+ #rsvp .seat-stepper input{width:28px;font-size:20px}
+ #rsvp .rsvp-person>legend{font-size:22px;margin-bottom:6px}
+ #rsvp .meal-options{margin-top:10px;gap:7px}
+ #rsvp .meal-options legend{margin-bottom:7px}
+ #rsvp .meal-choice>span{min-height:64px;padding:8px 6px;font-size:17px;gap:4px}
+ #rsvp .meal-choice svg{width:22px;height:22px}
+ #rsvp .rs-review{margin-bottom:12px}
+ #rsvp .rs-review-heart{font-size:44px}
+ #rsvp #rs-review-summary{font-size:22px;margin:9px 0}
+ #rsvp #rs-review-meals{font-size:16px;line-height:1.3}
+}
+
+/* The artwork belongs to the page; the reply remains legible over it. */
+#rsvp .rsvp-signoff{width:fit-content;margin-left:auto;margin-right:auto;padding:2px 12px;background:rgba(251,238,236,.88);border-radius:20px}
+#rsvp .rs-back{background:rgba(251,238,236,.88);border-radius:16px;padding-left:5px;padding-right:5px}
+@container (max-height:600px){
+ #rsvp .rs-masthead{font-size:20px;padding-bottom:8px;gap:8px}
+ #rsvp .rs-card-emblem{width:25px}
+ #rsvp .rs-progress{margin:6px 0 8px}
+}
+
+#rsvp:has([data-step="2"]:not([hidden])) .p-scene{opacity:.25}
+
+@container (max-height:460px){
+ #rsvp{padding-top:8px;padding-bottom:8px}
+ #rsvp .rs-masthead{font-size:18px;padding-bottom:5px}
+ #rsvp .rs-progress{margin:4px 0 5px}
+ #rsvp .p-rsvp-head{font-size:28px;margin-bottom:4px}
+ #rsvp .rs-subtitle{font-size:14px;margin-bottom:6px}
+ #rsvp .p-choices{margin-top:8px}
+ #rsvp .p-choice{min-height:96px;padding:10px 7px 8px;gap:5px}
+ #rsvp .p-choice b{font-size:16px}
+ #rsvp .p-choice .attendance-icon{width:22px;height:22px}
+ #rsvp .rs-footer{padding-top:5px;margin-top:4px}
+ #rsvp .rsvp-signoff{font-size:14px;margin-top:4px}
+}
+
+/* Match the compact paper layouts in browsers without container queries. */
+@supports not (container-type:size){
+ @media (max-width:449px),(max-height:664px){
+  #rsvp{padding:12px 16px}
+  #rsvp :is(.rs-masthead,.rs-progress,.p-rsvp-head,.rs-subtitle){flex-shrink:0}
+  #rsvp .rs-masthead{font-size:20px;padding-bottom:8px;gap:8px}
+  #rsvp .rs-card-emblem{width:25px}
+  #rsvp .rs-progress{margin:6px 0 8px;font-size:9px}
+  #rsvp .rs-progress .is-current::after{margin-top:4px}
+  #rsvp .p-rsvp-head{font-size:32px;line-height:1.05;margin-bottom:5px}
+  #rsvp .rs-subtitle{font-size:16px;line-height:1.2;margin-bottom:10px}
+  #rsvp .rs-step{overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;padding:0 2px 8px}
+  #rsvp input[type=text]{font-size:18px;min-height:44px;padding:7px 0}
+  #rsvp input::placeholder{font-size:16px}
+  #rsvp .p-choices{margin-top:12px;gap:8px}
+  #rsvp .p-choice{min-height:110px;padding:13px 8px 10px;gap:7px;border-radius:45px 45px 12px 12px}
+  #rsvp .p-choice>span{gap:3px}
+  #rsvp .p-choice b{font-size:17px;line-height:1.1}
+  #rsvp .p-choice small{font-size:10px}
+  #rsvp .p-choice .attendance-icon{width:26px;height:26px;margin:0}
+  #rsvp .p-choice input{top:12px;right:9px;bottom:auto}
+  #rsvp .rs-footer{padding-top:8px;margin-top:6px}
+  #rsvp .rs-navigation{gap:10px}
+  #rsvp .rs-navigation .chip{min-height:44px;padding:9px 13px;font-size:17px;margin-top:0}
+  #rsvp .rs-back{min-height:44px;padding:8px 5px}
+  #rsvp .rsvp-signoff{font-size:16px;margin-top:6px}
+  #rsvp .p-error{margin-bottom:6px}
+  #rsvp .p-more{gap:10px}
+  #rsvp .guest-table{max-width:200px}
+  #rsvp .p-count{font-size:18px;gap:8px}
+  #rsvp .seat-stepper button{width:44px;height:44px}
+  #rsvp .seat-stepper input{width:28px;font-size:20px}
+  #rsvp .rsvp-person>legend{font-size:22px;margin-bottom:6px}
+  #rsvp .meal-options{margin-top:10px;gap:7px}
+  #rsvp .meal-options legend{margin-bottom:7px}
+  #rsvp .meal-choice>span{min-height:64px;padding:8px 6px;font-size:17px;gap:4px}
+  #rsvp .meal-choice svg{width:22px;height:22px}
+  #rsvp .rs-review{margin-bottom:12px}
+  #rsvp .rs-review-heart{font-size:44px}
+  #rsvp #rs-review-summary{font-size:22px;margin:9px 0}
+  #rsvp #rs-review-meals{font-size:16px;line-height:1.3}
+ }
+ @media (max-width:350px),(max-height:524px){
+  #rsvp{padding-top:8px;padding-bottom:8px}
+  #rsvp .rs-masthead{font-size:18px;padding-bottom:5px}
+  #rsvp .rs-progress{margin:4px 0 5px}
+  #rsvp .p-rsvp-head{font-size:28px;margin-bottom:4px}
+  #rsvp .rs-subtitle{font-size:14px;margin-bottom:6px}
+  #rsvp .p-choices{margin-top:8px}
+  #rsvp .p-choice{min-height:96px;padding:10px 7px 8px;gap:5px}
+  #rsvp .p-choice b{font-size:16px}
+  #rsvp .p-choice .attendance-icon{width:22px;height:22px}
+  #rsvp .rs-footer{padding-top:5px;margin-top:4px}
+  #rsvp .rsvp-signoff{font-size:14px;margin-top:4px}
+ }
+}
+
+/* Keep touch targets consistent across every card size. */
+#rsvp .seat-stepper button{width:44px;height:44px}
+.guest-tabs button{width:44px;height:44px}
+#rsvp .rs-back{min-height:44px}
+
+/* The full printed invitation is available alongside the interactive reply. */
+#rsvp{background:#fbe6e3 url("assets/art/frame-original-4.svg?v=paper-match-2") center/100% 100% no-repeat}
+#rsvp .original-invitation{align-self:center;flex-shrink:0;color:var(--gold-dark);font:400 12px/1.4 var(--serif);margin:0 0 6px;text-underline-offset:3px;min-height:24px;display:flex;align-items:center}
+/* The complete original page now supplies the sky, petals, road and car. */
+#rsvp .p-scene,#rsvp .frame--petals{display:none}
+
+/* Keep reply choices readable where the full original illustration sits beneath them. */
+#rsvp .p-choice{background:rgba(255,247,242,.96)}
+#rsvp .p-choice:has(input:checked){background:var(--ink)}

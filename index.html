@@ -4,21 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7dfd9">
-  <meta name="description" content="Rukhshana and Ruzbeh invite you to their wedding on Friday, 26 February 2027, 6 PM, All Bless Baug, Mumbai.">
+  <meta name="description" content="Rukhshana and Ruzbeh invite you to their wedding on Friday, 26 February 2027, 6 PM, Albless Baug, Mumbai.">
   <meta name="referrer" content="no-referrer">
   <meta property="og:title" content="Rukhshana & Ruzbeh · You're invited">
-  <meta property="og:description" content="Friday, 26 February 2027 · 6 PM · All Bless Baug, Mumbai">
+  <meta property="og:description" content="Friday, 26 February 2027 · 6 PM · Albless Baug, Mumbai">
   <meta property="og:url" content="https://ruzbeh.github.io/rukhshana-ruzbeh/">
-  <meta property="og:image" content="https://ruzbeh.github.io/rukhshana-ruzbeh/assets/og.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://ruzbeh.github.io/rukhshana-ruzbeh/assets/og-2.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rukhshana with Ruzbeh, Friday 26 February 2027, Mumbai">
+  <meta name="twitter:card" content="summary_large_image">
   <title>Rukhshana &amp; Ruzbeh</title>
   <link rel="icon" href="data:,">
   <link rel="preload" href="assets/fonts/PinyonScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/card-1.webp" as="image">
-  <link rel="stylesheet" href="styles.css?v=19">
-  <script src="app.js?v=19" defer></script>
+  <link rel="stylesheet" href="styles.css?v=release-20261029-1">
+  <link rel="stylesheet" href="card-layout.css?v=release-20261029-1">
+  <link rel="stylesheet" href="rsvp.css?v=release-20261029-1">
+  <script src="app.js?v=release-20261029-1" defer></script>
 </head>
 <body class="is-sealed">
 
@@ -40,10 +45,10 @@
     <div class="petals petals--far" id="petals-far" aria-hidden="true"></div>
 
     <header class="sealed-head" id="sealed-head" data-depth="0.2">
-      <img class="sealed-emblem" src="assets/art/emblem-relief.webp" alt="">
+      <img class="sealed-emblem" src="assets/art/farohar-embossed-gold.png" alt="">
       <p class="caps">Together with our families</p>
-      <img class="sealed-names" src="assets/art/names-block.webp?v=18" alt="Rukhshana with Ruzbeh">
-      <p class="caps sealed-date">Friday · 26 February 2027 · Mumbai</p>
+      <div class="sealed-names" aria-label="Rukhshana and Ruzbeh"><img src="assets/art/name-rukhshana.webp" alt="Rukhshana"><span>and</span><img src="assets/art/name-ruzbeh.webp" alt="Ruzbeh"></div>
+
     </header>
 
     <div class="env-wrap" id="env-wrap">
@@ -64,22 +69,24 @@
           <span class="flap-face flap-face--back"></span>
         </span>
         <span class="env-seal" id="env-seal" aria-hidden="true"><img src="assets/art/seal-wax.webp" alt="" draggable="false"></span>
-        <span class="env-to">
+        <span class="env-to"><span class="env-title">Wedding invite</span>
           <span class="env-for" id="env-for" hidden>Specially for</span>
-          <span class="env-name" id="env-name">You’re invited</span>
+          <span class="env-name" id="env-name">Rukhshana &amp; Ruzbeh</span>
           <img class="env-rule" src="assets/art/divider-with.webp" alt="" draggable="false">
         </span>
       </button>
     </div>
 
-    <p class="tap-hint" id="tap-hint">Tap to open</p>
+    <div class="tap-hint" id="tap-hint" aria-hidden="true"><span class="seal-pointer">↑</span></div>
     <div class="petals petals--near" id="petals-near" aria-hidden="true"></div>
     <div class="flock" id="flock" aria-hidden="true"></div>
   </div>
 
+  <button class="chip chip--ghost opening-skip" id="skip-opening" type="button" hidden>Skip intro</button>
+
   <div class="film-screen" id="film-screen" hidden>
-    <video id="story-video" playsinline muted preload="none" poster="assets/story-mobile-poster-wc2.webp" aria-label="Our story: Ruku, Ruzbeh, and the road they are taking together">
-      <source id="story-source" src="assets/our-story-mobile-wc3.mp4" type="video/mp4">
+    <video id="story-video" playsinline muted preload="none" poster="assets/story-mobile-poster-wc4.jpg" aria-label="Our story: Rukhshana, Ruzbeh, and the road they are taking together">
+      <source id="story-source" src="assets/our-story-mobile-wc6.mp4" type="video/mp4">
     </video>
     <div class="film-controls">
       <button class="chip chip--ghost" id="sound-toggle" type="button" aria-pressed="true">♪ Sound on</button>
@@ -88,47 +95,48 @@
   </div>
 
   <main class="stage" id="stage" aria-label="Wedding invitation">
-    <div class="book" id="book" tabindex="0" aria-roledescription="carousel" aria-label="The invitation card, four pages. Swipe or use the arrows to turn.">
+    <div class="book" id="book" tabindex="0" aria-roledescription="carousel" aria-label="The invitation card, four pages. Swipe or use keyboard arrow keys to turn.">
 
       <div class="leaf" data-page="1" style="--i:0">
         <div class="face face--front">
-          <section class="page page--cover" aria-label="Page 1 of 4">
-            <div class="frame" data-depth="0.35" aria-hidden="true">
-              <img class="band band--top" src="assets/art/p1-top.webp" alt="">
-              <img class="band band--bottom" src="assets/art/p1-bottom.webp" alt="">
-              <img class="band band--left" src="assets/art/p1-left.webp" alt="">
-              <img class="band band--right" src="assets/art/p1-right.webp" alt="">
-              <img class="band band--left band--lower" src="assets/art/p1-left.webp" alt="">
-              <img class="band band--right band--lower" src="assets/art/p1-right.webp" alt="">
+          <section class="page print-page" aria-label="Page 1 of 4">
+            <div class="print-canvas print-invitation">
+              <img class="print-frame" src="assets/art/frame-unified-1.svg?v=farohar-1" alt="" draggable="false">
+              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <p class="print-intro">Naazlina and Zarir Patwa<br>invite <span id="p-guest">you</span> to share their joy<br>as they celebrate the wedding<br>of their daughter</p>
+              <h1 class="print-name print-name--bride"><img src="assets/art/name-rukhshana.webp" alt="Rukhshana" draggable="false"></h1>
+              <p class="print-and"><span aria-hidden="true"></span>and<span aria-hidden="true"></span></p>
+              <h1 class="print-name print-name--groom"><img src="assets/art/name-ruzbeh.webp" alt="Ruzbeh" draggable="false"></h1>
+              <p class="print-parents">son of Aban and Soli Irani</p>
             </div>
-            <img class="p-emblem" data-depth="0.55" src="assets/art/emblem-relief.webp" alt="" draggable="false">
-            <p class="p-line">Naazlina and Zarir Patwa<br>invite <span class="p-guest" id="p-guest">you</span> to share their joy<br>as they celebrate the wedding<br>of their daughter</p>
-            <h1 class="p-name p-name--bride"><img class="p-art" data-depth="0.18" src="assets/art/name-rukhshana.webp" alt="Rukhshana" draggable="false"></h1>
-            <img class="p-with" data-depth="0.12" src="assets/art/with-rule.webp" alt="with" draggable="false">
-            <h1 class="p-name p-name--groom"><img class="p-art" data-depth="0.18" src="assets/art/name-ruzbeh.webp" alt="Ruzbeh" draggable="false"></h1>
-            <p class="p-line p-line--sub">son of Aban and Soli Irani</p>
           </section>
         </div>
       </div>
 
       <div class="leaf" data-page="2" style="--i:1">
         <div class="face face--front">
-          <section class="page page--details" aria-label="Page 2 of 4">
-            <div class="frame" data-depth="0.35" aria-hidden="true">
-              <img class="band band--top" src="assets/art/p2-top.webp" alt="">
-              <img class="band band--right band--tall" src="assets/art/p2-right.webp" alt="">
-            </div>
-            <img class="p-ses" data-depth="0.7" src="assets/art/ses.webp" alt="The ses: the wedding tray with the coconut, lamp and flowers." draggable="false">
-            <img class="p-emblem p-emblem--sm" data-depth="0.55" src="assets/art/emblem-relief.webp" alt="" draggable="false">
-            <p class="p-day">Friday</p>
-            <p class="p-date"><span>February</span><b>26</b><span>2027</span></p>
-            <p class="p-time"><time datetime="2027-02-26T18:00:00+05:30">6 PM</time></p>
-            <h2 class="p-venue">All Bless Baug</h2>
-            <p class="p-address">Charni Road, East, Mumbai</p>
-            <p class="p-script"><img class="p-art" data-depth="0.15" src="assets/art/script-cocktails.webp" alt="Followed by cocktails and dinner" draggable="false"></p>
-            <div class="p-actions">
-              <a class="chip chip--small" href="assets/wedding.ics" download="Rukhshana-and-Ruzbeh-wedding.ics">Add to calendar</a>
-              <a class="chip chip--small" href="https://www.google.com/maps/search/?api=1&amp;query=All%20Bless%20Baug%2C%20Charni%20Road%20East%2C%20Mumbai" target="_blank" rel="noopener noreferrer">Directions</a>
+          <section class="page print-page" aria-label="Page 2 of 4">
+            <div class="print-canvas print-details">
+              <img class="print-frame" src="assets/art/frame-unified-2.svg?v=farohar-1" alt="A floral garland, hummingbird, and traditional wedding ses." draggable="false">
+              <img class="print-hummingbird" src="assets/art/hummingbird.webp" alt="" draggable="false">
+              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <h2 class="print-wedding">Wedding</h2>
+              <p class="print-day">Friday</p>
+              <p class="print-date"><span>February</span><b>26</b><span>2027</span></p>
+              <p class="print-time"><time datetime="2027-02-26T18:00:00+05:30">6 PM</time></p>
+              <h2 class="print-venue">Albless Baug</h2>
+              <p class="print-address">Charni Road East, Mumbai</p>
+              <img class="print-cocktails" src="assets/art/script-cocktails.webp" alt="Followed by cocktails and dinner" draggable="false">
+              <div class="print-actions">
+                <a class="venue-action venue-action--calendar" href="assets/wedding.ics" download="Rukhshana-and-Ruzbeh-wedding.ics" aria-label="Save the date — Add to calendar">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4m9-4v4M3.5 10h17"/><path class="venue-action-heart" d="M12 18s-4-2.3-4-4.3c0-1.8 2.5-2.3 4-.4 1.5-1.9 4-1.4 4 .4 0 2-4 4.3-4 4.3Z"/></svg>
+                  <span><b>Save the date</b></span>
+                </a>
+                <a class="venue-action venue-action--directions" href="https://www.google.com/maps/place/Albless+Baug/@18.953686,72.8177563,17z/data=!3m1!4b1!4m6!3m5!1s0x3be7ce10720809ad:0x56cddf22df4ffea0!8m2!3d18.953686!4d72.8177563!16s%2Fg%2F11j007p5cn" target="_blank" rel="noopener noreferrer" aria-label="Directions — Find the venue on Google Maps">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9c0 5-7 12-7 12S5 14 5 9a7 7 0 1 1 14 0Z"/><circle cx="12" cy="9" r="2.5"/><path d="m4 20-1.5 2h19L20 20"/></svg>
+                  <span><b>Find your way</b></span>
+                </a>
+              </div>
             </div>
           </section>
         </div>
@@ -136,32 +144,27 @@
 
       <div class="leaf" data-page="3" style="--i:2">
         <div class="face face--front">
-          <section class="page page--blessings" id="families" aria-label="Page 3 of 4">
-            <div class="frame" data-depth="0.35" aria-hidden="true">
-              <img class="band band--top band--deep" src="assets/art/p3-top.webp" alt="">
-              <img class="band band--bottom" src="assets/art/p3-bottom.webp" alt="">
-              <img class="band band--left band--mid" src="assets/art/p1-left.webp" alt="">
-              <img class="band band--right band--mid" src="assets/art/p1-right.webp" alt="">
-              <img class="band band--left band--mid band--lower" src="assets/art/p1-left.webp" alt="">
-              <img class="band band--right band--mid band--lower" src="assets/art/p1-right.webp" alt="">
-            </div>
-            <img class="p-emblem p-emblem--sm" data-depth="0.55" src="assets/art/emblem-relief.webp" alt="" draggable="false">
-            <h2 class="p-head p-head--blessings"><img class="p-art" data-depth="0.15" src="assets/art/word-blessings.webp" alt="Blessings" draggable="false"></h2>
-            <img class="p-flourish" src="assets/art/divider-flourish.webp" alt="" draggable="false">
-            <ul class="p-people">
+          <section class="page print-page" id="families" aria-label="Page 3 of 4">
+            <div class="print-canvas print-families">
+              <img class="print-frame" src="assets/art/frame-unified-3.svg?v=farohar-1" alt="" draggable="false">
+              <img class="print-emblem" src="assets/art/farohar-embossed-gold.png" alt="Gold embossed Farohar" draggable="false">
+              <h2 class="print-heading print-heading--blessings"><img src="assets/art/word-blessings.webp" alt="Blessings" draggable="false"></h2>
+              <img class="print-flourish print-flourish--blessings" src="assets/art/divider-flourish.webp" alt="" draggable="false">
+            <ul class="print-people print-people--blessings">
               <li class="person" data-photo="assets/family/jamshed-patwa.jpg"><span class="portrait" hidden></span>Jamshed Patwa</li>
               <li class="person" data-photo="assets/family/banoo-rumi-mody.jpg"><span class="portrait" hidden></span>Banoo and Rumi Mody</li>
               <li class="person" data-photo="assets/family/freny-sohrab-patwa.jpg"><span class="portrait" hidden></span>Freny and Sohrab Patwa</li>
               <li class="person" data-photo="assets/family/piroja-behram-baria.jpg"><span class="portrait" hidden></span>Piroja and Behram Baria</li>
               <li class="person" data-photo="assets/family/nariosang-navroje.jpg"><span class="portrait" hidden></span>Nariosang Navroje</li>
             </ul>
-            <h2 class="p-head p-head--compliments"><img class="p-art" data-depth="0.15" src="assets/art/word-compliments.webp" alt="Compliments" draggable="false"></h2>
-            <img class="p-flourish" src="assets/art/divider-flourish.webp" alt="" draggable="false">
-            <ul class="p-people">
-              <li class="person" data-photo="assets/family/cyrus-goolcher-patwa.jpg"><span class="portrait" hidden></span>Cyrus and Goolcher Patwa</li>
-              <li class="person" data-photo="assets/family/jamshed-meherzin-patwa.jpg"><span class="portrait" hidden></span>Jamshed and Meherzin Patwa</li>
+              <h2 class="print-heading print-heading--compliments"><img src="assets/art/word-compliments.webp" alt="Compliments" draggable="false"></h2>
+              <img class="print-flourish print-flourish--compliments" src="assets/art/divider-flourish.webp" alt="" draggable="false">
+            <ul class="print-people print-people--compliments">
+              <li class="person" data-photo="assets/family/cyrus-goolcher-patwa.jpg"><span class="portrait" hidden></span>Goolcher and Cyrus Patwa</li>
+              <li class="person" data-photo="assets/family/jamshed-meherzin-patwa.jpg"><span class="portrait" hidden></span>Meherzin and Jamshed Patwa</li>
               <li class="person" data-photo="assets/family/xerxes-mody.jpg"><span class="portrait" hidden></span>Xerxes Mody</li>
             </ul>
+            </div>
           </section>
         </div>
       </div>
@@ -171,22 +174,42 @@
           <section class="page page--rsvp" id="rsvp" aria-label="Page 4 of 4">
             <img class="p-scene" src="assets/art/scene-4.webp" alt="The couple drive away together in their flower-covered blue car." draggable="false">
             <img class="frame frame--petals" data-depth="0.5" src="assets/art/petals-4.webp" alt="" draggable="false">
-            <img class="p-emblem p-emblem--sm" data-depth="0.55" src="assets/art/emblem-relief.webp" alt="" draggable="false">
-            <h2 class="p-rsvp-head"><img class="p-art" src="assets/art/head-rsvp.webp" alt="RSVP to attend" draggable="false"></h2>
-            <img class="p-flourish p-flourish--sm" src="assets/art/divider-flourish.webp" alt="" draggable="false">
+            <a class="original-invitation" href="assets/original-invitation.pdf" target="_blank" rel="noopener">View original invitation (PDF)</a>
+            <div class="rs-masthead"><img class="rs-card-emblem" src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"><span>Rukhshana &amp; Ruzbeh</span></div>
+            <div class="rs-progress" aria-label="RSVP progress"><span class="is-current">01 · Your reply</span><span>02 · Your party</span><span>03 · The menu</span></div>
+            <h2 class="p-rsvp-head" id="rs-heading" tabindex="-1">We saved you a place.</h2>
+            <p id="rs-subtitle" class="rs-subtitle">The best part of our day? Sharing it with you.</p>
             <form id="rsvp-form" class="p-form" novalidate>
-              <input id="rsvp-name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="Your name or family name" aria-label="Your name or family name" required>
+              <section class="rs-step" data-step="0" aria-label="Your reply">
+                <label class="rsvp-field"><span>Your name or family</span><input id="rsvp-name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="The name on your invitation" required></label>
               <div class="p-choices" role="radiogroup" aria-label="Will you be attending?">
-                <label class="p-choice"><input type="radio" name="attending" value="yes" required><span>Joyfully attending</span></label>
-                <label class="p-choice"><input type="radio" name="attending" value="no" required><span>Unable to attend</span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b><small>With bells on</small></span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Sending our love</b><small>Celebrating from afar</small></span></label>
               </div>
-              <div class="p-more" id="attending-fields" hidden>
-                <label class="p-count"><span>Guests</span><input id="rsvp-count" name="partySize" type="number" min="1" max="20" step="1" inputmode="numeric" value="1"></label>
-                <input id="rsvp-food" name="foodNotes" type="text" maxlength="200" placeholder="Food preferences" aria-label="Food preferences">
+              </section>
+              <section class="rs-step" data-step="1" aria-label="Your party" hidden>
+                <div class="p-more" id="attending-fields">
+                <div class="seat-preview">
+                  <svg class="guest-table" viewBox="0 0 300 190" aria-hidden="true"><ellipse class="table-shadow" cx="150" cy="101" rx="96" ry="45"/><ellipse class="table-top" cx="150" cy="95" rx="96" ry="45"/><ellipse class="table-inlay" cx="150" cy="95" rx="87" ry="36"/><path class="table-heart" d="M150 91c-18-13-22 10 0 20 22-10 18-33 0-20Z"/><text x="150" y="80" class="table-caption">Room for love</text><g id="table-people"></g></svg>
+                  <p id="seat-summary" role="status" aria-live="polite" aria-atomic="true">1 guest joining the celebration</p>
+                </div>
+                <div class="p-count"><span id="seat-label">How many of you?<small>You, your favourite people &amp; the little ones.</small></span><div class="seat-stepper"><button id="seat-remove" type="button" aria-label="Remove a guest">−</button><input id="rsvp-count" name="partySize" type="number" min="1" max="20" step="1" inputmode="numeric" value="1" aria-labelledby="seat-label"><button id="seat-add" type="button" aria-label="Add a guest">+</button></div></div>
+                <p class="rs-footnote">A little illustration of your party. We’ll arrange the seating.</p>
+                </div>
+              </section>
+              <section class="rs-step" data-step="2" aria-label="Guest names and meals" hidden>
+                <div id="guest-tabs" class="guest-tabs" role="group" aria-label="Choose a guest"></div>
+                <div id="rsvp-guests" class="rsvp-guests"></div>
+              </section>
+              <section class="rs-step" data-step="3" aria-label="Review your reply" hidden>
+                <div class="rs-review"><span class="rs-review-heart" aria-hidden="true">♡</span><p id="rs-review-summary"></p><p id="rs-review-meals"></p></div>
+                <label class="rsvp-field"><span>A little love for the couple <small>optional</small></span><input id="rsvp-message" name="message" type="text" maxlength="300" placeholder="We can’t wait to celebrate…"></label>
+              </section>
+              <div class="rs-footer">
+                <p class="p-error" id="rsvp-error" role="alert" hidden></p>
+                <div class="rs-navigation"><button id="rs-back" class="rs-back" type="button" hidden>← Back</button><button id="rs-next" class="chip chip--primary" type="button">Let’s RSVP <span aria-hidden="true">→</span></button><button class="chip chip--primary" id="rsvp-submit" type="submit" hidden>Send our reply</button></div>
+                <p class="rsvp-signoff">With love, Rukhshana &amp; Ruzbeh</p>
               </div>
-              <input id="rsvp-message" name="message" type="text" maxlength="300" placeholder="A note for the couple (optional)" aria-label="A note for the couple">
-              <p class="p-error" id="rsvp-error" role="alert" hidden></p>
-              <button class="chip chip--primary" id="rsvp-submit" type="submit">Send our reply</button>
             </form>
             <div class="p-done" id="rsvp-done" role="status" aria-live="polite" hidden>
               <p class="p-head p-head--sm" id="rsvp-done-title">Thank you</p>
@@ -199,20 +222,32 @@
       </div>
 
     </div>
-    <button class="deck-arrow deck-arrow--prev" id="deck-prev" type="button" aria-label="Previous page">‹</button>
-    <button class="deck-arrow deck-arrow--next" id="deck-next" type="button" aria-label="Next page">›</button>
-    <div class="topbar">
+    <button class="deck-arrow deck-arrow--prev" id="deck-prev" type="button" aria-label="Previous page" aria-controls="book">‹</button>
+    <button class="deck-arrow deck-arrow--next" id="deck-next" type="button" aria-label="Next page" aria-controls="book">›</button>
+    <div class="topbar" hidden>
       <button class="bar-button" id="close-card" type="button" aria-label="Close the card">✕<span>Close</span></button>
       <button class="bar-button" id="story-button" type="button">▸<span>Our story</span></button>
     </div>
     <div class="bottombar">
-      <p class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe to turn the card</p>
+      <p class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe or use ← → to turn the card</p>
       <div class="bottombar-row">
         <div class="deck-dots" id="deck-dots" role="tablist" aria-label="Card pages"></div>
-        <button class="chip chip--primary bar-rsvp" id="rsvp-button" type="button">RSVP</button>
+        <button hidden class="chip chip--primary bar-rsvp" id="rsvp-button" type="button">RSVP</button>
       </div>
     </div>
   </main>
+
+  <div class="turn-upright" aria-hidden="true">
+    <img class="turn-upright-corner turn-upright-corner--tl" src="assets/art/corner-tl.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--tr" src="assets/art/corner-tr.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--bl" src="assets/art/corner-bl.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--br" src="assets/art/corner-br.webp" alt="">
+    <img class="turn-upright-emblem" src="assets/art/farohar-embossed-gold.png" alt="">
+    <img class="turn-upright-names" src="assets/art/names-block.webp?v=18" alt="">
+    <p class="caps">Please turn your phone upright</p>
+  </div>
+
+  <div class="guide-actor" id="guide-actor" aria-hidden="true" hidden><span class="guide-reach" id="guide-reach"></span><i class="guide-tap-ripple"></i></div>
 
   <audio id="score" src="assets/score.m4a?v=15" preload="auto"></audio>
   <div class="sr-only" id="live" aria-live="polite"></div>

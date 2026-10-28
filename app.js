@@ -2,7 +2,7 @@
   'use strict';
 
   // ---- RSVP delivery. Leave both empty to let guests share or copy their reply. ----
-  const RSVP_ENDPOINT = '';   // e.g. an Apps Script / webhook URL that accepts a JSON POST
+  const RSVP_ENDPOINT = '';   // a webhook URL that accepts a JSON POST
   const RSVP_WHATSAPP = '';   // e.g. '919876543210' (country code, digits only)
   const COUPLE = 'Rukhshana & Ruzbeh';
 
@@ -27,21 +27,127 @@
   let state = 'sealed';
 
   // ---------- guest ----------
-  const cleanName = value => String(value || '').replace(/[\u0000-\u001f\u007f]/g, '').replace(/\s+/g, ' ').trim().slice(0, 100);
+  const cleanName = value => String(value || '').replace(/[\u0000-\u001f\u007f]/g, '').replace(/\s+/g, ' ').trim().slice(0, 360);
   const params = new URLSearchParams(location.search);
   const guest = cleanName(params.get('guest') || params.get('g') || params.get('to'));
+  const invitees = params.getAll('guest').length > 1 ? params.getAll('guest').map(cleanName).filter(Boolean) : guest.split(/\s*(?:;|\n)\s*/).filter(Boolean);
   if (guest) {
     $('env-for').hidden = false;
     $('env-name').textContent = guest;
     $('env-name').classList.add('is-guest');
     $('env-name').classList.toggle('is-long', guest.length > 18);
-    $('p-guest').textContent = guest;
+    $('p-guest').replaceChildren(...invitees.map(name => { const line = document.createElement('span'); line.textContent = name; return line; }));
     $('p-guest').classList.add('is-named');
     $('p-guest').classList.toggle('is-long', guest.length > 18);
     document.title = `For ${guest} · ${document.title}`;
     envelope.setAttribute('aria-label', `Open the invitation for ${guest}`);
-    $('rsvp-name').value = guest;
+    $('rsvp-name').value = guest.slice(0, 100);
+    if (invitees.length > 1) $('env-name').textContent = invitees.join(', ');
+    const envelopeNames = $('env-name').textContent;
+    $('env-name').classList.toggle('is-long', envelopeNames.length > 18);
+    envelope.classList.toggle('has-many-invitees', envelopeNames.length > 80);
   }
+
+  const family = (params.get('family') || params.get('side') || '').trim().toLowerCase();
+  const host = family === 'ruzbeh' || family === 'groom' ? 'ruzbeh'
+    : family === 'rukhshana' || family === 'bride' ? 'rukhshana' : null;
+  const guideActor = $('guide-actor');
+  const guideReach = $('guide-reach');
+  guideActor.dataset.host = host || '';
+  let pageGuideLearned = false;
+  let guidePageIndex = null;
+  let pageHint = null;
+  let pageHintTimer;
+
+  function positionGuideActor() {
+    if (guideActor.hidden || guideActor.dataset.mode === 'page') return;
+    const rect = $('env-seal').getBoundingClientRect();
+    const size = Math.min(150, innerWidth * 0.34, innerHeight * 0.22);
+    guideActor.style.width = `${size}px`;
+    guideActor.style.height = `${size}px`;
+    guideActor.style.left = `${rect.left + rect.width * 0.48 - size * (guideActor.dataset.host === 'ruzbeh' ? 0.94 : 0.87)}px`;
+    guideActor.style.top = `${rect.top + rect.height * 0.48 - size * 0.075}px`;
+  }
+  window.addEventListener('resize', positionGuideActor);
+
+
+  function cancelPageHint() {
+    clearTimeout(pageHintTimer);
+    if (!pageHint) return;
+    const index = pageHint.index;
+    cancelAnimationFrame(pageHint.raf);
+    pageHint = null;
+    guidePageIndex = null;
+    guideActor.hidden = true;
+    leaves[index].classList.remove('is-turning');
+    paintCurl(index, index < currentPage - 1 ? 1 : 0, 0);
+    turning = flights.size > 0 || turn.active;
+  }
+  function hideGuide() {
+    cancelPageHint();
+    guidePageIndex = null;
+    guideActor.hidden = true;
+    body.classList.remove('has-opening-guide');
+    guideActor.getAnimations({subtree: true}).forEach(animation => animation.cancel());
+  }
+  function showOpeningGuide() {
+    hideGuide();
+    if (!host) return;
+    body.classList.add('has-opening-guide');
+    guideActor.dataset.mode = 'open';
+    guideActor.style.opacity = '';
+    guideActor.hidden = false;
+    requestAnimationFrame(positionGuideActor);
+  }
+  function startPageGuide(index) {
+    if (!host || reducedMotion.matches) return;
+    guidePageIndex = index;
+    guideActor.dataset.mode = 'page';
+    guideActor.hidden = false;
+  }
+  function positionPageGuide(index, progress, lift) {
+    if (guidePageIndex !== index) return;
+    if (progress >= 1) { guidePageIndex = null; guideActor.hidden = true; return; }
+    const rect = book.getBoundingClientRect();
+    const size = Math.min(185, rect.width * 0.46, innerHeight * 0.27);
+    const cornerX = rect.left + rect.width * (1 - 2 * progress);
+    const cornerY = rect.bottom - lift * Math.sin(Math.PI * progress) * rect.height / book.clientHeight;
+    guideActor.style.width = `${size}px`;
+    guideActor.style.height = `${size}px`;
+    guideActor.style.left = `${cornerX - 8 - size * 0.95}px`;
+    guideActor.style.top = `${cornerY - 8 - size * 0.88}px`;
+    guideActor.style.opacity = String(clamp((0.42 - progress) / 0.13, 0, 1));
+    guideActor.hidden = progress >= 0.42;
+  }
+  function schedulePageHint(delay = 1000) {
+    clearTimeout(pageHintTimer);
+    if (!host || pageGuideLearned || reducedMotion.matches || state !== 'deck' || currentPage === pageCount || document.hidden) return;
+    pageHintTimer = setTimeout(() => {
+      if (state !== 'deck' || pageGuideLearned || document.hidden || currentPage === pageCount) return;
+      if (turning || turn.pointerId !== null) { schedulePageHint(3000); return; }
+      const index = currentPage - 1;
+      const lift = book.clientHeight * 0.34;
+      const started = performance.now();
+      pageHint = {index, raf: 0};
+      turning = true;
+      leaves[index].classList.add('is-turning');
+      startPageGuide(index);
+      const frame = now => {
+        if (!pageHint || pageHint.index !== index) return;
+        const elapsed = now - started;
+        const progress = elapsed < 350 ? 0
+          : elapsed < 1550 ? 0.23 * easeInOutCubic((elapsed - 350) / 1200)
+          : elapsed < 2550 ? 0.23
+          : 0.23 * (1 - easeInOutCubic(clamp((elapsed - 2550) / 1000, 0, 1)));
+        paintCurl(index, progress, lift);
+        if (elapsed < 3550) pageHint.raf = requestAnimationFrame(frame);
+        else { cancelPageHint(); schedulePageHint(4200); }
+      };
+      pageHint.raf = requestAnimationFrame(frame);
+    }, delay);
+  }
+  $('env-seal').classList.add('seal-invitation');
+  showOpeningGuide();
 
   // ---------- petals ----------
   function sprinklePetals(holder, count, sizeBase, seed) {
@@ -158,9 +264,15 @@
       const k = Math.min(1, (now - startedAt) / ms);
       try { score.volume = startVolume * (1 - k); } catch (error) { /* iOS keeps volume read-only */ }
       if (k < 1) requestAnimationFrame(step);
-      else { score.pause(); try { score.volume = 1; } catch (error) { /* ignore */ } }
+      else stop();
+    };
+    const stop = () => {
+      if (token !== fadeToken || score.paused) return;
+      score.pause();
+      try { score.volume = 1; } catch (error) { /* ignore */ }
     };
     requestAnimationFrame(step);
+    setTimeout(stop, ms + 150);
   }
 
   function applySound() {
@@ -174,9 +286,9 @@
 
   function chooseStoryLayout() {
     const portrait = window.innerHeight >= window.innerWidth;
-    const wanted = portrait ? 'assets/our-story-mobile-wc3.mp4' : 'assets/our-story-wc3.mp4';
+    const wanted = portrait ? 'assets/our-story-mobile-wc6.mp4' : 'assets/our-story-wc6.mp4';
     filmScreen.dataset.layout = portrait ? 'portrait' : 'landscape';
-    storyVideo.poster = portrait ? 'assets/story-mobile-poster-wc2.webp' : 'assets/story-poster-wc2.webp';
+    storyVideo.poster = portrait ? 'assets/story-mobile-poster-wc4.jpg' : 'assets/story-poster-wc4.jpg';
     if (storySource.getAttribute('src') !== wanted && storyVideo.paused) {
       storySource.setAttribute('src', wanted);
       storyVideo.load();
@@ -247,7 +359,9 @@
   // ---------- opening ----------
   async function openEnvelope() {
     if (state !== 'sealed') return;
+    hideGuide();
     state = 'opening';
+    $('skip-opening').hidden = false;
     envelope.disabled = true;
     startScore();
     warmUpVideo();
@@ -282,6 +396,7 @@
         {transform: 'rotateX(-172deg)', opacity: 1, offset: 0.9},
         {transform: 'rotateX(-180deg)', opacity: 0}
       ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'}).finished;
+      if (state !== 'opening') return;
       flap.style.visibility = 'hidden';
 
       // a faint warm light from inside, nothing more
@@ -292,11 +407,13 @@
       ], {duration: 2600, easing: 'ease-in-out'});
       flyFlock();
       await wait(400);
+      if (state !== 'opening') return;
 
       const envRect = envelope.getBoundingClientRect();
       const rise = envRect.height * 0.62;
       await animate(letter, [{transform: 'translateY(0)'}, {transform: `translateY(${-rise}px)`}], {duration: 1500, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
 
+      if (state !== 'opening') return;
       const from = letter.getBoundingClientRect();
       stage.style.transform = 'translate(-50%,-50%)';
       const to = stage.getBoundingClientRect();
@@ -333,34 +450,44 @@
         {transform: 'translate(0,0) scale(1)', clipPath: clipStart},
         {transform: `translate(${landX.toFixed(1)}px, ${landY.toFixed(1)}px) scale(${fit.toFixed(4)})`, clipPath: clipEnd}
       ], {duration: 1600, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
-      sealed.hidden = true;
-      goToPage(1);
-      // the printed card fades onto the blank paper, then the paper lifts to show the live page:
-      // never two layouts of her name crossfading over each other
-      await animate(flyer, [{opacity: 1}, {opacity: 0}], {duration: 650, easing: 'ease-in-out'}).finished;
-      flyer.remove();
-      const lift = animate(veil, [{opacity: 1}, {opacity: 0}], {duration: 900, easing: 'ease-in-out'});
-      await lift.finished;
-      lift.cancel();
-      veil.remove();
+      // Hand the emerging card straight to the moving film.
+      // The live invitation is revealed only after the film has finished.
+
     } catch (error) {
       /* an interrupted animation still ends on the opened card */
     }
 
-    finishOpening(flyer);
-    stage.querySelectorAll('.stage-veil').forEach(veil => veil.remove());
-    await wait(3000);
     if (state !== 'opening') return;
-    if (storySeen) showDeck(1);
-    else playStory();
+    if (storySeen) {
+      finishOpening(flyer);
+      fadeOutScore(1600);
+      showDeck(1);
+    } else {
+      playStory();
+      finishOpening(flyer);
+    }
+    stage.querySelectorAll('.stage-veil').forEach(veil => veil.remove());
   }
 
   function finishOpening(flyer) {
+    $('skip-opening').hidden = true;
     body.classList.remove('is-sealed');
     sealed.hidden = true;
     if (flyer) flyer.remove();
     goToPage(1);
   }
+
+  $('skip-opening').addEventListener('click', () => {
+    if (state !== 'opening') return;
+    // Cancelling the current await cannot let later opening phases run.
+    state = 'deck';
+    sealed.getAnimations({subtree: true}).forEach(animation => animation.cancel());
+    document.querySelectorAll('.flying-card').forEach(card => { card.getAnimations().forEach(animation => animation.cancel()); card.remove(); });
+    stage.querySelectorAll('.stage-veil').forEach(veil => veil.remove());
+    finishOpening();
+    showDeck(1);
+    fadeOutScore(600);
+  });
 
   // ---------- our story, full screen ----------
   let releaseFilm = null;
@@ -392,7 +519,9 @@
 
   async function playStory() {
     if (state === 'film') return;
+    hideGuide();
     state = 'film';
+    body.classList.add('is-playing-story');
     storySeen = true;
     stage.inert = true;
     const session = ++filmSession;
@@ -415,11 +544,12 @@
   }
 
   function endStory() {
+    body.classList.remove('is-playing-story');
     filmWanted = false;
     storyVideo.pause();
     fadeOutScore(1600);
     filmScreen.classList.remove('is-visible');
-    setTimeout(() => { if (state !== 'film') filmScreen.hidden = true; }, 850);
+    filmScreen.hidden = true;
     showDeck(currentPage || 1);
     $('swipe-hint').classList.add('is-visible');
     setTimeout(() => $('swipe-hint').classList.remove('is-visible'), 4200);
@@ -430,6 +560,7 @@
     if (releaseFilm) releaseFilm();
     state = 'deck';
     endStory();
+    book.focus({preventScroll: true});
   }
   $('skip-film').addEventListener('click', skipFilm);
   $('story-button').addEventListener('click', () => { startScore(); playStory(); });
@@ -451,6 +582,7 @@
   }
   async function closeCard() {
     if (state !== 'deck') return;
+    hideGuide();
     state = 'closing';
     fadeOutScore(500);
     try {
@@ -460,6 +592,7 @@
     body.classList.add('is-sealed');
     parallax.on = !reducedMotion.matches;
     state = 'sealed';
+    showOpeningGuide();
     stage.getAnimations().forEach(animation => animation.cancel());
     stage.style.transform = '';
     stage.inert = true;
@@ -468,6 +601,11 @@
   }
   $('close-card').addEventListener('click', closeCard);
   document.addEventListener('visibilitychange', () => {
+    if (state === 'deck') {
+      if (document.hidden) cancelPageHint();
+      else schedulePageHint();
+      return;
+    }
     if (state !== 'film') return;
     if (document.hidden) storyVideo.pause();
     else if (filmWanted && !storyVideo.ended) storyVideo.play().catch(() => {});
@@ -505,7 +643,12 @@
   });
 
   function setActivePage(n) {
+    const changed = currentPage !== n;
     currentPage = n;
+    stage.classList.toggle('is-rsvp', n === pageCount);
+    if (changed && state === 'deck') {
+      cancelPageHint();
+    }
     [...dots.children].forEach((dot, index) => {
       dot.classList.toggle('is-active', index === n - 1);
       dot.setAttribute('aria-selected', String(index === n - 1));
@@ -545,6 +688,7 @@
   }
 
   function paintCurl(index, t, lift) {
+    positionPageGuide(index, t, lift);
     const leaf = leaves[index], curl = curls[index], liftShadow = liftShadows[index];
     if (t <= 0 || t >= 1) {
       leaf.style.clipPath = t >= 1 ? 'polygon(0 0, 0 0, 0 0)' : '';
@@ -563,7 +707,7 @@
 
     leaf.style.clipPath = polygonCss(clipRectByLine(W, H, mx, my, nx, ny, true));
 
-    curl.style.display = '';
+    curl.style.display = 'block';
     curl.style.clipPath = polygonCss(clipRectByLine(W, H, mx, my, nx, ny, false));
     const dx = -ny, dy = nx;
     const a = 2 * dx * dx - 1, b = 2 * dx * dy, d = 2 * dy * dy - 1;
@@ -577,7 +721,7 @@
     const width = W * (0.06 + 0.26 * openness);
     // the lifted edge of the folded part throws a soft shadow onto the flat page in front of it
     const edge = span / 2;
-    liftShadow.style.display = '';
+    liftShadow.style.display = 'block';
     liftShadow.style.backgroundImage = gradientAlong(W, H, nx, ny, mx, my, s =>
       `rgba(60,30,35,0) ${(s + edge - 1).toFixed(1)}px, rgba(60,30,35,${(0.16 + 0.12 * openness).toFixed(3)}) ${(s + edge).toFixed(1)}px, rgba(60,30,35,0) ${(s + edge + width * 0.7).toFixed(1)}px`);
     bookShade.style.zIndex = String(19 - 2 * index);
@@ -617,9 +761,11 @@
   }
 
   function goToPage(n, options = {}) {
+    if (state !== 'sealed') hideGuide();
     n = clamp(n, 1, pageCount);
     const animate = options.animate ?? (state === 'deck' && !reducedMotion.matches);
     const from = currentPage;
+    if (state === 'deck' && from !== n && options.animate !== false) pageGuideLearned = true;
     setActivePage(n);
     if (!animate || from === n) {
       flights.forEach(flight => cancelAnimationFrame(flight.raf));
@@ -642,8 +788,10 @@
 
   const turn = {pointerId: null, startX: 0, startY: 0, active: false, forward: true, index: -1, t: 0, lift: 0, lastX: 0, lastTime: 0, velocity: 0};
   book.addEventListener('pointerdown', event => {
+    cancelPageHint();
     if (state !== 'deck' || event.button !== 0 || turn.pointerId !== null || flights.size > 0) return;
-    if (event.target.closest('input, textarea, button, a, label, .topbar, .bottombar, .p-copy')) return;
+    if (event.target.closest('input, textarea, select, fieldset, button, a, label, .topbar, .bottombar, .p-copy')) return;
+    hideGuide();
     turn.pointerId = event.pointerId;
     turn.startX = event.clientX;
     turn.startY = event.clientY;
@@ -659,10 +807,10 @@
     const dy = event.clientY - turn.startY;
     if (!turn.active) {
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-      if (Math.abs(dy) > Math.abs(dx)) { turn.pointerId = null; return; }
+      if (Math.abs(dy) > Math.abs(dx)) { turn.pointerId = null; schedulePageHint(5000); return; }
       turn.forward = dx < 0;
       turn.index = turn.forward ? currentPage - 1 : currentPage - 2;
-      if (turn.index < 0 || (turn.forward && currentPage === pageCount)) { turn.pointerId = null; return; }
+      if (turn.index < 0 || (turn.forward && currentPage === pageCount)) { turn.pointerId = null; schedulePageHint(5000); return; }
       turn.active = true;
       turning = true;
       const localY = event.clientY - book.getBoundingClientRect().top;
@@ -680,26 +828,35 @@
     event.preventDefault();
   });
   const endTurn = event => {
-    if (event.pointerId !== turn.pointerId) return;
+    if (event.pointerId !== turn.pointerId) { schedulePageHint(5000); return; }
     turn.pointerId = null;
-    if (!turn.active || turn.index < 0) return;
+    if (!turn.active || turn.index < 0) { schedulePageHint(5000); return; }
     turn.active = false;
     const flung = Math.abs(turn.velocity) > 0.45;
     let complete;
-    if (turn.forward) complete = flung ? turn.velocity < 0 : turn.t > 0.3;
+    if (event.type === 'pointercancel') complete = false;
+    else if (turn.forward) complete = flung ? turn.velocity < 0 : turn.t > 0.3;
     else complete = flung ? turn.velocity > 0 : turn.t < 0.7;
     const target = turn.forward ? (complete ? 1 : 0) : (complete ? 0 : 1);
     const distance = Math.abs(target - turn.t);
-    flipLeaf(turn.index, turn.t, target, turn.lift, 260 + 420 * distance, easeOutCubic);
+    if (complete) pageGuideLearned = true;
+    flipLeaf(turn.index, turn.t, target, turn.lift, 260 + 420 * distance, easeOutCubic).then(() => {
+      if (!complete) schedulePageHint(5000);
+    });
     if (complete) setActivePage(currentPage + (turn.forward ? 1 : -1));
   };
   book.addEventListener('pointerup', endTurn);
   book.addEventListener('pointercancel', endTurn);
   book.addEventListener('click', event => { if (turn.active) event.preventDefault(); }, true);
-  $('deck-prev').addEventListener('click', () => goToPage(currentPage - 1));
-  $('deck-next').addEventListener('click', () => goToPage(currentPage + 1));
+  function turnFromPageControl(direction) {
+    goToPage(currentPage + direction, {animate: false});
+    book.focus({preventScroll: true});
+    live.textContent = `Page ${currentPage} of ${pageCount}: ${['Invitation', 'Wedding details', 'Blessings and compliments', 'RSVP'][currentPage - 1]}.`;
+  }
+  $('deck-prev').addEventListener('click', () => turnFromPageControl(-1));
+  $('deck-next').addEventListener('click', () => turnFromPageControl(1));
   book.addEventListener('keydown', event => {
-    if (event.target.closest('input, textarea')) return;
+    if (event.target.closest('input, textarea, select')) return;
     if (event.key === 'ArrowRight') { goToPage(currentPage + 1); event.preventDefault(); }
     if (event.key === 'ArrowLeft') { goToPage(currentPage - 1); event.preventDefault(); }
   });
@@ -708,6 +865,7 @@
     state = 'deck';
     stage.inert = false;
     goToPage(page, {animate: false});
+    schedulePageHint();
     live.textContent = 'The invitation is open. Swipe to turn the pages of the card. The RSVP is on the last page.';
   }
 
@@ -729,14 +887,186 @@
   const form = $('rsvp-form');
   const chip = label => { const button = document.createElement('button'); button.type = 'button'; button.className = 'chip'; button.textContent = label; return button; };
 
-  form.addEventListener('change', event => {
-    if (event.target.name === 'attending') $('attending-fields').hidden = event.target.value !== 'yes';
+  const meals = ['Parsi non veg', 'Parsi veg', 'Jain veg', 'Veg'];
+  const mealIcons = [
+    '<path d="M14 5c5-3 9 2 6 6-2 3-5 4-8 2l-5 5-2-2 5-5c-1-2 1-5 4-6Z"/><path d="m5 16-2-1-1 2 2 2 2-1"/>',
+    '<path d="M20 4C9 2 3 8 6 15c7 4 14-2 14-11Z"/><path d="M4 21 16 9M9 16v-5m0 5h5"/>',
+    '<path d="M12 21V10M12 14C5 15 3 10 4 6c6-1 9 3 8 8ZM12 10c-1-6 3-9 8-8 1 5-2 9-8 8Z"/>',
+    '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M2 3v5m-2-5v5m4-5v5M2 8v13M23 3v18"/>'
+  ];
+  const guestRows = $('rsvp-guests');
+  const guestDrafts = [];
+  let flowStep = 0;
+  let activeGuest = 0;
+  const readGuest = row => ({name: row.querySelector('input[type="text"]').value, meal: row.querySelector('input[type="radio"]:checked')?.value || ''});
+
+  function syncTable(count) {
+    const people = $('table-people');
+    while (people.children.length > count) people.lastElementChild.remove();
+    for (let i = 0; i < count; i++) {
+      let person = people.children[i];
+      if (!person) {
+        person = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        person.classList.add('table-person');
+        person.innerHTML = '<g class="table-person-icon"><circle class="seat-back" r="13"/><circle class="seat-head" cy="-3" r="4"/><path class="seat-body" d="M-7 7c0-9 14-9 14 0Z"/></g>';
+        people.append(person);
+      }
+      const angle = -Math.PI / 2 + i * 2 * Math.PI / count;
+      person.setAttribute('transform', `translate(${150 + 123 * Math.cos(angle)} ${95 + 70 * Math.sin(angle)})`);
+    }
+    $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'} joining the celebration`;
+    $('seat-remove').disabled = count <= 1;
+    $('seat-add').disabled = count >= 20;
+  }
+
+  function syncGuestRows() {
+    const count = Number($('rsvp-count').value);
+    if (!Number.isInteger(count) || count < 1 || count > 20) return;
+    guestRows.querySelectorAll('.rsvp-person').forEach((row, i) => { guestDrafts[i] = readGuest(row); });
+    guestRows.replaceChildren();
+    for (let i = 0; i < count; i++) {
+      const row = document.createElement('fieldset');
+      row.className = 'rsvp-person';
+      const legend = document.createElement('legend');
+      legend.textContent = `Guest ${i + 1}`;
+      const nameLabel = document.createElement('label');
+      nameLabel.textContent = 'Name';
+      const input = document.createElement('input');
+      input.type = 'text'; input.maxLength = 100; input.required = true;
+      input.autocomplete = 'off'; input.name = `guestName${i + 1}`;
+      input.value = guestDrafts[i]?.name || '';
+      nameLabel.append(input);
+      const mealGroup = document.createElement('fieldset');
+      mealGroup.className = 'meal-options';
+      const mealLegend = document.createElement('legend');
+      mealLegend.textContent = 'Meal preference';
+      mealGroup.append(mealLegend);
+      meals.forEach((meal, mealIndex) => {
+        const label = document.createElement('label');
+        label.className = 'meal-choice';
+        const radio = document.createElement('input');
+        radio.type = 'radio'; radio.name = `guestMeal${i + 1}`; radio.value = meal; radio.required = true;
+        radio.checked = guestDrafts[i]?.meal === meal;
+        const visual = document.createElement('span');
+        visual.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${mealIcons[mealIndex]}</svg>`;
+        const text = document.createElement('span');
+        text.textContent = meal;
+        visual.append(text);
+        label.append(radio, visual);
+        mealGroup.append(label);
+      });
+      row.append(legend, nameLabel, mealGroup);
+      guestRows.append(row);
+    }
+    syncTable(count);
+    renderGuestPage();
+  }
+  $('rsvp-count').addEventListener('input', syncGuestRows);
+  [['seat-remove', -1], ['seat-add', 1]].forEach(([id, step]) => {
+    $(id).addEventListener('click', () => {
+      const current = Number($('rsvp-count').value);
+      $('rsvp-count').value = Math.max(1, Math.min(20, (Number.isInteger(current) ? current : 1) + step));
+      syncGuestRows();
+      $('rsvp-error').hidden = true;
+    });
   });
+  syncGuestRows();
+
+  function renderGuestPage(focus = false) {
+    const rows = [...guestRows.children];
+    activeGuest = Math.max(0, Math.min(activeGuest, rows.length - 1));
+    rows.forEach((row, index) => { row.hidden = index !== activeGuest; });
+    const tabs = $('guest-tabs');
+    tabs.replaceChildren();
+    rows.forEach((row, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = String(index + 1).padStart(2, '0');
+      button.setAttribute('aria-label', `Guest ${index + 1}`);
+      button.setAttribute('aria-pressed', String(index === activeGuest));
+      const person = readGuest(row);
+      if (person.name.trim() && person.meal) button.classList.add('is-complete');
+      button.addEventListener('click', () => { activeGuest = index; renderGuestPage(true); updateNextLabel(); });
+      tabs.append(button);
+    });
+    if (focus && rows[activeGuest]) {
+      const legend = rows[activeGuest].querySelector("legend");
+      legend.tabIndex = -1;
+      legend.focus({preventScroll: true});
+    }
+  }
+  function updateNextLabel() {
+    $('rs-next').textContent = flowStep === 0 ? 'Let’s RSVP →' : flowStep === 1 ? 'Choose our meals →' : activeGuest < guestRows.children.length - 1 ? 'Next guest →' : 'Review our reply →';
+  }
+  function showReplyStep(step) {
+    flowStep = step;
+    form.querySelectorAll('.rs-step').forEach(panel => { panel.hidden = Number(panel.dataset.step) !== step; panel.scrollTop = 0; });
+    const titles = ['We saved you a place.', 'Your people. Our joy.', 'Made for your taste.', 'Sealed with love.'];
+    const subtitles = ['The best part of our day? Sharing it with you.', 'Add your favourite people to the celebration.', 'Your name. Your favourite meal.', 'One last look, then send your love our way.'];
+    $('rs-heading').textContent = titles[step];
+    $('rs-subtitle').textContent = subtitles[step];
+    document.querySelectorAll('.rs-progress span').forEach((item, index) => { item.classList.toggle('is-current', index === Math.min(step, 2)); item.classList.toggle('is-complete', index < Math.min(step, 2)); });
+    document.querySelector('.rs-progress span:last-child').textContent = step === 3 ? '03 · Ready to send' : '03 · The menu';
+    document.querySelectorAll('.rs-progress span').forEach((item, index) => {
+      if (index === Math.min(step, 2)) item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
+    });
+    $('rs-back').hidden = step === 0;
+    $('rs-next').hidden = step === 3;
+    $('rsvp-submit').hidden = step !== 3;
+    $('rsvp-error').hidden = true;
+    if (step === 2) renderGuestPage();
+    if (step === 3) {
+      const attending = form.attending.value === 'yes';
+      const people = [...guestRows.children].map(readGuest);
+      $('rs-review-summary').textContent = attending ? `${people.length} ${people.length === 1 ? 'lovely person' : 'lovely people'}. One beautiful celebration.` : 'You’ll be with us in spirit.';
+      $('rs-review-meals').textContent = attending ? people.map(person => `${person.name} · ${person.meal}`).join('\n') : 'Thank you for letting us know. We’ll miss you.';
+    }
+    updateNextLabel();
+    $('rs-heading').focus({preventScroll: true});
+  }
+  function replyError(message, input) {
+    $('rsvp-error').textContent = message;
+    $('rsvp-error').hidden = false;
+    input?.focus();
+  }
+  function advanceReply() {
+    if (flowStep === 0) {
+      if (!cleanName($('rsvp-name').value)) return replyError('Tell us your name or family name.', $('rsvp-name'));
+      if (!form.attending.value) return replyError('Choose whether you’ll be joining us.', form.querySelector('input[name=attending]'));
+      return showReplyStep(form.attending.value === 'yes' ? 1 : 3);
+    }
+    if (flowStep === 1) {
+      const count = Number($('rsvp-count').value);
+      if (!Number.isInteger(count) || count < 1 || count > 20) return replyError('Choose between 1 and 20 guests.', $('rsvp-count'));
+      return showReplyStep(2);
+    }
+    if (flowStep === 2) {
+      const row = guestRows.children[activeGuest];
+      const person = readGuest(row);
+      if (!person.name.trim()) return replyError(`What’s Guest ${activeGuest + 1}’s name?`, row.querySelector('input[type=text]'));
+      if (!meals.includes(person.meal)) return replyError('Choose a meal for this guest.', row.querySelector('input[type=radio]'));
+      if (activeGuest < guestRows.children.length - 1) { activeGuest++; renderGuestPage(true); updateNextLabel(); $('rsvp-error').hidden = true; }
+      else {
+        const invalid = [...guestRows.children].findIndex(item => { const draft = readGuest(item); return !draft.name.trim() || !meals.includes(draft.meal); });
+        if (invalid !== -1) { activeGuest = invalid; renderGuestPage(); updateNextLabel(); return replyError('Please finish this guest’s name and meal.'); }
+        showReplyStep(3);
+      }
+    }
+  }
+  $('rs-next').addEventListener('click', advanceReply);
+  $('rs-back').addEventListener('click', () => {
+    if (flowStep === 3) showReplyStep(form.attending.value === 'yes' ? 2 : 0);
+    else if (flowStep === 2 && activeGuest > 0) { activeGuest--; renderGuestPage(true); updateNextLabel(); }
+    else showReplyStep(flowStep - 1);
+  });
+  form.addEventListener('input', () => { $('rsvp-error').hidden = true; });
+  form.addEventListener('change', () => { $('rsvp-error').hidden = true; });
 
   function composeReply(reply) {
     const lines = [`RSVP for ${COUPLE}`, `${reply.name}: ${reply.attending ? 'Joyfully attending' : 'Unable to attend'}`];
     if (reply.attending) lines.push(`${reply.partySize} ${reply.partySize === 1 ? 'guest' : 'guests'}`);
-    if (reply.foodNotes) lines.push(`Food: ${reply.foodNotes}`);
+    reply.guests.forEach(person => lines.push(`${person.name}: ${person.meal}`));
     if (reply.message) lines.push(`Note: ${reply.message}`);
     return lines.join('\n');
   }
@@ -750,18 +1080,25 @@
     form.hidden = true;
     const done = $('rsvp-done');
     done.hidden = false;
-    $('rsvp-done-title').textContent = reply.attending ? 'See you there' : 'We’ll miss you';
+    const handedToGuest = !sent && !whatsapp;
+    $('rsvp-done-title').textContent = handedToGuest ? 'Almost there' : reply.attending ? 'See you there' : 'We’ll miss you';
     $('rsvp-done-text').textContent = sent
       ? `Thank you, ${reply.name}. Your reply has reached us.`
       : whatsapp
         ? `Thank you, ${reply.name}. Your reply opened in WhatsApp; tap send there to finish.`
-        : `Thank you, ${reply.name}. Please share this reply with us on WhatsApp or by message.`;
+        : `Thank you, ${reply.name}. Your reply hasn’t reached us yet: please send it on WhatsApp to whoever shared this card with you.`;
     const actions = $('rsvp-done-actions');
     actions.replaceChildren();
     const copyBox = $('rsvp-copy');
     copyBox.hidden = sent;
     if (!sent) {
       copyBox.textContent = text;
+      if (handedToGuest) {
+        const sendOnWhatsApp = chip('Send on WhatsApp');
+        sendOnWhatsApp.classList.add('chip--primary');
+        sendOnWhatsApp.addEventListener('click', () => { location.href = `https://wa.me/?text=${encodeURIComponent(text)}`; });
+        actions.append(sendOnWhatsApp);
+      }
       if (navigator.share) {
         const share = chip('Share reply');
         share.addEventListener('click', () => navigator.share({text}).catch(() => {}));
@@ -776,12 +1113,13 @@
       }
     }
     const edit = chip('Change my reply');
-    edit.addEventListener('click', () => { done.hidden = true; form.hidden = false; $('rsvp-name').focus(); });
+    edit.addEventListener('click', () => { done.hidden = true; form.hidden = false; showReplyStep(0); });
     actions.append(edit);
   }
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (flowStep !== 3) { advanceReply(); return; }
     const error = $('rsvp-error');
     error.hidden = true;
     const name = cleanName($('rsvp-name').value);
@@ -791,12 +1129,27 @@
     const countValue = Number($('rsvp-count').value);
     if (attending === 'yes' && (!Number.isInteger(countValue) || countValue < 1 || countValue > 20)) { error.textContent = 'How many of you are coming? Enter 1 to 20.'; error.hidden = false; $('rsvp-count').focus(); return; }
     const partySize = attending === 'yes' ? countValue : 0;
+    const guests = attending === 'yes' ? [...guestRows.querySelectorAll('.rsvp-person')].map(row => { const person = readGuest(row); return {name: cleanName(person.name).slice(0, 100), meal: person.meal}; }) : [];
+    if (attending === 'yes') {
+      const invalid = guests.findIndex(person => !person.name || !meals.includes(person.meal));
+      if (invalid !== -1) {
+        error.textContent = `Please enter a name and choose a meal for Guest ${invalid + 1}.`;
+        error.hidden = false;
+        activeGuest = invalid;
+        showReplyStep(2);
+        error.textContent = `Please finish Guest ${invalid + 1}’s name and meal.`;
+        error.hidden = false;
+        const row = guestRows.children[invalid];
+        row.querySelector(!guests[invalid].name ? 'input[type="text"]' : 'input[type="radio"]').focus();
+        return;
+      }
+    }
     const reply = {
       guest,
       name,
       attending: attending === 'yes',
       partySize,
-      foodNotes: attending === 'yes' ? $('rsvp-food').value.trim().slice(0, 200) : '',
+      guests,
       message: $('rsvp-message').value.trim().slice(0, 300),
       submittedAt: new Date().toISOString()
     };
@@ -827,6 +1180,7 @@
   goToPage(1);
   const target = location.hash.slice(1);
   if (target === 'rsvp' || target === 'families') {
+    hideGuide();
     state = 'opening';
     finishOpening();
     showDeck(target === 'rsvp' ? 4 : 3);

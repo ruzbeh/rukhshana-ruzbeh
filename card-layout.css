@@ -1,0 +1,86 @@
+/* The PDF is the layout grid. Scale the paper uniformly, including on phones. */
+:root{--stage-w:min(calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)),calc((100vh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .708181818),520px)}
+@supports(height:100svh){:root{--stage-w:min(calc(100vw - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)),calc((100svh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .708181818),520px)}}
+.table{display:none}
+.stage,.stage.is-rsvp{left:50%;top:50%;width:var(--stage-w);height:auto;aspect-ratio:779/1100;transform:translate(-50%,-50%)!important;border-radius:3px;overflow:visible;container-type:size;--w:1cqw;--u:1cqw;box-shadow:0 1px 0 #fff6ef,0 0 0 1px #b48d4c38,0 12px 32px #5a283222}
+.book{overflow:hidden;border-radius:inherit}
+.stage::after{z-index:25;border-radius:inherit}
+.stage .bottombar{bottom:-34px;padding:0;pointer-events:none}
+.stage .swipe-hint{background:none;padding:0;color:var(--gold-dark);font-size:12px;line-height:24px;letter-spacing:.015em}
+.print-page{display:block;padding:0;overflow:hidden;background:var(--card-paper)}
+.print-page>.print-canvas{position:absolute;inset:0;z-index:2;width:100%;height:100%;text-align:center;color:var(--ink);font-weight:600}
+.print-canvas>*{position:absolute;margin:0;max-width:none}
+.print-canvas .print-frame{inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;z-index:0}
+.print-canvas>:not(.print-frame){z-index:1}
+.print-canvas img{height:auto;pointer-events:none}
+.print-canvas .print-emblem{left:36%;top:12.5%;width:28%;filter:drop-shadow(0 2px 2px #78501424)}
+.print-intro{left:14%;top:29.5%;width:72%;font-size:calc(4.65 * var(--w));line-height:1.35;text-wrap:balance}
+.print-intro #p-guest.is-named{display:block;font-size:inherit;font-style:italic;font-weight:700;line-height:1.2;margin:calc(.6 * var(--w)) 0;overflow-wrap:anywhere}
+.print-intro #p-guest span{display:inline}
+.print-intro #p-guest span+span::before{content:", "}
+.print-invitation:has(#p-guest.is-named) .print-intro{top:28%;font-size:calc(4 * var(--w));line-height:1.15}
+.print-invitation:has(#p-guest span:nth-child(4)) .print-intro{top:26%;left:13%;width:74%;font-size:calc(3.8 * var(--w))}
+.print-name{line-height:0}
+.print-name img,.print-heading img{width:100%;height:auto}
+.print-name--bride{left:24%;top:51.5%;width:52%}
+.print-name--groom{left:31.5%;top:66%;width:37%}
+.print-and{left:29%;top:62.5%;width:42%;display:flex;align-items:center;justify-content:center;gap:calc(2 * var(--w));font-size:calc(4.1 * var(--w));line-height:1.2;font-weight:500}
+.print-and span{height:1px;flex:1;background:var(--gold)}
+.print-parents{left:15%;top:78%;width:70%;font-size:calc(4.15 * var(--w));line-height:1.25}
+.print-invitation:has(#p-guest span:nth-child(4)) .print-name--bride{top:55.5%}
+.print-invitation:has(#p-guest span:nth-child(4)) .print-and{top:66%}
+.print-invitation:has(#p-guest span:nth-child(4)) .print-name--groom{top:69.5%}
+.print-invitation:has(#p-guest span:nth-child(4)) .print-parents{top:82.3%}
+
+/* Event details follow page 2; the complete frame includes the ses. */
+.print-details .print-emblem{left:38.5%;top:12%;width:23%}
+/* The original keyed frame omitted the bird's left edge; register its full cutout to the PDF. */
+.print-hummingbird{left:72.1438%;top:11.6364%;width:22.8498%}
+.print-wedding{left:25%;top:22%;width:50%;font:400 calc(7 * var(--w))/1.1 var(--script)}
+.print-day{left:25%;top:28%;width:50%;font-size:calc(4.1 * var(--w));line-height:1.15;text-transform:uppercase;letter-spacing:.28em}
+.print-date{left:17%;top:31%;width:66%;height:8%;display:flex;justify-content:center;align-items:center;gap:calc(3 * var(--w));line-height:1}
+.print-date span{font-size:calc(4 * var(--w));letter-spacing:.12em;text-transform:uppercase}
+.print-date b{font-size:calc(13 * var(--w));font-weight:600;line-height:1}
+.print-time{left:30%;top:40%;width:40%;font-size:calc(4.8 * var(--w));line-height:1.25;letter-spacing:.1em}
+.print-venue{left:10%;top:46%;width:80%;font-size:calc(5.7 * var(--w));line-height:1.15;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.print-address{left:12%;top:51%;width:76%;font-size:calc(4.25 * var(--w));line-height:1.2}
+.print-cocktails{left:19%;top:56%;width:62%}
+.print-actions{left:8%;top:62%;width:84%;display:flex;align-items:stretch;justify-content:center;gap:calc(2.8 * var(--w))}
+.venue-action{position:relative;flex:1;min-width:0;min-height:50px;display:flex;align-items:center;justify-content:center;gap:calc(1.6 * var(--w));padding:calc(2.3 * var(--w)) calc(1.7 * var(--w));border:1px solid #b58c51;border-radius:12px;background:linear-gradient(150deg,#fff5ef,#f5d8d2);color:var(--ink);text-decoration:none;text-align:center;box-shadow:inset 0 1px 0 #ffffffb3,0 3px 7px #85504415;transition:background .2s,transform .2s,box-shadow .2s}
+.venue-action svg{flex:none;width:clamp(20px,calc(5.6 * var(--w)),29px);height:clamp(23px,calc(6.4 * var(--w)),33px);fill:none;stroke:#927039;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.venue-action>span{min-width:0}
+.venue-action b{font:600 italic max(13px,calc(3.8 * var(--w)))/1.2 var(--serif);white-space:nowrap}
+@media(hover:hover){.venue-action:hover{background:linear-gradient(150deg,#fff8f2,#efc6bd);transform:translateY(-1px);box-shadow:inset 0 1px 0 #ffffffb3,0 4px 9px #85504425}}
+.venue-action:active{transform:translateY(1px);box-shadow:inset 0 1px 3px #85504420}
+@media(prefers-reduced-motion:reduce){.venue-action{transition:none}}
+
+/* Each original page fills the paper, including its pink wash at the edges. */
+.print-page>.print-families{inset:0;height:100%;aspect-ratio:auto;transform:none}
+.print-families .print-emblem{left:38%;top:13%;width:24%}
+.print-heading{line-height:0}
+.print-heading--blessings{left:30%;top:27%;width:40%}
+.print-heading--compliments{left:27.5%;top:63%;width:45%}
+.print-flourish{left:34%;width:32%}
+.print-flourish--blessings{top:36.8%}
+.print-flourish--compliments{top:72%}
+.print-people{left:12%;width:76%;padding:0;list-style:none;font-size:max(12px,calc(3.95 * var(--w)));line-height:1.25;font-weight:600;display:flex;flex-direction:column;gap:calc(.15 * var(--w))}
+.print-people--blessings{top:41%}
+.print-people--compliments{top:77%}
+.print-people .portrait{width:calc(12 * var(--w))}
+
+@supports not (width:1cqw){
+  .stage{--w:calc(var(--stage-w) / 100);--u:var(--w)}
+}
+
+/* Preserve every painted detail and the original flat-gold emblems from the PDF. */
+.print-page{background:#fbe6e3}
+.print-canvas .print-frame{object-fit:fill}
+/* The PDF already contains its paper texture; extra grain changes its colors. */
+.stage::after{display:none}
+.print-canvas .print-emblem,.print-hummingbird,.print-families .print-flourish{display:none}
+/* The original frames now include their complete emblems, bird and flourishes. */
+/* The source page supplies the complete gold divider; only its word is live. */
+.print-and span{display:none}
+
+/* One shared, tactile gold Farohar, with identical scale on every printed page. */
+.print-canvas .print-emblem,.print-details .print-emblem,.print-families .print-emblem{display:block;left:36%;top:8%;width:28%;height:auto;filter:drop-shadow(0 1px 0 #fff5d880) drop-shadow(0 2px 2px #70401638)}
