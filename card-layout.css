@@ -84,3 +84,9 @@
 
 /* One shared, tactile gold Farohar, with identical scale on every printed page. */
 .print-canvas .print-emblem,.print-details .print-emblem,.print-families .print-emblem{display:block;left:36%;top:8%;width:28%;height:auto;filter:drop-shadow(0 1px 0 #fff5d880) drop-shadow(0 2px 2px #70401638)}
+
+/* Family links place the inviting family's child first. */
+.print-invitation--groom .print-name--groom{left:31.5%;top:51.5%;width:37%}
+.print-invitation--groom .print-name--bride{left:24%;top:66%;width:52%}
+.print-invitation--groom:has(#p-guest span:nth-child(4)) .print-name--groom{top:55.5%}
+.print-invitation--groom:has(#p-guest span:nth-child(4)) .print-name--bride{top:69.5%}

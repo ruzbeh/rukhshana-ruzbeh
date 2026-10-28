@@ -88,3 +88,7 @@ The site plays `our-story-wc7.mp4` / `our-story-mobile-wc7.mp4` (16.75 seconds).
 ## Return to the envelope
 
 A deliberate backward swipe on the first page closes the invitation into its envelope. The same gesture on later pages returns to the previous page. Arrow Left and the accessible Previous/Close control follow the same rule. Small drags, vertical scrolling and cancelled touches leave the card open. Reopening starts at page 1 and preserves the RSVP draft.
+
+## Family invitation wording
+
+`?family=ruzbeh` (or `family=groom`, `side=ruzbeh`, `side=groom`) shows Aban and Soli Irani as hosts, Ruzbeh first, and his blessings and compliments. `?family=rukhshana` (or `family=bride`, and matching `side` aliases) retains the Patwa invitation and family lists. Unassigned links retain the original bride-family card. Guest personalization works with either family.

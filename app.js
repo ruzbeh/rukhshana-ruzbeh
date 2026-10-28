@@ -90,6 +90,44 @@
   const family = (params.get('family') || params.get('side') || '').trim().toLowerCase();
   const host = family === 'ruzbeh' || family === 'groom' ? 'ruzbeh'
     : family === 'rukhshana' || family === 'bride' ? 'rukhshana' : null;
+  // Ruzbeh's links use his family's invitation; bride and unassigned links retain the original.
+  if (host === 'ruzbeh') {
+    const sealedNames = document.querySelector('.sealed-names');
+    const [sealedBride, sealedAnd, sealedGroom] = sealedNames.children;
+    sealedNames.replaceChildren(sealedGroom, sealedAnd, sealedBride);
+    sealedNames.setAttribute('aria-label', 'Ruzbeh and Rukhshana');
+    if (!guest) $('env-name').textContent = 'Ruzbeh & Rukhshana';
+    document.querySelector('.rs-masthead span').textContent = 'Ruzbeh & Rukhshana';
+    document.querySelector('.rsvp-signoff').textContent = 'With love, Ruzbeh & Rukhshana';
+    document.title = document.title.replace('Rukhshana & Ruzbeh', 'Ruzbeh & Rukhshana');
+    const invitation = document.querySelector('.print-invitation');
+    invitation.classList.add('print-invitation--groom');
+    const intro = invitation.querySelector('.print-intro');
+    intro.firstChild.textContent = 'Aban and Soli Irani';
+    intro.lastChild.textContent = 'of their son';
+    const groomName = invitation.querySelector('.print-name--groom');
+    const brideName = invitation.querySelector('.print-name--bride');
+    const and = invitation.querySelector('.print-and');
+    invitation.insertBefore(groomName, and);
+    invitation.insertBefore(brideName, and.nextSibling);
+    invitation.querySelector('.print-parents').textContent = 'daughter of Naazlina and Zarir Patwa';
+    const replacePeople = (selector, names) => {
+      document.querySelector(selector).replaceChildren(...names.map(name => {
+        const person = document.createElement('li');
+        person.className = 'person';
+        person.textContent = name;
+        return person;
+      }));
+    };
+    // Remaining blessings names and the spelling of Soultan are pending.
+    replacePeople('.print-people--blessings', [
+      'Rustom and Soultan Irani', 'Perin and Minoo Pithawala', 'Katy and Polly'
+    ]);
+    replacePeople('.print-people--compliments', [
+      'Zenia Irani', 'Hanoz Daruwala', 'Muna’s'
+    ]);
+  }
+
   const guideActor = $('guide-actor');
   const guideReach = $('guide-reach');
   guideActor.dataset.host = host || '';
