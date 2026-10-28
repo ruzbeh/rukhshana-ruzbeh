@@ -574,3 +574,14 @@ body.is-sealed.has-opening-guide .env-seal{animation:seal-teach 7s ease-in-out i
  .sealed-emblem{width:clamp(52px,14svh,86px);margin-bottom:6px}
  .sealed-names{width:min(55vw,200px,40svh)}
 }
+
+/* Hidden celebrations stay out of the invitation's normal layout. */
+.print-canvas .card-luck{padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;line-height:0}
+.print-canvas .card-luck img{width:100%;height:auto}
+.card-surprise{position:absolute;left:6%;right:6%;top:13%;z-index:100;margin:0;padding:13px 15px;border:1px solid var(--gold);border-radius:12px;background:#1c2c5bf5;color:#fff5e3;text-align:center;font:600 21px/1.2 var(--serif);box-shadow:0 8px 24px #1c2c5b25;pointer-events:none}
+.card-sparkles{position:absolute;inset:0;z-index:95;overflow:hidden;pointer-events:none}
+.card-sparkles span{position:absolute;left:50%;top:46%;font:400 22px/1 var(--serif);color:var(--gold);opacity:0;animation:wedding-sparkle 1.2s ease-out both}
+.card-sparkles span:nth-child(3n){color:#b87885}
+@keyframes wedding-sparkle{0%{opacity:0;transform:translate(0,0) scale(.2)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--spin)) scale(1.1)}}
+@container(max-height:490px){.card-surprise{font-size:17px;padding:10px 12px}}
+@media(prefers-reduced-motion:reduce){.card-sparkles span{animation:none}}

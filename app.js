@@ -26,6 +26,45 @@
 
   let state = 'sealed';
 
+  let surpriseTimer = 0;
+  let guestDanceAnimations = [];
+  function clearCardSurprise() {
+    clearTimeout(surpriseTimer);
+    guestDanceAnimations.forEach(animation => animation.cancel());
+    guestDanceAnimations = [];
+    $('card-surprise').hidden = true;
+    $('card-sparkles').replaceChildren();
+  }
+  function celebrateCard(message, {dance = false} = {}) {
+    clearCardSurprise();
+    $('card-surprise').textContent = message;
+    $('card-surprise').hidden = false;
+    if (!reducedMotion.matches) {
+      for (let i = 0; i < 14; i++) {
+        const sparkle = document.createElement('span');
+        sparkle.textContent = i % 3 ? '✦' : '♡';
+        const angle = i * 2 * Math.PI / 14;
+        sparkle.style.setProperty('--dx', `${Math.cos(angle) * stage.clientWidth * .4}px`);
+        sparkle.style.setProperty('--dy', `${Math.sin(angle) * stage.clientHeight * .36}px`);
+        sparkle.style.setProperty('--spin', `${i % 2 ? 90 : -90}deg`);
+        sparkle.style.animationDelay = `${i % 4 * 45}ms`;
+        $('card-sparkles').append(sparkle);
+      }
+      if (dance) {
+        guestDanceAnimations = [...document.querySelectorAll('.table-person-icon')].map((person, index) => person.animate([
+          {transform: 'translateY(0) rotate(-12deg)'},
+          {transform: 'translateY(-7px) rotate(12deg)', offset: .5},
+          {transform: 'translateY(0) rotate(-12deg)'}
+        ], {duration: 420, iterations: 6, delay: index % 3 * 70, easing: 'ease-in-out'}));
+      }
+    }
+    surpriseTimer = setTimeout(clearCardSurprise, 3200);
+  }
+  document.querySelectorAll('.card-luck').forEach(button => {
+    button.addEventListener('click', () => celebrateCard('A little luck. A lot of love.'));
+  });
+
+
   // ---------- guest ----------
   const cleanName = value => String(value || '').replace(/[\u0000-\u001f\u007f]/g, '').replace(/\s+/g, ' ').trim().slice(0, 360);
   const params = new URLSearchParams(location.search);
@@ -646,6 +685,7 @@
   function setActivePage(n) {
     const changed = currentPage !== n;
     currentPage = n;
+    if (changed) clearCardSurprise();
     stage.classList.toggle('is-rsvp', n === pageCount);
     if (changed && state === 'deck') {
       cancelPageHint();
@@ -919,8 +959,35 @@
   let activeGuest = 0;
   const readGuest = row => ({name: row.querySelector('input[type="text"]').value, meal: row.querySelector('input[type="radio"]:checked')?.value || ''});
 
+  const guestSurprises = [
+    'Solo entry. Main-character energy.',
+    'Double trouble. We approve.',
+    'Three’s a dance crew!',
+    'Four seats. One very loud table.',
+    'Five already? Warm up those dance moves.',
+    'OH MY GOD, TOO MANY! YOU GUYS HAVE TO DANCE!',
+    'Seven! Who’s starting the dance-off?',
+    'Eight plates. Zero excuses to sit out.',
+    'Nine guests. The dance floor is getting nervous.',
+    'We’re going to need more cake!',
+    'Eleven! This is officially a squad.',
+    'A dozen legends. Save us some cake.',
+    'Lucky thirteen. Unlucky for the dessert table.',
+    'Fourteen! Turn up the music!',
+    'Fifteen! Even the cake wants to dance.',
+    'Sixteen! Family group chat: assembled.',
+    'Seventeen. The party has backup dancers.',
+    'Eighteen! Hope you’ve all rehearsed.',
+    'Nineteen! Is this a wedding or a festival?',
+    'Full house! Nobody escapes the dance floor.'
+  ];
+  function celebrateGuestCount(count) {
+    if (guestSurprises[count - 1]) celebrateCard(guestSurprises[count - 1], {dance: count >= 6});
+  }
+
   function syncTable(count) {
     const people = $('table-people');
+    const previousCount = people.children.length;
     while (people.children.length > count) people.lastElementChild.remove();
     for (let i = 0; i < count; i++) {
       let person = people.children[i];
@@ -936,6 +1003,7 @@
     $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'}`;
     $('seat-remove').disabled = count <= 1;
     $('seat-add').disabled = count >= 20;
+    if (flowStep === 1 && count !== previousCount) celebrateGuestCount(count);
   }
 
   function syncGuestRows() {
@@ -1018,6 +1086,8 @@
     $('rs-next').textContent = flowStep === 2 && activeGuest < guestRows.children.length - 1 ? 'Next guest →' : flowStep === 2 ? 'Review →' : 'Next →';
   }
   function showReplyStep(step) {
+    const previousStep = flowStep;
+    clearCardSurprise();
     flowStep = step;
     form.querySelectorAll('.rs-step').forEach(panel => { panel.hidden = Number(panel.dataset.step) !== step; panel.scrollTop = 0; });
     const titles = ['Will you join us?', 'How many guests?', 'Name & meal', 'Your reply'];
@@ -1043,6 +1113,7 @@
     }
     updateNextLabel();
     $('rs-heading').focus({preventScroll: true});
+    if (step === 1 && previousStep === 0) celebrateGuestCount(Number($('rsvp-count').value));
   }
   function replyError(message, input) {
     $('rsvp-error').textContent = message;
