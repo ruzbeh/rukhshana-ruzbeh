@@ -222,6 +222,9 @@
   function showOpeningGuide() {
     hideGuide();
     if (parentsPresenting) { startParentDelivery(); return; }
+    showSealGuide();
+  }
+  function showSealGuide() {
     if (!host) return;
     body.classList.add('has-opening-guide');
     guideActor.dataset.mode = 'open';
@@ -282,7 +285,8 @@
   let deliveryPlaying = false;
 
   function startParentDelivery() {
-    if (reducedMotion.matches) return;
+    hideGuide();
+    if (reducedMotion.matches) { showSealGuide(); return; }
     ++deliveryRun;
     deliveryPlaying = true;
     body.classList.remove('parents-film-landed');
@@ -336,6 +340,10 @@
     deliveryControl.textContent = 'Replay handover';
     deliveryControl.hidden = false;
     live.textContent = `${parentPresentation.name}’s parents have handed you the invitation. Tap the envelope to open it.`;
+    // Let the envelope settle into place before pointing at its seal.
+    setTimeout(() => {
+      if (run === deliveryRun && state === 'sealed') showSealGuide();
+    }, 800);
   }
   deliveryVideo.addEventListener('ended', receiveParentEnvelope);
   deliveryVideo.addEventListener('error', receiveParentEnvelope);
