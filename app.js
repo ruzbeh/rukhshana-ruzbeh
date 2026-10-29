@@ -148,9 +148,37 @@
     ]);
   }
 
-  const parentsPresenting = host === 'ruzbeh';
+  const parentPresentations = {
+    ruzbeh: {
+      name: 'Ruzbeh',
+      poster: 'assets/guides/parents-approach-poster.png',
+      video: 'assets/guides/parents-approach-v1.mp4',
+      still: 'assets/guides/parents-presenting-v1.png',
+      bounds: [.14, .449, .738, .247]
+    },
+    rukhshana: {
+      name: 'Rukhshana',
+      poster: 'assets/guides/rukhshana-parents-approach-poster.png',
+      video: 'assets/guides/rukhshana-parents-approach-v1.mp4',
+      still: 'assets/guides/rukhshana-parents-approach-poster.png',
+      bounds: [.085, .412, .855, .31]
+    }
+  };
+  const parentPresentation = parentPresentations[host];
+  const parentsPresenting = Boolean(parentPresentation);
   body.classList.toggle('has-presenting-parents', parentsPresenting);
-  $('presenting-parents').hidden = !parentsPresenting;
+  const parentsStill = $('presenting-parents');
+  parentsStill.hidden = !parentsPresenting;
+  if (parentPresentation) {
+    parentsStill.src = parentPresentation.still;
+    parentsStill.alt = `${parentPresentation.name}’s parents warmly presenting your invitation`;
+    parentsStill.classList.toggle('is-portrait', host === 'rukhshana');
+    const video = $('parents-delivery');
+    video.poster = parentPresentation.poster;
+    video.setAttribute('aria-label', `${parentPresentation.name}’s parents approach and hand you the invitation`);
+    video.querySelector('source').src = parentPresentation.video;
+    video.load();
+  }
 
   const guideActor = $('guide-actor');
   const guideReach = $('guide-reach');
@@ -286,11 +314,12 @@
     const videoScale = Math.min(width / videoWidth, height / videoHeight);
     const frameWidth = videoWidth * videoScale;
     const frameHeight = videoHeight * videoScale;
-    // Envelope bounds measured in the delivered clip's final frame (800 × 1136).
-    const offeredX = (width - frameWidth) / 2 + frameWidth * .14;
-    const offeredY = (height - frameHeight) / 2 + frameHeight * .449 - envelopeTop;
-    const offeredScaleX = frameWidth * .738 / width;
-    const offeredScaleY = frameHeight * .247 / envelope.clientHeight;
+    // Each clip's measured final-frame envelope bounds, normalized to the frame.
+    const [left, top, offeredWidth, offeredHeight] = parentPresentation.bounds;
+    const offeredX = (width - frameWidth) / 2 + frameWidth * left;
+    const offeredY = (height - frameHeight) / 2 + frameHeight * top - envelopeTop;
+    const offeredScaleX = frameWidth * offeredWidth / width;
+    const offeredScaleY = frameHeight * offeredHeight / envelope.clientHeight;
     const offeredTransform = `translate(${offeredX}px, ${offeredY}px) scale(${offeredScaleX}, ${offeredScaleY})`;
     const flight = animate(envelope, [
       {transform: offeredTransform, opacity: 0},
@@ -306,7 +335,7 @@
     $('tap-hint').classList.remove('is-hidden');
     deliveryControl.textContent = 'Replay handover';
     deliveryControl.hidden = false;
-    live.textContent = 'Your parents have handed you the invitation. Tap the envelope to open it.';
+    live.textContent = `${parentPresentation.name}’s parents have handed you the invitation. Tap the envelope to open it.`;
   }
   deliveryVideo.addEventListener('ended', receiveParentEnvelope);
   deliveryVideo.addEventListener('error', receiveParentEnvelope);
