@@ -1,0 +1,28 @@
+/* Preview: the parents offer the real, interactive envelope. */
+.presenting-parents[hidden]{display:none}
+.has-presenting-parents{--env-w:min(86vw,390px,(100svh - 290px) / 1.25)}
+.has-presenting-parents .sealed{gap:12px}
+.has-presenting-parents .sealed-emblem{width:58px;margin-bottom:4px}
+.has-presenting-parents .sealed-head .caps{font-size:10px;letter-spacing:.18em;margin:4px 0}
+.has-presenting-parents .sealed-names{width:min(47vw,190px);margin:0}
+.has-presenting-parents .env-wrap{width:var(--env-w);height:calc(var(--env-w) * 1.25);flex-shrink:0;isolation:isolate}
+.has-presenting-parents .envelope{position:absolute;bottom:0;left:0;z-index:2}
+.presenting-parents{position:absolute;width:88%;max-width:none;left:6%;bottom:calc(var(--env-w) * .22);z-index:1;pointer-events:none;transform-origin:50% 90%;transition:opacity .6s ease,transform .65s ease;animation:parents-arrive 1.2s ease-out both;filter:drop-shadow(0 5px 9px #78544112)}
+.has-presenting-parents .tap-hint{z-index:4}
+.parents-handing-over .presenting-parents{animation:none;opacity:0;transform:translateY(-12px) scale(.96)}
+@keyframes parents-arrive{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-height:650px){.has-presenting-parents .sealed-emblem{width:40px}.has-presenting-parents .sealed-names{width:145px}.has-presenting-parents{--env-w:min(74vw,340px,(100svh - 180px) / 1.25)}}
+@media(prefers-reduced-motion:reduce){.presenting-parents{animation:none;transition:none}}
+
+/* A real motion clip brings the envelope to the guest before the paper opens. */
+.parents-delivery[hidden],.delivery-control[hidden]{display:none}
+.parents-delivery{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:3;pointer-events:none;opacity:1;transition:opacity .7s ease;mask-image:linear-gradient(to bottom,transparent,#000 5%,#000 95%,transparent);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 5%,#000 95%,transparent)}
+.parents-film-active .envelope{visibility:hidden;transform-origin:0 0}
+.parents-film-active .presenting-parents,.parents-film-landed .presenting-parents{display:none}
+.parents-film-landed .parents-delivery{opacity:0;transition-delay:.12s}
+.parents-film-landed .envelope{visibility:visible}
+.delivery-control{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);z-index:8;white-space:nowrap;border:0;background:transparent;padding:5px 12px;color:var(--gold-dark);font:500 12px/1.4 var(--serif);text-decoration:underline;text-underline-offset:3px}
+.has-presenting-parents .sealed:has(.delivery-control:not([hidden])) .tap-hint{visibility:hidden}
+.has-presenting-parents .env-wrap{transition:height .75s ease}
+.has-presenting-parents.parents-film-landed:not(.parents-film-active) .env-wrap{height:calc(var(--env-w) / 1.42)}
+@media(prefers-reduced-motion:reduce){.has-presenting-parents .env-wrap{transition:none}}

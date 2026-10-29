@@ -148,6 +148,10 @@
     ]);
   }
 
+  const parentsPresenting = host === 'ruzbeh';
+  body.classList.toggle('has-presenting-parents', parentsPresenting);
+  $('presenting-parents').hidden = !parentsPresenting;
+
   const guideActor = $('guide-actor');
   const guideReach = $('guide-reach');
   guideActor.dataset.host = host || '';
@@ -189,6 +193,7 @@
   }
   function showOpeningGuide() {
     hideGuide();
+    if (parentsPresenting) { startParentDelivery(); return; }
     if (!host) return;
     body.classList.add('has-opening-guide');
     guideActor.dataset.mode = 'open';
@@ -243,6 +248,74 @@
       pageHint.raf = requestAnimationFrame(frame);
     }, delay);
   }
+  const deliveryVideo = $('parents-delivery');
+  const deliveryControl = $('delivery-control');
+  let deliveryRun = 0;
+  let deliveryPlaying = false;
+
+  function startParentDelivery() {
+    if (reducedMotion.matches) return;
+    ++deliveryRun;
+    deliveryPlaying = true;
+    body.classList.remove('parents-film-landed');
+    body.classList.add('parents-film-active');
+    deliveryVideo.hidden = false;
+    deliveryVideo.currentTime = 0;
+    envelope.disabled = true;
+    $('tap-hint').classList.add('is-hidden');
+    deliveryControl.hidden = false;
+    deliveryControl.textContent = 'Skip handover';
+    deliveryVideo.play().catch(() => {
+      deliveryPlaying = false;
+      deliveryControl.textContent = 'Play handover';
+    });
+  }
+  async function receiveParentEnvelope() {
+    if (!body.classList.contains('parents-film-active')) return;
+    const run = ++deliveryRun;
+    deliveryVideo.pause();
+    deliveryPlaying = false;
+    deliveryControl.hidden = true;
+    body.classList.add('parents-film-landed');
+    // The live envelope starts at the offered envelope's last-frame position.
+    const width = envWrap.clientWidth;
+    const height = envWrap.clientHeight;
+    const envelopeTop = height - envelope.clientHeight;
+    const videoWidth = deliveryVideo.videoWidth || 800;
+    const videoHeight = deliveryVideo.videoHeight || 1136;
+    const videoScale = Math.min(width / videoWidth, height / videoHeight);
+    const frameWidth = videoWidth * videoScale;
+    const frameHeight = videoHeight * videoScale;
+    // Envelope bounds measured in the delivered clip's final frame (800 × 1136).
+    const offeredX = (width - frameWidth) / 2 + frameWidth * .14;
+    const offeredY = (height - frameHeight) / 2 + frameHeight * .449 - envelopeTop;
+    const offeredScaleX = frameWidth * .738 / width;
+    const offeredScaleY = frameHeight * .247 / envelope.clientHeight;
+    const offeredTransform = `translate(${offeredX}px, ${offeredY}px) scale(${offeredScaleX}, ${offeredScaleY})`;
+    const flight = animate(envelope, [
+      {transform: offeredTransform, opacity: 0},
+      {transform: offeredTransform, opacity: 1, offset: .18},
+      {transform: 'translate(0,0) scale(1)', opacity: 1}
+    ], {duration: 1100, easing: 'cubic-bezier(.2,.65,.2,1)'});
+    try { await flight.finished; } catch (_) { return; }
+    if (run !== deliveryRun || state !== 'sealed') return;
+    flight.cancel();
+    body.classList.remove('parents-film-active');
+    deliveryVideo.hidden = true;
+    envelope.disabled = false;
+    $('tap-hint').classList.remove('is-hidden');
+    deliveryControl.textContent = 'Replay handover';
+    deliveryControl.hidden = false;
+    live.textContent = 'Your parents have handed you the invitation. Tap the envelope to open it.';
+  }
+  deliveryVideo.addEventListener('ended', receiveParentEnvelope);
+  deliveryVideo.addEventListener('error', receiveParentEnvelope);
+  deliveryControl.addEventListener('click', () => {
+    if (state !== 'sealed') return;
+    if (deliveryPlaying) receiveParentEnvelope();
+    else startParentDelivery();
+  });
+
   $('env-seal').classList.add('seal-invitation');
   showOpeningGuide();
 
@@ -458,6 +531,7 @@
     if (state !== 'sealed') return;
     hideGuide();
     state = 'opening';
+    deliveryControl.hidden = true;
     $('skip-opening').hidden = false;
     envelope.disabled = true;
     startScore();
@@ -665,6 +739,7 @@
 
   // ---------- close: fold the card back into its envelope ----------
   function resetEnvelope() {
+    body.classList.remove('parents-handing-over');
     const flap = $('env-flap'), letter = $('env-letter'), seal = $('env-seal');
     [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), ...birds.map(bird => bird.element), ...sealedLayers].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
     envWrap.style.transform = '';

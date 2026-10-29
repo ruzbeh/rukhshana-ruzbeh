@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="styles.css?v=dugli-guide-20261029-1">
   <link rel="stylesheet" href="card-layout.css?v=family-portraits-20261029-1">
   <link rel="stylesheet" href="rsvp.css?v=guest-reactions-20261029-1">
-  <script src="app.js?v=family-portraits-20261029-4" defer></script>
+  <script src="app.js?v=parents-handover-20261029-1" defer></script>
+  <link rel="stylesheet" href="parents-handover.css?v=parents-handover-20261029-1">
 </head>
 <body class="is-sealed">
 
@@ -52,6 +53,9 @@
     </header>
 
     <div class="env-wrap" id="env-wrap">
+      <video class="parents-delivery" id="parents-delivery" muted playsinline preload="auto" poster="assets/guides/parents-approach-poster.png" aria-label="Your parents approach and hand you the invitation" hidden><source src="assets/guides/parents-approach-v1.mp4" type="video/mp4"></video>
+      <button class="delivery-control" id="delivery-control" type="button" hidden>Skip handover</button>
+      <img class="presenting-parents" id="presenting-parents" src="assets/guides/parents-presenting-v1.png" alt="Ruzbeh’s parents warmly presenting your invitation" hidden>
       <button class="envelope" id="envelope" type="button" aria-label="Open your invitation">
         <span class="env-back" aria-hidden="true"></span>
         <span class="env-window" aria-hidden="true"><img class="env-letter" id="env-letter" src="assets/card-1.webp" alt="" draggable="false"></span>
