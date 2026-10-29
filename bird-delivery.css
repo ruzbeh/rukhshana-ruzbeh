@@ -1,0 +1,9 @@
+/* Alternate opening: the invitation bird delivers the same sealed envelope. */
+.drop-envelope-pending .envelope{opacity:0}
+.drop-version .tap-hint{visibility:hidden}
+.delivery-bird[hidden],.drop-replay[hidden]{display:none}
+.delivery-bird{position:fixed;z-index:62;transform-origin:17% 50%;filter:drop-shadow(0 7px 6px #78544122);--flap:.09s;--phase:0s}
+.delivery-ribbon{position:absolute;left:17%;top:50%;width:1px;height:20px;background:linear-gradient(#d5b77c,#b48d4c);transition:opacity .1s}
+.drop-version .envelope{transform-origin:50% 0}
+.drop-replay{position:absolute;z-index:5;left:50%;bottom:-30px;transform:translateX(-50%);white-space:nowrap;border:0;background:transparent;padding:5px 12px;color:var(--gold-dark);font:500 12px/1.4 var(--serif);text-decoration:underline;text-underline-offset:3px}
+@media(prefers-reduced-motion:reduce){.delivery-bird{display:none}}
