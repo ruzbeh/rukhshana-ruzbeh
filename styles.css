@@ -585,3 +585,7 @@ body.is-sealed.has-opening-guide .env-seal{animation:seal-teach 7s ease-in-out i
 @keyframes wedding-sparkle{0%{opacity:0;transform:translate(0,0) scale(.2)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--spin)) scale(1.1)}}
 @container(max-height:490px){.card-surprise{font-size:17px;padding:10px 12px}}
 @media(prefers-reduced-motion:reduce){.card-sparkles span{animation:none}}
+
+/* Ruzbeh wears his dugli while reaching for the seal and lifting the card. */
+.guide-actor[data-host="ruzbeh"] .guide-reach{background-image:url("assets/guides/ruzbeh-dugli-poses-v1.png");background-position:left top}
+.guide-actor[data-host="ruzbeh"][data-mode="page"] .guide-reach{background-position:right top}
