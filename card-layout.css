@@ -15,7 +15,8 @@
 .print-canvas img{height:auto;pointer-events:none}
 .print-canvas .print-emblem{left:36%;top:12.5%;width:28%;filter:drop-shadow(0 2px 2px #78501424)}
 .print-intro{left:14%;top:29.5%;width:72%;font-size:calc(4.65 * var(--w));line-height:1.35;text-wrap:balance}
-.print-intro #p-guest.is-named{display:block;font-size:inherit;font-style:italic;font-weight:700;line-height:1.2;margin:calc(.6 * var(--w)) 0;overflow-wrap:anywhere}
+.print-host-names{font-family:var(--serif);font-size:1.12em;font-style:normal;font-weight:500;letter-spacing:.015em}
+.print-intro #p-guest.is-named{display:block;font-family:var(--serif);font-size:1.12em;font-style:normal;font-weight:500;letter-spacing:.015em;line-height:1.2;margin:calc(.9 * var(--w)) 0;overflow-wrap:anywhere}
 .print-intro #p-guest span{display:inline}
 .print-intro #p-guest span+span::before{content:", "}
 .print-invitation:has(#p-guest.is-named) .print-intro{top:28%;font-size:calc(4 * var(--w));line-height:1.15}
@@ -26,7 +27,9 @@
 .print-name--groom{left:31.5%;top:66%;width:37%}
 .print-and{left:29%;top:62.5%;width:42%;display:flex;align-items:center;justify-content:center;gap:calc(2 * var(--w));font-size:calc(4.1 * var(--w));line-height:1.2;font-weight:500}
 .print-and span{height:1px;flex:1;background:var(--gold)}
-.print-parents{left:15%;top:78%;width:70%;font-size:calc(4.15 * var(--w));line-height:1.25}
+.print-parents{left:15%;top:78%;width:70%;font-size:calc(4.45 * var(--w));line-height:1.2}
+.print-parent-label{display:block;font-size:.78em;font-weight:400;margin-bottom:calc(.5 * var(--w))}
+.print-parent-names{display:block;font-family:var(--serif);font-style:normal;font-weight:500;letter-spacing:.015em}
 .print-invitation:has(#p-guest span:nth-child(4)) .print-name--bride{top:55.5%}
 .print-invitation:has(#p-guest span:nth-child(4)) .print-and{top:66%}
 .print-invitation:has(#p-guest span:nth-child(4)) .print-name--groom{top:69.5%}
@@ -106,3 +109,14 @@
 /* Small family portraits sit beside their names within the printed card. */
 .print-people .person--cameo{display:flex;align-items:center;justify-content:center;gap:calc(1.7 * var(--w));margin-bottom:calc(.5 * var(--w))}
 .print-people img.family-cameo{flex:none;width:calc(10 * var(--w));height:calc(12 * var(--w));object-fit:cover;object-position:50% 18%;border-radius:50%;border:1px solid var(--gold);background:var(--card-paper)}
+
+/* Ruzbeh's family page: three blessings lines, six compliments lines; its frame drops the baked flourishes. */
+.print-families--groom .print-heading--blessings{top:25%}
+.print-families--groom .print-flourish{display:block}
+.print-families--groom .print-flourish--blessings{top:33.6%}
+.print-families--groom .print-people--blessings{top:37.6%}
+.print-families--groom .print-heading--compliments{top:50%}
+.print-families--groom .print-flourish--compliments{top:58.1%}
+.print-families--groom .print-people--compliments{top:62.1%;font-size:max(11.5px,calc(3.7 * var(--w)));line-height:1.2;gap:0}
+.print-families--groom .print-people .person--cameo{margin-bottom:0}
+.print-families--groom .print-people img.family-cameo{width:calc(7 * var(--w));height:calc(8 * var(--w))}

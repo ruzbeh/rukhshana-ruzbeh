@@ -2,7 +2,7 @@
   'use strict';
 
   // ---- RSVP delivery. Leave both empty to let guests share or copy their reply. ----
-  const RSVP_ENDPOINT = '';   // a webhook URL that accepts a JSON POST
+  const RSVP_ENDPOINT = '';   // the Google Apps Script web app URL from ../rsvp-sheet (ends in /exec)
   const RSVP_WHATSAPP = '';   // e.g. '919876543210' (country code, digits only)
   const COUPLE = 'Rukhshana & Ruzbeh';
 
@@ -111,14 +111,15 @@
     const invitation = document.querySelector('.print-invitation');
     invitation.classList.add('print-invitation--groom');
     const intro = invitation.querySelector('.print-intro');
-    intro.firstChild.textContent = 'Aban and Soli Irani';
+    intro.querySelector('.print-host-names').textContent = 'Aban and Soli Irani';
     intro.lastChild.textContent = 'of their son';
     const groomName = invitation.querySelector('.print-name--groom');
     const brideName = invitation.querySelector('.print-name--bride');
     const and = invitation.querySelector('.print-and');
     invitation.insertBefore(groomName, and);
     invitation.insertBefore(brideName, and.nextSibling);
-    invitation.querySelector('.print-parents').textContent = 'daughter of Naazlina and Zarir Patwa';
+    invitation.querySelector('.print-parent-label').textContent = 'daughter of';
+    invitation.querySelector('.print-parent-names').textContent = 'Naazlina and Zarir Patwa';
     const familyPortraits = {
       'Zenia Irani': 'zenia-caricature-v2.png',
       'Hanoz and Monaz Khambatta': 'hanoz-caricature-v3.png'
@@ -144,8 +145,14 @@
       'Rustom and Soultoon Irani', 'Perin and Minoo Pithawala', 'Katy and Polly'
     ]);
     replacePeople('.print-people--compliments', [
-      'Zenia Irani', 'Hanoz and Monaz Khambatta'
+      'Aban and Soli Irani', 'Zenia Irani', 'Hanoz and Monaz Khambatta',
+      'Farida and Pervez', 'Pericher and Viraf', 'Mahiyar, Rohinton and Maharukh'
     ]);
+    const groomFamilies = document.querySelector('.print-families');
+    groomFamilies.classList.add('print-families--groom');
+    groomFamilies.querySelector('.print-frame').src = 'assets/art/frame-unified-3-groom.svg?v=1';
+    // The printed PDF carries the Patwa hosting wording.
+    document.querySelector('.original-invitation').remove();
   }
 
   const parentPresentations = {
@@ -198,6 +205,7 @@
     guideActor.style.top = `${rect.top + rect.height * 0.48 - size * 0.075}px`;
   }
   window.addEventListener('resize', positionGuideActor);
+  envWrap.addEventListener('transitionend', positionGuideActor);
 
 
   function cancelPageHint() {
@@ -286,7 +294,7 @@
   function startParentDelivery() {
     hideGuide();
     if (reducedMotion.matches) { showSealGuide(); return; }
-    ++deliveryRun;
+    const run = ++deliveryRun;
     deliveryPlaying = true;
     body.classList.remove('parents-film-landed');
     body.classList.add('parents-film-active');
@@ -296,10 +304,29 @@
     $('tap-hint').classList.add('is-hidden');
     deliveryControl.hidden = false;
     deliveryControl.textContent = 'Skip handover';
-    deliveryVideo.play().catch(() => {
+    // Low Power Mode and slow networks can block or stall the clip; never leave the envelope unreachable.
+    const handOverWithoutClip = () => {
+      if (run !== deliveryRun || !deliveryPlaying || state !== 'sealed') return;
+      deliveryVideo.pause();
       deliveryPlaying = false;
-      deliveryControl.textContent = 'Play handover';
-    });
+      body.classList.add('parents-film-landed');
+      settleParentEnvelope(run);
+    };
+    deliveryVideo.play().catch(handOverWithoutClip);
+    setTimeout(() => { if (deliveryVideo.currentTime === 0) handOverWithoutClip(); }, 5000);
+  }
+  function settleParentEnvelope(run) {
+    body.classList.remove('parents-film-active');
+    deliveryVideo.hidden = true;
+    envelope.disabled = false;
+    $('tap-hint').classList.remove('is-hidden');
+    deliveryControl.textContent = 'Replay handover';
+    deliveryControl.hidden = false;
+    live.textContent = `${parentPresentation.name}’s parents have handed you the invitation. Tap the envelope to open it.`;
+    // Let the envelope settle into place before pointing at its seal.
+    setTimeout(() => {
+      if (run === deliveryRun && state === 'sealed') showSealGuide();
+    }, 800);
   }
   async function receiveParentEnvelope() {
     if (!body.classList.contains('parents-film-active')) return;
@@ -332,17 +359,7 @@
     try { await flight.finished; } catch (_) { return; }
     if (run !== deliveryRun || state !== 'sealed') return;
     flight.cancel();
-    body.classList.remove('parents-film-active');
-    deliveryVideo.hidden = true;
-    envelope.disabled = false;
-    $('tap-hint').classList.remove('is-hidden');
-    deliveryControl.textContent = 'Replay handover';
-    deliveryControl.hidden = false;
-    live.textContent = `${parentPresentation.name}’s parents have handed you the invitation. Tap the envelope to open it.`;
-    // Let the envelope settle into place before pointing at its seal.
-    setTimeout(() => {
-      if (run === deliveryRun && state === 'sealed') showSealGuide();
-    }, 800);
+    settleParentEnvelope(run);
   }
   deliveryVideo.addEventListener('ended', receiveParentEnvelope);
   deliveryVideo.addEventListener('error', receiveParentEnvelope);
@@ -1410,9 +1427,14 @@
     return lines.join('\n');
   }
 
+  const whatsappLink = text => `https://wa.me/${RSVP_WHATSAPP.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`;
+
   async function sendToEndpoint(reply) {
-    const response = await fetch(RSVP_ENDPOINT, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(reply)});
+    // text/plain keeps this a simple CORS request; Google Apps Script cannot answer a preflight.
+    const response = await fetch(RSVP_ENDPOINT, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(reply)});
     if (!response.ok) throw new Error(`RSVP endpoint responded ${response.status}`);
+    const result = await response.json();
+    if (!result.ok) throw new Error(result.error || 'RSVP endpoint refused the reply');
   }
 
   function showDone(reply, {sent = false, whatsapp = false, text = ''} = {}) {
@@ -1424,7 +1446,7 @@
     $('rsvp-done-text').textContent = sent
       ? `Thank you, ${reply.name}. Your reply has reached us.`
       : whatsapp
-        ? `Thank you, ${reply.name}. Your reply opened in WhatsApp; tap send there to finish.`
+        ? `Thank you, ${reply.name}. Tap send in WhatsApp to finish. If it didn’t open, tap the button below.`
         : 'Your reply is ready. Send it on WhatsApp to finish.';
     const actions = $('rsvp-done-actions');
     actions.replaceChildren();
@@ -1432,12 +1454,10 @@
     copyBox.hidden = sent;
     if (!sent) {
       copyBox.textContent = text;
-      if (handedToGuest) {
-        const sendOnWhatsApp = chip('Send on WhatsApp');
-        sendOnWhatsApp.classList.add('chip--primary');
-        sendOnWhatsApp.addEventListener('click', () => { location.href = `https://wa.me/?text=${encodeURIComponent(text)}`; });
-        actions.append(sendOnWhatsApp);
-      }
+      const sendOnWhatsApp = chip('Send on WhatsApp');
+      sendOnWhatsApp.classList.add('chip--primary');
+      sendOnWhatsApp.addEventListener('click', () => { location.href = whatsappLink(text); });
+      actions.append(sendOnWhatsApp);
       if (navigator.share) {
         const share = chip('Share reply');
         share.addEventListener('click', () => navigator.share({text}).catch(() => {}));
@@ -1485,6 +1505,7 @@
     }
     const reply = {
       guest,
+      side: host || '',
       name,
       attending: attending === 'yes',
       partySize,
@@ -1501,7 +1522,7 @@
         await sendToEndpoint(reply);
         showDone(reply, {sent: true});
       } else if (RSVP_WHATSAPP) {
-        window.open(`https://wa.me/${RSVP_WHATSAPP.replace(/\D/g, '')}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        window.open(whatsappLink(text), '_blank', 'noopener');
         showDone(reply, {whatsapp: true, text});
       } else {
         showDone(reply, {text});

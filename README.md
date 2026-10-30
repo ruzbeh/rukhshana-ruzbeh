@@ -42,13 +42,13 @@ imagegen tool and the existing caricatures as identity references.
 
 ## RSVP delivery
 
-Open `app.js` and fill one of the two values at the top:
+Replies go to a Google Sheet through a small Apps Script web app; setup steps and the script are in
+`../rsvp-sheet/`. Put its `/exec` URL in `RSVP_ENDPOINT` at the top of `app.js` and `bird-delivery.js`.
+The page posts `{guest, side, name, attending, partySize, guests, message, submittedAt}` as
+`text/plain` JSON (Apps Script cannot answer a CORS preflight) and expects `{ok: true}` back.
 
-- `RSVP_ENDPOINT` — a URL that accepts a JSON POST. The page sends `{guest, name, attending, partySize, guests, message, submittedAt}`.
-- `RSVP_WHATSAPP` — a number with country code, digits only. The reply opens in
-  WhatsApp as a prefilled message.
-
-With neither set, guests see their composed reply with Share and Copy buttons.
+`RSVP_WHATSAPP` (country code, digits only) is the fallback when no endpoint is set. With neither set,
+guests see their composed reply with Send on WhatsApp, Share and Copy, and must pick the chat themselves.
 
 ## Family photos
 
