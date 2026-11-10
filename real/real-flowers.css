@@ -1,0 +1,11 @@
+/* The painted frames carry no lettering or gold, so the rule and flourishes are drawn live. */
+.print-and span{display:block}
+.print-families .print-flourish{display:block}
+.theme-pink{--liner:url("../assets/art/real-pink/liner.webp?v=real-flowers-5");--petal-art:url("../assets/art/real-pink/petal.webp?v=real-flowers-5")}
+.theme-blue{--liner:url("../assets/art/real-blue/liner.webp?v=real-flowers-5");--petal-art:url("../assets/art/real-blue/petal.webp?v=real-flowers-5")}
+.env-back,.flap-face--back{background-image:var(--liner)}
+.float{filter:none}
+.petal{border-radius:0;background:var(--petal-art) center/contain no-repeat;opacity:.92}
+.petal{width:calc(var(--size) * 1.7);height:calc(var(--size) * 1.7)}
+.float--tl,.float--tr{width:min(60vw,340px)}
+.env-window{bottom:4%}
