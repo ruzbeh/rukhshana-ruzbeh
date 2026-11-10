@@ -221,7 +221,7 @@
 #rsvp .rs-back{min-height:44px}
 
 /* The full printed invitation is available alongside the interactive reply. */
-#rsvp{background:#e0eef9 url("../assets/art/real-blue/frame-original-4.svg?v=real-flowers-5") center/100% 100% no-repeat}
+#rsvp{background:#e0eef9 url("../assets/art/real-blue/frame-original-4.svg?v=real-flowers-6") center/100% 100% no-repeat}
 #rsvp .original-invitation{align-self:center;flex-shrink:0;color:var(--gold-dark);font:400 12px/1.4 var(--serif);margin:0 0 6px;text-underline-offset:3px;min-height:24px;display:flex;align-items:center}
 /* The complete original page now supplies the sky, petals, road and car. */
 #rsvp .p-scene,#rsvp .frame--petals{display:none}

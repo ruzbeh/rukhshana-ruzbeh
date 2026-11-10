@@ -1,11 +1,19 @@
 /* The painted frames carry no lettering or gold, so the rule and flourishes are drawn live. */
 .print-and span{display:block}
 .print-families .print-flourish{display:block}
-.theme-pink{--liner:url("../assets/art/real-pink/liner.webp?v=real-flowers-5");--petal-art:url("../assets/art/real-pink/petal.webp?v=real-flowers-5")}
-.theme-blue{--liner:url("../assets/art/real-blue/liner.webp?v=real-flowers-5");--petal-art:url("../assets/art/real-blue/petal.webp?v=real-flowers-5")}
+.theme-pink{--liner:url("../assets/art/real-pink/liner.webp?v=real-flowers-6");--petal-art:url("../assets/art/real-pink/petal.webp?v=real-flowers-6")}
+.theme-blue{--liner:url("../assets/art/real-blue/liner.webp?v=real-flowers-6");--petal-art:url("../assets/art/real-blue/petal.webp?v=real-flowers-6")}
 .env-back,.flap-face--back{background-image:var(--liner)}
 .float{filter:none}
 .petal{border-radius:0;background:var(--petal-art) center/contain no-repeat;opacity:.92}
 .petal{width:calc(var(--size) * 1.7);height:calc(var(--size) * 1.7)}
 .float--tl,.float--tr{width:min(60vw,340px)}
 .env-window{bottom:4%}
+/* RSVP: the panel is only as tall as its step, so the car scene shows between it and the button; the tile itself shows the choice. */
+#rsvp .rs-step{flex:0 1 auto;overflow-y:auto}
+#rsvp .rs-footer{margin-top:auto;border-top:0}
+#rsvp .p-choice input{opacity:0;pointer-events:none}
+#rsvp .p-choice:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:3px}
+#rsvp :is(.rs-progress,.rsvp-field>span,.rsvp-person label,.meal-options legend,.p-choice small,.rs-back,.p-error,#seat-summary,.p-count small,.rs-footnote,.guest-tabs button){font-family:var(--serif);font-size-adjust:.5;font-weight:600}
+#rsvp .p-rsvp-head{text-wrap:balance}
+#rsvp :is(#rsvp-count,.rsvp-person>legend,#seat-summary,#rs-review-summary,#rs-review-meals,.p-count){font-variant-numeric:lining-nums}
