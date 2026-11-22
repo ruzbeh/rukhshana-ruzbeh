@@ -225,7 +225,7 @@
     cancelPageHint();
     guidePageIndex = null;
     guideActor.hidden = true;
-    body.classList.remove('has-opening-guide');
+    body.classList.remove('has-opening-guide', 'bird-teaching');
     guideActor.getAnimations({subtree: true}).forEach(animation => animation.cancel());
   }
   function showOpeningGuide() {
@@ -234,12 +234,7 @@
     showSealGuide();
   }
   function showSealGuide() {
-    if (!host) return;
-    body.classList.add('has-opening-guide');
-    guideActor.dataset.mode = 'open';
-    guideActor.style.opacity = '';
-    guideActor.hidden = false;
-    requestAnimationFrame(positionGuideActor);
+    body.classList.add('bird-teaching');
   }
   function startPageGuide(index) {
     if (!host || reducedMotion.matches) return;
@@ -582,8 +577,39 @@
   }
 
   // ---------- opening ----------
+  const perchedBird = $('env-bird');
+  const perchedBirdArt = perchedBird.querySelector('img');
+  const beakGrip = {x: 0.875, y: 0.17};
+  const birdHopPivot = '56% 68%';
+
+  function cubicBezier(x1, y1, x2, y2) {
+    const along = (t, a, b) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+    return x => {
+      let low = 0, high = 1, t = x;
+      for (let step = 0; step < 24; step++) {
+        t = (low + high) / 2;
+        if (along(t, x1, x2) < x) low = t; else high = t;
+      }
+      return along(t, y1, y2);
+    };
+  }
+  const cardFlightEasing = 'cubic-bezier(.25,.1,.15,1)';
+  const cardFlightProgress = cubicBezier(.25, .1, .15, 1);
+
+  function currentTranslation(element) {
+    const transform = getComputedStyle(element).transform;
+    const matrix = new DOMMatrix(transform === 'none' ? undefined : transform);
+    return {x: matrix.m41, y: matrix.m42};
+  }
+  function removeCarryingBirds() {
+    document.querySelectorAll('.carrying-bird').forEach(carrier => carrier.remove());
+  }
+
   async function openEnvelope() {
     if (state !== 'sealed') return;
+    const birdPose = getComputedStyle(perchedBird).transform;
+    const birdArtPose = getComputedStyle(perchedBirdArt).transform;
+    const birdIsOnTheBow = currentTranslation(perchedBird).x < -perchedBird.offsetWidth * 0.3;
     hideGuide();
     state = 'opening';
     deliveryControl.hidden = true;
@@ -608,19 +634,17 @@
     $('tap-hint').classList.add('is-hidden');
 
     try {
-      const perchedBird = $('env-bird');
-      if (perchedBird) {
-        // the bluebird crouches, then takes off over the top of the card before the seal gives
-        animate(perchedBird, [
-          {transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1},
-          {transform: 'translate(-2%,5%) rotate(4deg) scale(1,.9)', opacity: 1, offset: .1},
-          {transform: 'translate(14%,-38%) rotate(-10deg) scale(1)', opacity: 1, offset: .26},
-          {transform: 'translate(120%,-240%) rotate(-16deg) scale(.82)', opacity: 1, offset: .6},
-          {transform: 'translate(330%,-620%) rotate(-20deg) scale(.6)', opacity: 0}
-        ], {duration: 1500, easing: 'cubic-bezier(.45,.05,.55,.95)'});
-        await wait(380);
-        if (state !== 'opening') return;
-      }
+      // The bird steps off the seal onto the bow (or is already there, mid-peck) so the seal can give way.
+      const birdOnTheBow = getComputedStyle(perchedBird).getPropertyValue('--aside').trim();
+      perchedBirdArt.style.transformOrigin = birdHopPivot;
+      animate(perchedBirdArt, [{transform: birdArtPose}, {transform: 'none'}], {duration: 220, easing: 'ease-out'});
+      animate(perchedBird, birdIsOnTheBow
+        ? [{transform: birdPose}, {transform: birdOnTheBow}]
+        : [{transform: birdPose}, {transform: 'translate(-30%,-22%)', offset: .45}, {transform: birdOnTheBow}],
+      {duration: 520, easing: 'ease-in-out'});
+      await wait(380);
+      if (state !== 'opening') return;
+
       // the seal gives way quietly
       animate(seal, [
         {transform: 'translate(-50%,-50%) scale(1)', opacity: 1},
@@ -629,12 +653,31 @@
       animate($('sealed-head'), [{opacity: 1}, {opacity: 0}], {duration: 900, delay: 600, easing: 'ease'});
 
       // the flap turns over slowly, with the weight of real paper
-      await animate(flap, [
+      const flapOpening = animate(flap, [
         {transform: 'rotateX(0deg)', opacity: 1},
         {transform: 'rotateX(-95deg)', opacity: 1, offset: 0.55},
         {transform: 'rotateX(-172deg)', opacity: 1, offset: 0.9},
         {transform: 'rotateX(-180deg)', opacity: 0}
-      ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'}).finished;
+      ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'});
+      await wait(1700);
+      if (state !== 'opening') return;
+
+      // As the flap settles, the bird flutters up and takes the top edge of the letter in its beak.
+      const envRect = envelope.getBoundingClientRect();
+      const letterRect = letter.getBoundingClientRect();
+      const birdWidth = perchedBird.offsetWidth, birdHeight = perchedBird.offsetHeight;
+      const gripX = letterRect.left + letterRect.width / 2 - (envRect.left + perchedBird.offsetLeft + birdWidth * beakGrip.x);
+      const gripY = letterRect.top + birdHeight * 0.03 - (envRect.top + perchedBird.offsetTop + birdHeight * beakGrip.y);
+      const bow = currentTranslation(perchedBird);
+      perchedBirdArt.getAnimations().forEach(animation => animation.cancel());
+      perchedBird.classList.add('is-flapping');
+      const birdReachesLetter = animate(perchedBird, [
+        {transform: `translate(${bow.x}px, ${bow.y}px)`},
+        {transform: `translate(${(bow.x + gripX) / 2}px, ${Math.min(bow.y, gripY) - birdHeight * 0.35}px)`, offset: .55},
+        {transform: `translate(${gripX}px, ${gripY}px)`}
+      ], {duration: 650, easing: 'ease-in-out'}).finished;
+
+      await flapOpening.finished;
       if (state !== 'opening') return;
       flap.style.visibility = 'hidden';
 
@@ -645,12 +688,16 @@
         {opacity: 0, transform: 'translate(-50%,-60%) scale(1.25)'}
       ], {duration: 2600, easing: 'ease-in-out'});
       flyFlock();
-      await wait(400);
+      await birdReachesLetter;
+      if (state !== 'opening') return;
+      await wait(150);
       if (state !== 'opening') return;
 
-      const envRect = envelope.getBoundingClientRect();
+      // The bird pulls the letter up out of the envelope.
       const rise = envRect.height * 0.62;
-      await animate(letter, [{transform: 'translateY(0)'}, {transform: `translateY(${-rise}px)`}], {duration: 1500, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
+      const letterLift = {duration: 1500, easing: cardFlightEasing};
+      animate(perchedBird, [{transform: `translate(${gripX}px, ${gripY}px)`}, {transform: `translate(${gripX}px, ${gripY - rise}px)`}], letterLift);
+      await animate(letter, [{transform: 'translateY(0)'}, {transform: `translateY(${-rise}px)`}], letterLift).finished;
 
       if (state !== 'opening') return;
       const from = letter.getBoundingClientRect();
@@ -686,10 +733,44 @@
       const fit = Math.min(to.width / from.width, to.height / from.height);
       const landX = to.left + (to.width - from.width * fit) / 2 - from.left;
       const landY = to.top + (to.height - from.height * fit) / 2 - from.top;
+
+      // The bird keeps hold of the card's top edge as it flies to the screen, then lets go and leaves before it lands.
+      const birdRect = perchedBird.getBoundingClientRect();
+      const carrier = document.createElement('div');
+      carrier.className = 'carrying-bird';
+      carrier.append(...[...perchedBird.children].map(part => {
+        const copy = part.cloneNode(true);
+        copy.removeAttribute('style');
+        return copy;
+      }));
+      Object.assign(carrier.style, {left: `${birdRect.left}px`, top: `${birdRect.top}px`, width: `${birdRect.width}px`, height: `${birdRect.height}px`});
+      body.append(carrier);
+      perchedBird.style.visibility = 'hidden';
+      perchedBird.classList.remove('is-flapping');
+      carrier.classList.add('is-flapping');
+      const letGoAt = 0.78;
+      const carrierPath = Array.from({length: 25}, (_, step) => {
+        const time = step / 24;
+        const progress = cardFlightProgress(time);
+        const cardScale = 1 + progress * (fit - 1);
+        let x = progress * landX + (cardScale - 1) * from.width / 2;
+        let y = progress * landY;
+        let tilt = 0, opacity = 1;
+        if (time > letGoAt) {
+          const away = (time - letGoAt) / (1 - letGoAt);
+          x += away * away * innerWidth * 0.55;
+          y -= away * innerHeight * 0.3;
+          tilt = -14 * away;
+          opacity = 1 - away ** 1.6;
+        }
+        return {offset: time, transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${tilt.toFixed(1)}deg) scale(${(1 + progress * 0.25).toFixed(3)})`, opacity};
+      });
+      animate(carrier, carrierPath, {duration: 1600, easing: 'linear'});
+
       await animate(flyer, [
         {transform: 'translate(0,0) scale(1)', clipPath: clipStart},
         {transform: `translate(${landX.toFixed(1)}px, ${landY.toFixed(1)}px) scale(${fit.toFixed(4)})`, clipPath: clipEnd}
-      ], {duration: 1600, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
+      ], {duration: 1600, easing: cardFlightEasing}).finished;
       // Hand the emerging card straight to the moving film.
       // The live invitation is revealed only after the film has finished.
 
@@ -714,6 +795,7 @@
     body.classList.remove('is-sealed');
     sealed.hidden = true;
     if (flyer) flyer.remove();
+    removeCarryingBirds();
     goToPage(1);
   }
 
@@ -810,7 +892,11 @@
   function resetEnvelope() {
     body.classList.remove('parents-handing-over');
     const flap = $('env-flap'), letter = $('env-letter'), seal = $('env-seal');
-    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), $('env-bird'), ...birds.map(bird => bird.element), ...sealedLayers].filter(Boolean).forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
+    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), perchedBird, perchedBirdArt, ...birds.map(bird => bird.element), ...sealedLayers].filter(Boolean).forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
+    removeCarryingBirds();
+    perchedBird.style.visibility = '';
+    perchedBirdArt.style.transformOrigin = '';
+    perchedBird.classList.remove('is-flapping');
     envWrap.style.transform = '';
     sealedLayers.forEach(layer => { layer.style.transform = ''; });
     flap.style.visibility = '';
