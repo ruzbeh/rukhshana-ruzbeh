@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const ENDPOINT = '';   // the RSVP Apps Script web app URL (same as RSVP_ENDPOINT in the card's app.js)
+  const ENDPOINT = 'https://script.google.com/macros/s/AKfycbx5wDx7YdOppY3Gvi889cd7B_p0Tp92mL9dNrcZdL7mMcj45d-1HVge4kfhe-DEG-tw2A/exec';   // the RSVP Apps Script web app URL (same as RSVP_ENDPOINT in the card's app.js)
 
   const WEDDING_DAY = '2027-02-26';
   const WEDDING_LABEL = 'Friday 26 February 2027';

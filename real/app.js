@@ -2,7 +2,7 @@
   'use strict';
 
   // ---- RSVP delivery. Leave both empty to let guests share or copy their reply. ----
-  const RSVP_ENDPOINT = '';   // the Google Apps Script web app URL from ../rsvp-sheet (ends in /exec)
+  const RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx5wDx7YdOppY3Gvi889cd7B_p0Tp92mL9dNrcZdL7mMcj45d-1HVge4kfhe-DEG-tw2A/exec';   // the Google Apps Script web app URL from ../rsvp-sheet (ends in /exec)
   const RSVP_WHATSAPP = '';   // e.g. '919876543210' (country code, digits only)
   const COUPLE = 'Rukhshana & Ruzbeh';
 
