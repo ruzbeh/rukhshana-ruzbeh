@@ -8,16 +8,21 @@
 @media(prefers-reduced-motion:reduce){.is-flapping>.bird-flight{animation:none;background-position:33.333% 0}}
 
 /* Cover header: the design's own Farohar, WEDDING lettering and gold rule (cut from the owner's page). */
-.sealed-head .sealed-emblem{left:39.941%;top:14.986%;width:24.707%;filter:none}
+.sealed-head .sealed-emblem{left:39.844%;top:15.549%;width:25%;filter:drop-shadow(0 1px 1px #7a4a1238)}
 .cover-wedding{left:35.938%!important;right:auto!important;top:28.406%!important;width:33.936%;padding:0!important;transform:none!important;line-height:0!important;font-size:0!important}
 .cover-wedding img,.cover-rule{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none}
 .cover-rule{position:absolute;left:35.449%;top:41.315%;width:34.277%}
 
 /* Printed pages: the frames now carry the owner's Farohar, gold rules, icons and fixed lettering.
    The live copies stay for screen readers and as tap targets, but are not painted. */
-.print-canvas .print-emblem img{opacity:0}
 .print-details :is(.print-when,.print-where,.print-cocktails),.print-details :is(.print-when,.print-where) *{color:transparent!important}
 .print-details :is(.print-icon,.print-when-rule,.print-details-rule){visibility:hidden}
 .print-families .print-heading img,.print-families .print-flourish{opacity:0}
 .print-families:not(.print-families--groom) .print-people{color:transparent}
 .print-families:not(.print-families--groom) .print-people img{opacity:0}
+
+/* Farohar: a crisp painted rendering of the family's own emblem, centred where the design has its emblem. */
+.print-canvas .print-emblem{filter:drop-shadow(0 1px 1px #7a4a1238)}
+.print-invitation .print-emblem{left:37.331%;top:15.315%;width:24.565%}
+.print-details .print-emblem{left:39.844%;top:4.838%;width:24.805%}
+.print-families .print-emblem{left:37.137%;top:4.662%;width:24.758%}
