@@ -1,0 +1,164 @@
+/* Bluebird variant: the owner's four-page watercolour card. Every position below is measured
+   from bluebird-art/reference/owner-design-4-pages.jpg (page crops in bluebird-art/crops). */
+@font-face{font-family:"Bluebird Script";src:url("../assets/fonts/ImperialScript-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Bluebird Serif";src:url("../assets/fonts/EBGaramond.woff2") format("woff2");font-weight:400 800;font-style:normal;font-display:block}
+@font-face{font-family:"Bluebird Serif";src:url("../assets/fonts/EBGaramond-Italic.woff2") format("woff2");font-weight:400 800;font-style:italic;font-display:block}
+
+:root{
+  --ink:#9b1b3f;
+  --ink-soft:#a9284c;
+  --gold:#c49a4c;
+  --gold-dark:#8c6a2c;
+  --gold-light:#e7cf98;
+  --paper:#f2e8df;
+  --card-paper:#f8efe6;
+  --cream:#fffaf4;
+  --line:#e3d2c2;
+  --muted:#7d5a62;
+  --script:"Bluebird Script","Snell Roundhand",cursive;
+  --serif:"Bluebird Serif","EB Garamond",Garamond,Georgia,serif;
+}
+body{background:var(--paper);background-image:none}
+
+/* Soft blurred copy of the card behind everything, like the card lying on its own colours. */
+.table,.sealed::before{display:block;content:"";position:fixed;inset:-60px;z-index:0;background:url("../assets/art/bluebird/cover.webp?v=bluebird-3") center/cover no-repeat;filter:blur(30px) saturate(.9);opacity:.55;mix-blend-mode:normal;pointer-events:none}
+.sealed::before{position:absolute}
+.sealed{background:var(--paper);background-image:none;padding:0;display:block}
+.petals,.flock,.depth{display:none}
+
+/* ---------- the cover: page one of the design, with a live envelope ---------- */
+.cover-card{position:absolute;left:50%;top:50%;z-index:2;width:var(--stage-w);aspect-ratio:779/1100;transform:translate(-50%,-50%);container-type:inline-size;--w:1cqw;border-radius:3px;box-shadow:0 1px 0 #fffaf3,0 0 0 1px #b48d4c30,0 14px 34px #5a362a26}
+.cover-art{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;border-radius:inherit;pointer-events:none;user-select:none;-webkit-user-select:none}
+.sealed-head{position:absolute;inset:0;z-index:2;display:block;pointer-events:none;will-change:opacity}
+.sealed-head .sealed-emblem{position:absolute;left:40.43%;top:14.85%;width:23.4%;height:auto;margin:0;filter:drop-shadow(0 1px 0 #fff5d880) drop-shadow(0 2px 2px #70401638)}
+.cover-wedding{position:absolute;left:0;right:0;top:28%;padding-left:.22em;margin:0;font:600 calc(5.4 * var(--w))/1 var(--serif);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);text-align:center;transform:translateX(calc(3.13 * var(--w)))}
+.cover-invitation{position:absolute;left:24.023%;top:32.153%;width:56.25%;margin:0;line-height:0}
+.cover-invitation img,.print-name img,.print-heading img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none}
+.cover-card .gold-rule{position:absolute;left:35.7%;width:33.1%;top:41.8%}
+
+/* gold hairlines with the small diamond knot from the card */
+.gold-rule{display:flex;align-items:center;gap:calc(1.6 * var(--w));height:calc(3.2 * var(--w))}
+.gold-rule::before,.gold-rule::after{content:"";flex:1;height:1.2px;background:linear-gradient(90deg,transparent,var(--gold) 18%,var(--gold))}
+.gold-rule::after{background:linear-gradient(270deg,transparent,var(--gold) 18%,var(--gold))}
+.gold-rule i{flex:none;width:calc(4.2 * var(--w));aspect-ratio:1;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f2d27e'/%3E%3Cstop offset='.5' stop-color='%23c8952f'/%3E%3Cstop offset='1' stop-color='%2394661c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url%28%23g%29' stroke='%238a5c19' stroke-width='.45' stroke-linejoin='round'%3E%3Cpath d='M10 .6 14.3 4.9 10 9.2 5.7 4.9Z'/%3E%3Cpath d='M10 10.8 14.3 15.1 10 19.4 5.7 15.1Z'/%3E%3Cpath d='M.6 10 4.9 5.7 9.2 10 4.9 14.3Z'/%3E%3Cpath d='M10.8 10 15.1 5.7 19.4 10 15.1 14.3Z'/%3E%3C/g%3E%3Cg fill='%23fff3cf' opacity='.55'%3E%3Ccircle cx='10' cy='4.9' r='1'/%3E%3Ccircle cx='10' cy='15.1' r='1'/%3E%3Ccircle cx='4.9' cy='10' r='1'/%3E%3Ccircle cx='15.1' cy='10' r='1'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+
+.cover-card .env-wrap{position:absolute;left:16.21%;top:46.73%;width:70.7%;z-index:3;perspective:1100px}
+.cover-card .envelope{width:100%;aspect-ratio:362/252;--pocket-apex:.71;filter:drop-shadow(0 2px 2px rgba(110,78,48,.22)) drop-shadow(0 9px 12px rgba(110,78,48,.16))}
+.cover-card .env-back{inset:0;border-radius:0;box-shadow:none;background:url("../assets/art/bluebird/env-back.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .env-window{left:7%;right:7%;top:-250%;bottom:4%}
+.cover-card .env-letter{top:76.9%;border:0;box-shadow:0 -4px 14px rgba(90,60,40,.16)}
+.cover-card .env-front{inset:-5.16% -4.14% -17.86% -3.59%;clip-path:none;border-radius:0;background:url("../assets/art/bluebird/env-front.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .env-front::before,.cover-card .env-front::after,.cover-card .flap-face--front::before,.cover-card .flap-face--front::after,.cover-card .flap-face--back::after{display:none}
+.cover-card .env-flap{height:71.03%}
+.cover-card .flap-face{clip-path:none;border-radius:0}
+.cover-card .flap-face--front{background:url("../assets/art/bluebird/env-flap.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .flap-face--back{background:url("../assets/art/bluebird/env-flap-back.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .env-seal{left:51.24%;top:57.34%;width:26.24%;aspect-ratio:1}
+.cover-card .env-seal img{filter:drop-shadow(0 1px 1px rgba(90,60,20,.4)) drop-shadow(0 3px 5px rgba(90,60,20,.22))}
+.env-bird{position:absolute;left:33.7%;top:12.3%;z-index:9;width:33.43%;aspect-ratio:121/98;pointer-events:none;will-change:transform,opacity}
+.env-bird img{display:block;width:100%;height:100%;transform-origin:64% 92%;animation:bird-idle 5.2s ease-in-out infinite}
+@keyframes bird-idle{0%,58%,100%{transform:none}62%{transform:translateY(-1.5%) rotate(-3deg)}66%{transform:none}84%{transform:rotate(2deg) scaleY(.98)}88%{transform:none}}
+@media(prefers-reduced-motion:reduce){.env-bird img{animation:none}}
+
+.cover-card .env-to{position:absolute;left:14%;right:14%;top:86.3%;z-index:4;display:flex;flex-direction:column;align-items:center;gap:0;margin:0;text-align:center;color:var(--ink)}
+.cover-card .env-to:not(:has(.is-guest)){display:none}
+.cover-card .env-for{font:italic 500 calc(3.6 * var(--w))/1.1 var(--serif);color:var(--gold-dark);letter-spacing:.02em}
+.cover-card .env-name,.cover-card .env-name.is-guest{font:400 calc(7.4 * var(--w))/1.1 var(--script);color:var(--ink);letter-spacing:0;overflow-wrap:anywhere;max-width:100%}
+.cover-card .env-name.is-long{font-size:calc(4.6 * var(--w));line-height:1.05;text-wrap:balance}
+.cover-card .envelope.has-many-invitees~* .env-name,.cover-card:has(.has-many-invitees) .env-name{font-size:calc(4.2 * var(--w))}
+
+.cover-card .tap-hint{position:absolute;left:0;right:0;top:calc(100% + 10px);z-index:2;margin:0;font:italic 500 15px/1.2 var(--serif);letter-spacing:.03em;text-transform:none;color:var(--ink)}
+.cover-card .seal-pointer{display:inline;font-size:inherit;color:inherit}
+
+/* ---------- printed pages ---------- */
+.print-page,.stage-veil{background:var(--card-paper);background-image:none}
+.stage-veil::after{display:none}
+.print-canvas .print-frame{object-fit:fill}
+.print-canvas{color:var(--ink);font-family:var(--serif)}
+.print-canvas .print-emblem{filter:drop-shadow(0 1px 0 #fff5d880) drop-shadow(0 2px 2px #70401638)}
+
+/* Page 1: the names. The text is one centred column so guest names and the groom's order flow naturally. */
+.print-invitation{display:flex;flex-direction:column;align-items:center;padding-top:calc(40.2 * var(--w))}
+.print-invitation>.print-intro,.print-invitation>.print-name,.print-invitation>.print-and,.print-invitation>.print-parents{position:relative;left:auto!important;top:auto!important;width:auto;max-width:84%;margin:0}
+.print-invitation .print-intro{width:84%!important;font-size:calc(4 * var(--w))!important;line-height:1.51!important}
+.print-invitation .print-emblem{left:37.6%;top:14.55%;width:23.4%}
+.print-intro{font:italic 500 calc(4 * var(--w))/1.51 var(--serif);letter-spacing:0;text-wrap:balance}
+.print-intro .print-host-names{display:block;margin-bottom:0;font:600 calc(4.4 * var(--w))/1.2 var(--serif);font-style:normal;letter-spacing:0;text-transform:uppercase}
+.print-invite-line,.print-celebrate{display:inline}
+.print-intro{display:block;text-align:center}
+.print-invite-line{display:block}
+.print-intro #p-guest.is-named{display:block;margin:calc(.5 * var(--w)) 0;font:600 calc(4.4 * var(--w))/1.2 var(--serif);font-style:normal;letter-spacing:.04em;text-transform:uppercase;overflow-wrap:anywhere}
+.print-intro #p-guest.is-long{font-size:calc(3.8 * var(--w))}
+.print-name{line-height:0;font-size:0;--name-scale:1}
+.print-invitation>.print-name--bride{width:calc(73.5 * var(--name-scale) * var(--w));max-width:none;transform:translateX(calc(-1.64 * var(--w)))}
+.print-invitation>.print-name--groom{width:calc(59.19 * var(--name-scale) * var(--w));max-width:none;transform:translateX(calc(-2.22 * var(--w)))}
+.print-invitation--groom .print-name--bride{transform:translateX(calc(-1.64 * var(--w)))}
+.print-name--bride{margin-top:calc(3.8 * var(--w))!important}
+.print-and{display:flex;align-items:center;justify-content:center;gap:calc(2.6 * var(--w));width:calc(46 * var(--w))!important;transform:translateX(calc(-1.6 * var(--w)));margin-top:calc(.6 * var(--w))!important;font:italic 500 calc(3.9 * var(--w))/1.2 var(--serif)}
+.print-and span{display:block!important;flex:1;height:1px;background:var(--gold)}
+.print-and span:first-child{background:linear-gradient(90deg,transparent,var(--gold) 25%)}
+.print-and span:last-child{background:linear-gradient(270deg,transparent,var(--gold) 25%)}
+.print-name--groom{margin-top:calc(.45 * var(--w))!important}
+.print-parents{margin-top:calc(6.76 * var(--w))!important;font:600 calc(4.1 * var(--w))/1.2 var(--serif);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;transform:translateX(calc(-1.8 * var(--w)))}
+.print-parent-label,.print-parent-names{display:inline;font:inherit;letter-spacing:inherit;margin:0}
+.print-invitation--groom .print-parents{font-size:calc(3.1 * var(--w))}
+.print-invitation:has(#p-guest.is-named){padding-top:calc(38.5 * var(--w))}
+.print-invitation:has(#p-guest.is-named) .print-name{--name-scale:.86}
+.print-invitation:has(#p-guest span:nth-child(3)) .print-name{--name-scale:.64}
+.print-invitation:has(#p-guest span:nth-child(3)){padding-top:calc(37 * var(--w))}
+.print-invitation:has(#p-guest span:nth-child(3)) .print-intro{line-height:1.36!important}
+.print-invitation:has(#p-guest span:nth-child(3)) #p-guest{font-size:calc(3.5 * var(--w));line-height:1.18}
+.print-invitation:has(#p-guest span:nth-child(3)) .print-name--bride{margin-top:calc(2.4 * var(--w))!important}
+.print-invitation:has(#p-guest span:nth-child(3)) .print-parents{margin-top:calc(4.6 * var(--w))!important}
+
+/* Page 2: date, venue, and the baug itself (the building is part of the painting). */
+.print-details .print-emblem{left:40.4%;top:4.1%;width:23.4%}
+.print-details .print-parsi-date,.print-details .print-actions{display:none}
+.print-when{position:absolute;left:12%;top:16.2%;width:76%;height:14.2%;display:block;color:var(--ink);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.print-when-day,.print-when-time{position:absolute;top:0;display:flex;flex-direction:column;align-items:center;text-align:center}
+.print-when-day{left:5.5%;width:50%}
+.print-when-time{left:64.1%;width:34%}
+.print-icon{width:calc(7.3 * var(--w));height:calc(7.3 * var(--w));fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.print-when-day .print-icon{margin-top:calc(1.2 * var(--w));transform:translateX(calc(-2.3 * var(--w)))}
+.print-when-time .print-icon{width:calc(8.1 * var(--w));height:calc(8.1 * var(--w));margin-top:calc(1 * var(--w))}
+.print-when .print-day,.print-when .print-date,.print-when .print-time{position:static;display:block;width:auto;height:auto;margin:0;white-space:nowrap;font:600 calc(3.8 * var(--w))/1.18 var(--serif);letter-spacing:.035em;text-transform:uppercase;color:var(--ink);font-variant-numeric:lining-nums}
+.print-when .print-day{margin-top:calc(.9 * var(--w));transform:translateX(calc(-1.7 * var(--w)))}
+.print-when .print-time{margin-top:calc(1.25 * var(--w));font-size:calc(5 * var(--w));letter-spacing:.04em}
+.print-when-rule{position:absolute;left:60%;top:29.5%;width:1px;height:62.5%;background:linear-gradient(transparent,var(--gold) 15%,var(--gold) 85%,transparent)}
+.print-where{position:absolute;left:8%;top:62%;width:85.2%;display:flex;flex-direction:column;align-items:center;color:var(--ink);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.print-where .print-venue{position:static;width:auto;font:600 calc(6.25 * var(--w))/1.1 var(--serif);letter-spacing:.075em;text-transform:uppercase}
+.print-where .print-address{position:static;width:auto;margin-top:calc(1.35 * var(--w));font:600 calc(4.05 * var(--w))/1.1 var(--serif);letter-spacing:.035em;text-transform:uppercase}
+.print-details-rule{position:absolute;left:34.2%;top:73.6%;width:35.2%}
+.print-details .print-cocktails{left:5%;top:77.2%;width:96%;font:italic 500 calc(4.55 * var(--w))/1.2 var(--serif);letter-spacing:.005em;white-space:nowrap}
+@media(hover:hover){.print-when:hover .print-icon,.print-where:hover .print-venue{opacity:.8}}
+
+/* Page 3: blessings and compliments side by side, above the ses. */
+.print-families .print-emblem{left:38.3%;top:3.8%;width:23.4%}
+.print-families .print-heading{line-height:0;font-size:0}
+.print-heading--blessings{left:9.865%!important;top:17.486%!important;width:35.2%!important}
+.print-heading--compliments{left:53.578%!important;top:18.716%!important;width:40.23%!important}
+.print-families .print-flourish{display:flex!important;width:21%;top:27.4%!important}
+.print-flourish--blessings{left:17%!important}
+.print-flourish--compliments{left:63.8%!important}
+.print-families .print-people{top:31.1%!important;width:45%;gap:0;white-space:nowrap;font:600 calc(3.6 * var(--w))/1.653 var(--serif);letter-spacing:0;text-transform:uppercase;color:var(--ink);text-align:center;align-items:center}
+.print-people--blessings{left:6.6%!important;transform:translateX(calc(-1.5 * var(--w)))}
+.print-people--compliments{left:52.6%!important;top:30.9%!important;line-height:1.79!important}
+.print-families--groom .print-people{white-space:normal;font-size:calc(3.4 * var(--w));line-height:1.2!important;gap:calc(1.3 * var(--w))!important;text-wrap:balance}
+.print-families--groom .print-people img.family-cameo{width:calc(6 * var(--w));height:calc(7 * var(--w))}
+.print-families--groom .print-people .person--cameo{gap:calc(1.2 * var(--w));margin:0}
+
+/* ---------- RSVP keeps its flow, on the cover's paper ---------- */
+#rsvp{background:var(--card-paper) url("../assets/art/bluebird/rsvp.webp?v=bluebird-3") center/100% 100% no-repeat}
+#rsvp .p-scene,#rsvp .frame--petals{display:none}
+#rsvp .rs-masthead{background-image:none}
+.curl{background-color:#f6ede3}
+.chip--primary{background:var(--ink);border-color:var(--ink);color:#fffaf4}
+.chip--primary:hover{background:#82142f}
+.deck-dots button::before{border-color:rgba(155,27,63,.6)}
+
+/* ---------- landscape phones ---------- */
+.turn-upright{background:var(--paper)!important;background-image:none!important}
+.turn-upright-names{font:400 34px/1.1 var(--script);color:var(--ink);margin:0}
+.turn-upright-names i{font:italic 500 16px var(--serif);margin:0 6px}
+
+@supports not (width:1cqw){.cover-card{--w:calc(var(--stage-w) / 100)}}
