@@ -21,7 +21,7 @@
 body{background:var(--paper);background-image:none}
 
 /* Soft blurred copy of the card behind everything, like the card lying on its own colours. */
-.table,.sealed::before{display:block;content:"";position:fixed;inset:-60px;z-index:0;background:url("../assets/art/bluebird/cover.webp?v=bluebird-3") center/cover no-repeat;filter:blur(30px) saturate(.9);opacity:.55;mix-blend-mode:normal;pointer-events:none}
+.table,.sealed::before{display:block;content:"";position:fixed;inset:-60px;z-index:0;background:url("../assets/art/bluebird/cover.webp?v=bluebird-4") center/cover no-repeat;filter:blur(30px) saturate(.9);opacity:.55;mix-blend-mode:normal;pointer-events:none}
 .sealed::before{position:absolute}
 .sealed{background:var(--paper);background-image:none;padding:0;display:block}
 .petals,.flock,.depth{display:none}
@@ -44,15 +44,15 @@ body{background:var(--paper);background-image:none}
 
 .cover-card .env-wrap{position:absolute;left:16.21%;top:46.73%;width:70.7%;z-index:3;perspective:1100px}
 .cover-card .envelope{width:100%;aspect-ratio:362/252;--pocket-apex:.71;filter:drop-shadow(0 2px 2px rgba(110,78,48,.22)) drop-shadow(0 9px 12px rgba(110,78,48,.16))}
-.cover-card .env-back{inset:0;border-radius:0;box-shadow:none;background:url("../assets/art/bluebird/env-back.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .env-back{inset:0;border-radius:0;box-shadow:none;background:url("../assets/art/bluebird/env-back.webp?v=bluebird-4") 0 0/100% 100% no-repeat}
 .cover-card .env-window{left:7%;right:7%;top:-250%;bottom:4%}
 .cover-card .env-letter{top:76.9%;border:0;box-shadow:0 -4px 14px rgba(90,60,40,.16)}
-.cover-card .env-front{inset:-5.16% -4.14% -17.86% -3.59%;clip-path:none;border-radius:0;background:url("../assets/art/bluebird/env-front.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .env-front{inset:-5.16% -4.14% -17.86% -3.59%;clip-path:none;border-radius:0;background:url("../assets/art/bluebird/env-front.webp?v=bluebird-4") 0 0/100% 100% no-repeat}
 .cover-card .env-front::before,.cover-card .env-front::after,.cover-card .flap-face--front::before,.cover-card .flap-face--front::after,.cover-card .flap-face--back::after{display:none}
 .cover-card .env-flap{height:71.03%}
 .cover-card .flap-face{clip-path:none;border-radius:0}
-.cover-card .flap-face--front{background:url("../assets/art/bluebird/env-flap.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
-.cover-card .flap-face--back{background:url("../assets/art/bluebird/env-flap-back.webp?v=bluebird-3") 0 0/100% 100% no-repeat}
+.cover-card .flap-face--front{background:url("../assets/art/bluebird/env-flap.webp?v=bluebird-4") 0 0/100% 100% no-repeat}
+.cover-card .flap-face--back{background:url("../assets/art/bluebird/env-flap-back.webp?v=bluebird-4") 0 0/100% 100% no-repeat}
 .cover-card .env-seal{left:51.24%;top:57.34%;width:26.24%;aspect-ratio:1}
 .cover-card .env-seal img{filter:drop-shadow(0 1px 1px rgba(90,60,20,.4)) drop-shadow(0 3px 5px rgba(90,60,20,.22))}
 .env-bird{position:absolute;left:33.7%;top:12.3%;z-index:9;width:33.43%;aspect-ratio:121/98;pointer-events:none;will-change:transform,opacity}
@@ -148,7 +148,7 @@ body{background:var(--paper);background-image:none}
 .print-families--groom .print-people .person--cameo{gap:calc(1.2 * var(--w));margin:0}
 
 /* ---------- RSVP keeps its flow, on the cover's paper ---------- */
-#rsvp{background:var(--card-paper) url("../assets/art/bluebird/rsvp.webp?v=bluebird-3") center/100% 100% no-repeat}
+#rsvp{background:var(--card-paper) url("../assets/art/bluebird/rsvp.webp?v=bluebird-4") center/100% 100% no-repeat}
 #rsvp .p-scene,#rsvp .frame--petals{display:none}
 #rsvp .rs-masthead{background-image:none}
 .curl{background-color:#f6ede3}
