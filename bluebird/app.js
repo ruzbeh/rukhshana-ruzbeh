@@ -53,7 +53,7 @@
         $('card-sparkles').append(sparkle);
       }
       if (dance) {
-        guestDanceAnimations = [...document.querySelectorAll('.table-person-icon')].map((person, index) => person.animate([
+        guestDanceAnimations = [...document.querySelectorAll('.seat-pip')].map((person, index) => person.animate([
           {transform: 'translateY(0) rotate(-12deg)'},
           {transform: 'translateY(-7px) rotate(12deg)', offset: .5},
           {transform: 'translateY(0) rotate(-12deg)'}
@@ -1281,13 +1281,10 @@
     for (let i = 0; i < count; i++) {
       let person = people.children[i];
       if (!person) {
-        person = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        person.classList.add('table-person');
-        person.innerHTML = '<g class="table-person-icon"><circle class="seat-back" r="13"/><circle class="seat-head" cy="-3" r="4"/><path class="seat-body" d="M-7 7c0-9 14-9 14 0Z"/></g>';
+        person = document.createElement('i');
+        person.className = 'seat-pip';
         people.append(person);
       }
-      const angle = -Math.PI / 2 + i * 2 * Math.PI / count;
-      person.setAttribute('transform', `translate(${150 + 123 * Math.cos(angle)} ${95 + 70 * Math.sin(angle)})`);
     }
     [...people.children].forEach((person, index) => person.classList.toggle('is-newest', index === count - 1));
     $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'}`;

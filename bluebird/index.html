@@ -22,7 +22,8 @@
   <link rel="stylesheet" href="real-flowers.css?v=bluebird-4">
   <link rel="stylesheet" href="bluebird.css?v=bluebird-6">
   <link rel="stylesheet" href="bluebird-art.css?v=bluebird-7">
-  <script src="app.js?v=bluebird-5" defer></script>
+  <link rel="stylesheet" href="bluebird-rsvp.css?v=rsvp-2">
+  <script src="app.js?v=bluebird-5-rsvp1" defer></script>
 </head>
 <body class="is-sealed theme-bluebird" data-handover="off">
 
@@ -172,20 +173,21 @@
             <div class="rs-masthead"><img class="rs-card-emblem" src="../assets/art/bluebird/farohar-gold.webp?v=bluebird-7" alt="" draggable="false"><span>Rukhshana &amp; Ruzbeh</span></div>
             <div class="rs-progress" aria-label="RSVP progress"><span class="is-current">Reply</span><span>Guests</span><span>Meals</span></div>
             <h2 class="p-rsvp-head" id="rs-heading" tabindex="-1">Will you join us?</h2>
+            <span class="gold-rule rs-rule" aria-hidden="true"><i></i></span>
             <p id="party-reaction" class="party-reaction" role="status" aria-live="polite" aria-atomic="true" hidden></p>
             <p id="rs-subtitle" class="rs-subtitle">The best part of our day? Sharing it with you.</p>
             <form id="rsvp-form" class="p-form" novalidate>
               <section class="rs-step" data-step="0" aria-label="Your reply">
                 <label class="rsvp-field"><span>Your name or family</span><input id="rsvp-name" name="name" type="text" maxlength="100" autocomplete="name" placeholder="The name on your invitation" required></label>
               <div class="p-choices" role="radiogroup" aria-label="Will you be attending?">
-                <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b></span></label>
-                <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Can’t make it</b></span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b><small>Count us in</small></span></label>
+                <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Can’t make it</b><small>Sending our love</small></span></label>
               </div>
               </section>
               <section class="rs-step" data-step="1" aria-label="Your party" hidden>
                 <div class="p-more" id="attending-fields">
                 <div class="seat-preview">
-                  <svg class="guest-table" viewBox="0 0 300 190" aria-hidden="true"><ellipse class="table-shadow" cx="150" cy="101" rx="96" ry="45"/><ellipse class="table-top" cx="150" cy="95" rx="96" ry="45"/><ellipse class="table-inlay" cx="150" cy="95" rx="87" ry="36"/><path class="table-heart" d="M150 91c-18-13-22 10 0 20 22-10 18-33 0-20Z"/><text x="150" y="80" class="table-caption">Room for love</text><g id="table-people"></g></svg>
+                  <div class="seat-pips" id="table-people" aria-hidden="true"></div>
                   <p id="seat-summary" role="status" aria-live="polite" aria-atomic="true">1 guest joining the celebration</p>
                 </div>
                 <div class="p-count"><span id="seat-label">Guests<small>Including children</small></span><div class="seat-stepper"><button id="seat-remove" type="button" aria-label="Remove a guest">−</button><input id="rsvp-count" name="partySize" type="number" min="1" max="20" step="1" inputmode="numeric" value="1" aria-labelledby="seat-label"><button id="seat-add" type="button" aria-label="Add a guest">+</button></div></div>
