@@ -53,7 +53,7 @@
         $('card-sparkles').append(sparkle);
       }
       if (dance) {
-        guestDanceAnimations = [...document.querySelectorAll('.seat-pip')].map((person, index) => person.animate([
+        guestDanceAnimations = [...document.querySelectorAll('.table-person-icon')].map((person, index) => person.animate([
           {transform: 'translateY(0) rotate(-12deg)'},
           {transform: 'translateY(-7px) rotate(12deg)', offset: .5},
           {transform: 'translateY(0) rotate(-12deg)'}
@@ -122,7 +122,7 @@
     invitation.querySelector('.print-parent-names').textContent = 'Naazlina and Zarir Patwa';
     const familyPortraits = {
       'Zenia Irani': 'zenia-caricature-v2.png',
-      'Hanoz & Monaz Khambatta': 'hanoz-caricature-v3.png'
+      'Hanoz and Monaz Khambatta': 'hanoz-caricature-v3.png'
     };
     const replacePeople = (selector, names) => {
       document.querySelector(selector).replaceChildren(...names.map(name => {
@@ -142,16 +142,15 @@
     };
     // Remaining blessings names will be supplied later.
     replacePeople('.print-people--blessings', [
-      'Rustom & Soultoon Irani', 'Perin & Minoo Pithawala', 'Katy & Polly'
+      'Rustom and Soultoon Irani', 'Perin and Minoo Pithawala', 'Katy and Polly'
     ]);
     replacePeople('.print-people--compliments', [
-      'Aban & Soli Irani', 'Zenia Irani', 'Hanoz & Monaz Khambatta',
-      'Farida & Pervez', 'Pericher & Viraf', 'Mahiyar, Rohinton & Maharukh'
+      'Aban and Soli Irani', 'Zenia Irani', 'Hanoz and Monaz Khambatta',
+      'Farida and Pervez', 'Pericher and Viraf', 'Mahiyar, Rohinton and Maharukh'
     ]);
     const groomFamilies = document.querySelector('.print-families');
     groomFamilies.classList.add('print-families--groom');
-    const groomFrame = groomFamilies.querySelector('.print-frame');
-    groomFrame.src = groomFrame.dataset.groomSrc || '../assets/art/frame-unified-3-groom.svg?v=1';
+    groomFamilies.querySelector('.print-frame').src = '../assets/art/frame-unified-3-groom.svg?v=1';
     // The printed PDF carries the Patwa hosting wording.
     document.querySelector('.original-invitation').remove();
   }
@@ -172,7 +171,7 @@
       bounds: [.085, .412, .855, .31]
     }
   };
-  const parentPresentation = document.body.dataset.handover === 'off' ? null : parentPresentations[host];
+  const parentPresentation = null;
   const parentsPresenting = Boolean(parentPresentation);
   body.classList.toggle('has-presenting-parents', parentsPresenting);
   const parentsStill = $('presenting-parents');
@@ -225,16 +224,20 @@
     cancelPageHint();
     guidePageIndex = null;
     guideActor.hidden = true;
-    body.classList.remove('has-opening-guide', 'bird-teaching');
+    body.classList.remove('has-opening-guide');
     guideActor.getAnimations({subtree: true}).forEach(animation => animation.cancel());
   }
   function showOpeningGuide() {
     hideGuide();
-    if (parentsPresenting) { startParentDelivery(); return; }
-    showSealGuide();
+    requestAnimationFrame(startBirdDelivery);
   }
   function showSealGuide() {
-    body.classList.add('bird-teaching');
+    if (!host) return;
+    body.classList.add('has-opening-guide');
+    guideActor.dataset.mode = 'open';
+    guideActor.style.opacity = '';
+    guideActor.hidden = false;
+    requestAnimationFrame(positionGuideActor);
   }
   function startPageGuide(index) {
     if (!host || reducedMotion.matches) return;
@@ -365,6 +368,84 @@
     if (deliveryPlaying) receiveParentEnvelope();
     else startParentDelivery();
   });
+
+  const dropBird = $('delivery-bird');
+  const dropReplay = $('drop-replay');
+  let dropRun = 0;
+
+  async function startBirdDelivery() {
+    if (state !== 'sealed') return;
+    const run = ++dropRun;
+    hideGuide();
+    dropReplay.hidden = true;
+    envelope.disabled = true;
+    settleSealedDepth();
+    body.classList.remove('drop-envelope-pending');
+    if (reducedMotion.matches) {
+      envelope.disabled = false;
+      showSealGuide();
+      return;
+    }
+    const rect = envelope.getBoundingClientRect();
+    const birdWidth = Math.min(130, innerWidth * .28);
+    dropBird.style.width = `${birdWidth}px`;
+    // The bird's beak holds the short gold ribbon at the envelope's top centre.
+    dropBird.style.left = `${rect.left + rect.width / 2 - birdWidth * .17}px`;
+    dropBird.style.top = `${rect.top - birdWidth * .50 - 20}px`;
+    dropBird.hidden = false;
+    dropBird.querySelector('.delivery-ribbon').style.opacity = '1';
+    const startX = innerWidth * .65;
+    const startY = -innerHeight * .85;
+    const carried = [
+      {transform: `translate(${startX}px,${startY}px) rotate(8deg) scale(.5)`, opacity: 0},
+      {transform: 'translate(65px,-190px) rotate(-5deg) scale(.85)', opacity: 1, offset: .62},
+      {transform: 'translate(0,-110px) rotate(-2deg) scale(1)', opacity: 1}
+    ];
+    const flight = animate(envelope, carried, {duration: 2300, easing: 'cubic-bezier(.25,.65,.3,1)'});
+    const birdFlight = animate(dropBird, carried, {duration: 2300, easing: 'cubic-bezier(.25,.65,.3,1)'});
+    try {
+      await flight.finished;
+      await wait(350);
+      if (run !== dropRun || state !== 'sealed') return;
+      dropBird.querySelector('.delivery-ribbon').style.opacity = '0';
+      const departure = animate(dropBird, [
+        {transform: 'translate(0,-110px) rotate(-2deg) scale(1)', opacity: 1},
+        {transform: `translate(${-innerWidth * .7}px,${-innerHeight * .65}px) rotate(-12deg) scale(.65)`, opacity: 0}
+      ], {duration: 1300, easing: 'ease-in'});
+      const landing = animate(envelope, [
+        {transform: 'translate(0,-110px) rotate(-2deg)', opacity: 1},
+        {transform: 'translate(0,6px) rotate(1deg)', offset: .72},
+        {transform: 'translate(0,-3px) rotate(-.4deg)', offset: .88},
+        {transform: 'translate(0,0) rotate(0deg)', opacity: 1}
+      ], {duration: 950, easing: 'cubic-bezier(.4,0,.65,1)'});
+      await landing.finished;
+      if (run !== dropRun || state !== 'sealed') return;
+      flight.cancel();
+      landing.cancel();
+      envelope.disabled = false;
+      parallax.on = !reducedMotion.matches;
+      dropReplay.hidden = false;
+      showSealGuide();
+      live.textContent = 'Your invitation has arrived. Tap the gold seal to open it.';
+      await departure.finished;
+      if (run === dropRun) {
+        dropBird.hidden = true;
+        birdFlight.cancel();
+        departure.cancel();
+      }
+    } catch (_) {
+      if (run === dropRun && state === 'sealed') {
+        flight.cancel();
+        birdFlight.cancel();
+        dropBird.hidden = true;
+        envelope.disabled = false;
+        parallax.on = !reducedMotion.matches;
+        dropReplay.hidden = false;
+        showSealGuide();
+      }
+    }
+  }
+  dropReplay.addEventListener('click', startBirdDelivery);
 
   $('env-seal').classList.add('seal-invitation');
   showOpeningGuide();
@@ -544,9 +625,9 @@
     bird.style.setProperty('--flap', `${plan.flap}ms`);
     bird.style.setProperty('--phase', `${-Math.round(Math.random() * plan.flap)}ms`);
     bird.style.setProperty('--sway', `${plan.lead ? 1.5 : 2.5}deg`);
-    bird.innerHTML = `<img class="bird-body" src="${document.body.dataset.birdArt || '../assets/art'}/${plan.lead ? 'hb-body' : 'hb-body-plain'}.webp" alt="" draggable="false">` +
-      `<img class="bird-wing" src="${document.body.dataset.birdArt || '../assets/art'}/hb-wing.webp" alt="" draggable="false">` +
-      `<img class="bird-wing bird-wing--blur" src="${document.body.dataset.birdArt || '../assets/art'}/hb-wing.webp" alt="" draggable="false">`;
+    bird.innerHTML = `<img class="bird-body" src="../assets/art/${plan.lead ? 'hb-body' : 'hb-body-plain'}.webp" alt="" draggable="false">` +
+      '<img class="bird-wing" src="../assets/art/hb-wing.webp" alt="" draggable="false">' +
+      '<img class="bird-wing bird-wing--blur" src="../assets/art/hb-wing.webp" alt="" draggable="false">';
     flock.appendChild(bird);
     return {element: bird, plan};
   });
@@ -577,42 +658,12 @@
   }
 
   // ---------- opening ----------
-  const perchedBird = $('env-bird');
-  const perchedBirdArt = perchedBird.querySelector('img');
-  const beakGrip = {x: 0.875, y: 0.17};
-  const birdHopPivot = '56% 68%';
-
-  function cubicBezier(x1, y1, x2, y2) {
-    const along = (t, a, b) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
-    return x => {
-      let low = 0, high = 1, t = x;
-      for (let step = 0; step < 24; step++) {
-        t = (low + high) / 2;
-        if (along(t, x1, x2) < x) low = t; else high = t;
-      }
-      return along(t, y1, y2);
-    };
-  }
-  const cardFlightEasing = 'cubic-bezier(.25,.1,.15,1)';
-  const cardFlightProgress = cubicBezier(.25, .1, .15, 1);
-
-  function currentTranslation(element) {
-    const transform = getComputedStyle(element).transform;
-    const matrix = new DOMMatrix(transform === 'none' ? undefined : transform);
-    return {x: matrix.m41, y: matrix.m42};
-  }
-  function removeCarryingBirds() {
-    document.querySelectorAll('.carrying-bird').forEach(carrier => carrier.remove());
-  }
-
   async function openEnvelope() {
     if (state !== 'sealed') return;
-    const birdPose = getComputedStyle(perchedBird).transform;
-    const birdArtPose = getComputedStyle(perchedBirdArt).transform;
-    const birdIsOnTheBow = currentTranslation(perchedBird).x < -perchedBird.offsetWidth * 0.3;
     hideGuide();
     state = 'opening';
     deliveryControl.hidden = true;
+    dropReplay.hidden = true;
     $('skip-opening').hidden = false;
     envelope.disabled = true;
     startScore();
@@ -634,17 +685,6 @@
     $('tap-hint').classList.add('is-hidden');
 
     try {
-      // The bird steps off the seal onto the bow (or is already there, mid-peck) so the seal can give way.
-      const birdOnTheBow = getComputedStyle(perchedBird).getPropertyValue('--aside').trim();
-      perchedBirdArt.style.transformOrigin = birdHopPivot;
-      animate(perchedBirdArt, [{transform: birdArtPose}, {transform: 'none'}], {duration: 220, easing: 'ease-out'});
-      animate(perchedBird, birdIsOnTheBow
-        ? [{transform: birdPose}, {transform: birdOnTheBow}]
-        : [{transform: birdPose}, {transform: 'translate(-30%,-22%)', offset: .45}, {transform: birdOnTheBow}],
-      {duration: 520, easing: 'ease-in-out'});
-      await wait(380);
-      if (state !== 'opening') return;
-
       // the seal gives way quietly
       animate(seal, [
         {transform: 'translate(-50%,-50%) scale(1)', opacity: 1},
@@ -653,31 +693,12 @@
       animate($('sealed-head'), [{opacity: 1}, {opacity: 0}], {duration: 900, delay: 600, easing: 'ease'});
 
       // the flap turns over slowly, with the weight of real paper
-      const flapOpening = animate(flap, [
+      await animate(flap, [
         {transform: 'rotateX(0deg)', opacity: 1},
         {transform: 'rotateX(-95deg)', opacity: 1, offset: 0.55},
         {transform: 'rotateX(-172deg)', opacity: 1, offset: 0.9},
         {transform: 'rotateX(-180deg)', opacity: 0}
-      ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'});
-      await wait(1700);
-      if (state !== 'opening') return;
-
-      // As the flap settles, the bird flutters up and takes the top edge of the letter in its beak.
-      const envRect = envelope.getBoundingClientRect();
-      const letterRect = letter.getBoundingClientRect();
-      const birdWidth = perchedBird.offsetWidth, birdHeight = perchedBird.offsetHeight;
-      const gripX = letterRect.left + letterRect.width / 2 - (envRect.left + perchedBird.offsetLeft + birdWidth * beakGrip.x);
-      const gripY = letterRect.top + birdHeight * 0.03 - (envRect.top + perchedBird.offsetTop + birdHeight * beakGrip.y);
-      const bow = currentTranslation(perchedBird);
-      perchedBirdArt.getAnimations().forEach(animation => animation.cancel());
-      perchedBird.classList.add('is-flapping');
-      const birdReachesLetter = animate(perchedBird, [
-        {transform: `translate(${bow.x}px, ${bow.y}px)`},
-        {transform: `translate(${(bow.x + gripX) / 2}px, ${Math.min(bow.y, gripY) - birdHeight * 0.35}px)`, offset: .55},
-        {transform: `translate(${gripX}px, ${gripY}px)`}
-      ], {duration: 650, easing: 'ease-in-out'}).finished;
-
-      await flapOpening.finished;
+      ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'}).finished;
       if (state !== 'opening') return;
       flap.style.visibility = 'hidden';
 
@@ -688,16 +709,12 @@
         {opacity: 0, transform: 'translate(-50%,-60%) scale(1.25)'}
       ], {duration: 2600, easing: 'ease-in-out'});
       flyFlock();
-      await birdReachesLetter;
-      if (state !== 'opening') return;
-      await wait(150);
+      await wait(400);
       if (state !== 'opening') return;
 
-      // The bird pulls the letter up out of the envelope.
+      const envRect = envelope.getBoundingClientRect();
       const rise = envRect.height * 0.62;
-      const letterLift = {duration: 1500, easing: cardFlightEasing};
-      animate(perchedBird, [{transform: `translate(${gripX}px, ${gripY}px)`}, {transform: `translate(${gripX}px, ${gripY - rise}px)`}], letterLift);
-      await animate(letter, [{transform: 'translateY(0)'}, {transform: `translateY(${-rise}px)`}], letterLift).finished;
+      await animate(letter, [{transform: 'translateY(0)'}, {transform: `translateY(${-rise}px)`}], {duration: 1500, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
 
       if (state !== 'opening') return;
       const from = letter.getBoundingClientRect();
@@ -711,8 +728,7 @@
 
       const cardWidth = from.width, cardHeight = from.height;
       const xLeft = envRect.left - from.left, xRight = envRect.right - from.left, xCentre = xLeft + envRect.width / 2;
-      const pocketApex = parseFloat(getComputedStyle(envelope).getPropertyValue('--pocket-apex')) || 0.48;
-      const yTop = envRect.top - from.top, yApex = yTop + envRect.height * pocketApex;
+      const yTop = envRect.top - from.top, yApex = yTop + envRect.height * 0.48;
       const pocketEdgeAt = x => {
         const t = (x - xCentre) / ((x > xCentre ? xRight : xLeft) - xCentre);
         return yApex + t * (yTop - yApex);
@@ -733,44 +749,10 @@
       const fit = Math.min(to.width / from.width, to.height / from.height);
       const landX = to.left + (to.width - from.width * fit) / 2 - from.left;
       const landY = to.top + (to.height - from.height * fit) / 2 - from.top;
-
-      // The bird keeps hold of the card's top edge as it flies to the screen, then lets go and leaves before it lands.
-      const birdRect = perchedBird.getBoundingClientRect();
-      const carrier = document.createElement('div');
-      carrier.className = 'carrying-bird';
-      carrier.append(...[...perchedBird.children].map(part => {
-        const copy = part.cloneNode(true);
-        copy.removeAttribute('style');
-        return copy;
-      }));
-      Object.assign(carrier.style, {left: `${birdRect.left}px`, top: `${birdRect.top}px`, width: `${birdRect.width}px`, height: `${birdRect.height}px`});
-      body.append(carrier);
-      perchedBird.style.visibility = 'hidden';
-      perchedBird.classList.remove('is-flapping');
-      carrier.classList.add('is-flapping');
-      const letGoAt = 0.78;
-      const carrierPath = Array.from({length: 25}, (_, step) => {
-        const time = step / 24;
-        const progress = cardFlightProgress(time);
-        const cardScale = 1 + progress * (fit - 1);
-        let x = progress * landX + (cardScale - 1) * from.width / 2;
-        let y = progress * landY;
-        let tilt = 0, opacity = 1;
-        if (time > letGoAt) {
-          const away = (time - letGoAt) / (1 - letGoAt);
-          x += away * away * innerWidth * 0.55;
-          y -= away * innerHeight * 0.3;
-          tilt = -14 * away;
-          opacity = 1 - away ** 1.6;
-        }
-        return {offset: time, transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) rotate(${tilt.toFixed(1)}deg) scale(${(1 + progress * 0.25).toFixed(3)})`, opacity};
-      });
-      animate(carrier, carrierPath, {duration: 1600, easing: 'linear'});
-
       await animate(flyer, [
         {transform: 'translate(0,0) scale(1)', clipPath: clipStart},
         {transform: `translate(${landX.toFixed(1)}px, ${landY.toFixed(1)}px) scale(${fit.toFixed(4)})`, clipPath: clipEnd}
-      ], {duration: 1600, easing: cardFlightEasing}).finished;
+      ], {duration: 1600, easing: 'cubic-bezier(.25,.1,.15,1)'}).finished;
       // Hand the emerging card straight to the moving film.
       // The live invitation is revealed only after the film has finished.
 
@@ -795,7 +777,6 @@
     body.classList.remove('is-sealed');
     sealed.hidden = true;
     if (flyer) flyer.remove();
-    removeCarryingBirds();
     goToPage(1);
   }
 
@@ -892,11 +873,7 @@
   function resetEnvelope() {
     body.classList.remove('parents-handing-over');
     const flap = $('env-flap'), letter = $('env-letter'), seal = $('env-seal');
-    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), perchedBird, perchedBirdArt, ...birds.map(bird => bird.element), ...sealedLayers].filter(Boolean).forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
-    removeCarryingBirds();
-    perchedBird.style.visibility = '';
-    perchedBirdArt.style.transformOrigin = '';
-    perchedBird.classList.remove('is-flapping');
+    [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), ...birds.map(bird => bird.element), ...sealedLayers].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
     envWrap.style.transform = '';
     sealedLayers.forEach(layer => { layer.style.transform = ''; });
     flap.style.visibility = '';
@@ -1120,7 +1097,7 @@
   book.addEventListener('pointerdown', event => {
     cancelPageHint();
     if (state !== 'deck' || event.button !== 0 || turn.pointerId !== null || flights.size > 0) return;
-    if (event.target.closest('input, textarea, select, fieldset, button, a:not(.print-when):not(.print-where), label, .topbar, .bottombar, .p-copy')) return;
+    if (event.target.closest('input, textarea, select, fieldset, button, a, label, .topbar, .bottombar, .p-copy')) return;
     hideGuide();
     turn.pointerId = event.pointerId;
     turn.startX = event.clientX;
@@ -1164,7 +1141,6 @@
     turn.pointerId = null;
     if (!turn.active || (!turn.closing && turn.index < 0)) { schedulePageHint(5000); return; }
     turn.active = false;
-    turn.endedAt = performance.now();
     const flung = Math.abs(turn.velocity) > 0.45;
     let complete;
     if (event.type === 'pointercancel') complete = false;
@@ -1190,7 +1166,7 @@
   };
   book.addEventListener('pointerup', endTurn);
   book.addEventListener('pointercancel', endTurn);
-  book.addEventListener('click', event => { if (turn.active || performance.now() - (turn.endedAt || 0) < 400) event.preventDefault(); }, true);
+  book.addEventListener('click', event => { if (turn.active) event.preventDefault(); }, true);
   function turnFromPageControl(direction) {
     if (direction < 0 && currentPage === 1) { closeCard(); return; }
     goToPage(currentPage + direction, {animate: false});
@@ -1281,10 +1257,13 @@
     for (let i = 0; i < count; i++) {
       let person = people.children[i];
       if (!person) {
-        person = document.createElement('i');
-        person.className = 'seat-pip';
+        person = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        person.classList.add('table-person');
+        person.innerHTML = '<g class="table-person-icon"><circle class="seat-back" r="13"/><circle class="seat-head" cy="-3" r="4"/><path class="seat-body" d="M-7 7c0-9 14-9 14 0Z"/></g>';
         people.append(person);
       }
+      const angle = -Math.PI / 2 + i * 2 * Math.PI / count;
+      person.setAttribute('transform', `translate(${150 + 123 * Math.cos(angle)} ${95 + 70 * Math.sin(angle)})`);
     }
     [...people.children].forEach((person, index) => person.classList.toggle('is-newest', index === count - 1));
     $('seat-summary').textContent = `${count} ${count === 1 ? 'guest' : 'guests'}`;

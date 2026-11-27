@@ -1,0 +1,107 @@
+/* Art-side rules for the bluebird variant (owned by the art pipeline in bluebird-art/).
+   Wing beat: a painted 4-frame strip (up, spread, down, recovery) registered on the perched bird's eye,
+   shown whenever the bird's container has .is-flapping (set by app.js on #env-bird and the carrier). */
+.bird-flight{position:absolute;left:.034%;top:-52.272%;width:125.62%;height:172.109%;pointer-events:none;opacity:0;background:url("assets/art/bluebird/bird-flight.webp?v=bluebird-6") 0 0/400% 100% no-repeat}
+.is-flapping>.bird-flight{opacity:1;animation:bird-wingbeat .3s steps(4,jump-none) infinite}
+.is-flapping>img{opacity:0}
+@keyframes bird-wingbeat{from{background-position:0 0}to{background-position:100% 0}}
+@media(prefers-reduced-motion:reduce){.is-flapping>.bird-flight{animation:none;background-position:33.333% 0}}
+
+/* Cover header: the design's own Farohar, WEDDING lettering and gold rule (cut from the owner's page). */
+.sealed-head .sealed-emblem{left:39.844%;top:15.549%;width:25%;filter:drop-shadow(0 1px 1px #7a4a1238)}
+.cover-wedding{left:35.938%!important;right:auto!important;top:28.406%!important;width:33.936%;padding:0!important;transform:none!important;line-height:0!important;font-size:0!important}
+.cover-wedding img,.cover-rule{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none}
+.cover-rule{position:absolute;left:35.449%;top:41.315%;width:34.277%}
+
+/* Printed pages: the frames now carry the owner's Farohar, gold rules, icons and fixed lettering.
+   The live copies stay for screen readers and as tap targets, but are not painted. */
+.print-details :is(.print-when,.print-where,.print-cocktails),.print-details :is(.print-when,.print-where) *{color:transparent!important}
+.print-details :is(.print-icon,.print-when-rule,.print-details-rule){visibility:hidden}
+.print-families .print-heading img,.print-families .print-flourish{opacity:0}
+.print-families:not(.print-families--groom) .print-people{color:transparent}
+.print-families:not(.print-families--groom) .print-people img{opacity:0}
+
+/* Farohar: a crisp painted rendering of the family's own emblem, centred where the design has its emblem. */
+.print-canvas .print-emblem{filter:drop-shadow(0 1px 1px #7a4a1238)}
+.print-invitation .print-emblem{left:37.331%;top:15.315%;width:24.565%}
+.print-details .print-emblem{left:39.844%;top:4.838%;width:24.805%}
+.print-families .print-emblem{left:37.137%;top:4.662%;width:24.758%}
+
+/* The bluebird from the envelope visits every page: it lands on the vine (page 1), on the clock (page 2), and on page 3
+   it brings a bougainvillea blossom, scatters the petals over the ses tray, then perches on the tray's rim.
+   Each visit replays when its page becomes the open page; flight uses the wing-beat strip, perched uses the envelope bird. */
+.page-bird{position:absolute;z-index:3;aspect-ratio:121/98;pointer-events:none;opacity:0}
+.page-bird>img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transform-origin:64% 92%}
+.page-bird>.bird-flight{opacity:0;animation:bird-wingbeat .3s steps(4,jump-none) infinite}
+.page-bird>.bird-blossom{position:absolute;left:83.9%;top:-25.9%;width:30%;height:auto;opacity:0}
+.leaf.is-turning .page-bird,.leaf.is-turning .page-bird>img{opacity:1}
+.page-bird--1{left:65.75%;top:8.1%;width:15%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="1"][aria-hidden="false"] .page-bird--1{animation:page-bird-1 1.8s 0.9s cubic-bezier(.4,.1,.4,1) both}
+@keyframes page-bird-1{0%{opacity:1;transform:translate(-585%,301%) rotate(-8deg)}40%{transform:translate(-305%,162%) rotate(-4deg)}75%{transform:translate(-25%,-24%) rotate(2deg)}86%,100%{opacity:1;transform:none}}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="1"][aria-hidden="false"] .page-bird--1>.bird-flight{animation:bird-wingbeat .3s steps(4,jump-none) infinite,page-bird-flying 1.8s 0.9s step-end both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="1"][aria-hidden="false"] .page-bird--1>img{animation:page-bird-perched 1.8s 0.9s step-end both,bird-idle 5.2s 2.7s ease-in-out infinite}
+.page-bird--2{left:65.8%;top:13.7%;width:14%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="2"][aria-hidden="false"] .page-bird--2{animation:page-bird-2 1.8s 0.7s cubic-bezier(.4,.1,.4,1) both}
+@keyframes page-bird-2{0%{opacity:1;transform:translate(-627%,343%) rotate(-8deg)}40%{transform:translate(-313%,169%) rotate(-4deg)}75%{transform:translate(-27%,-31%) rotate(2deg)}86%,100%{opacity:1;transform:none}}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="2"][aria-hidden="false"] .page-bird--2>.bird-flight{animation:bird-wingbeat .3s steps(4,jump-none) infinite,page-bird-flying 1.8s 0.7s step-end both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="2"][aria-hidden="false"] .page-bird--2>img{animation:page-bird-perched 1.8s 0.7s step-end both,bird-idle 5.2s 2.5s ease-in-out infinite}
+.page-bird--3{left:64.85%;top:72.98%;width:13%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .page-bird--3{animation:page-bird-3 5.2s .6s cubic-bezier(.4,.1,.4,1) both}
+@keyframes page-bird-3{0%{opacity:1;transform:translate(-668%,-94%) rotate(-8deg)}14%{transform:translate(-307%,-201%) rotate(-4deg)}22%{transform:translate(-60%,-174%) rotate(0)}30%{transform:translate(-60%,-185%)}38%{transform:translate(-60%,-169%)}46%{transform:translate(-60%,-182%)}54%{transform:translate(-60%,-170%)}60%{transform:translate(-60%,-174%) rotate(0)}70%{transform:translate(-8%,-54%) rotate(4deg)}78%,100%{opacity:1;transform:none}}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .page-bird--3>.bird-flight{animation:bird-wingbeat .3s steps(4,jump-none) infinite,page-bird-flying-3 5.2s .6s step-end both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .page-bird--3>img{animation:page-bird-perched-3 5.2s .6s step-end both,bird-idle 5.2s 5.8s ease-in-out infinite}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .page-bird--3>.bird-blossom{animation:page-bird-blossom 5.2s .6s linear both}
+@keyframes page-bird-flying{0%{opacity:1}85%,100%{opacity:0}}
+@keyframes page-bird-perched{0%{opacity:0}85%,100%{opacity:1}}
+@keyframes page-bird-flying-3{0%{opacity:1}77%,100%{opacity:0}}
+@keyframes page-bird-perched-3{0%{opacity:0}77%,100%{opacity:1}}
+@keyframes page-bird-blossom{0%,24%{opacity:1;transform:none}40%{opacity:1;transform:scale(.8)}52%{opacity:.6;transform:scale(.55)}58%,100%{opacity:0;transform:scale(.4)}}
+/* Ruzbeh's families page has a longer list, so the bird hovers lower there. */
+.print-families--groom .page-bird--3{--groom:1}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .print-families--groom .page-bird--3{animation-name:page-bird-3g}
+@keyframes page-bird-3g{0%{opacity:1;transform:translate(-668%,-94%) rotate(-8deg)}14%{transform:translate(-307%,-201%) rotate(-4deg)}22%{transform:translate(-60%,-120%) rotate(0)}30%{transform:translate(-60%,-131%)}38%{transform:translate(-60%,-115%)}46%{transform:translate(-60%,-128%)}54%{transform:translate(-60%,-116%)}60%{transform:translate(-60%,-120%) rotate(0)}70%{transform:translate(-8%,-54%) rotate(4deg)}78%,100%{opacity:1;transform:none}}
+.fall-petal{position:absolute;z-index:2;height:auto;pointer-events:none;opacity:0}
+.fall-petal--1{left:37.03%;top:83.88%;width:7.93%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .fall-petal--1{animation:petal-fall-1 2.3s 2.0s cubic-bezier(.35,.1,.6,1) both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .print-families--groom .fall-petal--1{animation-name:petal-fall-g1}
+.fall-petal--2{left:49.05%;top:86.28%;width:6.90%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .fall-petal--2{animation:petal-fall-2 2.3s 2.35s cubic-bezier(.35,.1,.6,1) both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .print-families--groom .fall-petal--2{animation-name:petal-fall-g2}
+.fall-petal--3{left:58.62%;top:83.17%;width:6.77%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .fall-petal--3{animation:petal-fall-3 2.3s 2.7s cubic-bezier(.35,.1,.6,1) both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .print-families--groom .fall-petal--3{animation-name:petal-fall-g3}
+.fall-petal--4{left:43.71%;top:81.69%;width:6.58%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .fall-petal--4{animation:petal-fall-4 2.3s 3.05s cubic-bezier(.35,.1,.6,1) both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="3"][aria-hidden="false"] .print-families--groom .fall-petal--4{animation-name:petal-fall-g4}
+@keyframes petal-fall-1{0%{opacity:0;transform:translate(364%,-959%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(156%,-594%) rotate(28deg) scale(.8)}70%{transform:translate(115%,-211%) rotate(-22deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(-14deg) scale(1)}}
+@keyframes petal-fall-2{0%{opacity:0;transform:translate(252%,-1049%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(226%,-651%) rotate(-18deg) scale(.8)}70%{transform:translate(8%,-231%) rotate(14deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(9deg) scale(1)}}
+@keyframes petal-fall-3{0%{opacity:0;transform:translate(116%,-862%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(2%,-534%) rotate(12deg) scale(.8)}70%{transform:translate(65%,-190%) rotate(-10deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(-6deg) scale(1)}}
+@keyframes petal-fall-4{0%{opacity:0;transform:translate(348%,-954%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(285%,-591%) rotate(-34deg) scale(.8)}70%{transform:translate(28%,-210%) rotate(27deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(17deg) scale(1)}}
+@keyframes petal-fall-g1{0%{opacity:0;transform:translate(364%,-807%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(156%,-500%) rotate(28deg) scale(.8)}70%{transform:translate(115%,-178%) rotate(-22deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(-14deg) scale(1)}}
+@keyframes petal-fall-g2{0%{opacity:0;transform:translate(252%,-898%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(226%,-557%) rotate(-18deg) scale(.8)}70%{transform:translate(8%,-198%) rotate(14deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(9deg) scale(1)}}
+@keyframes petal-fall-g3{0%{opacity:0;transform:translate(116%,-722%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(2%,-448%) rotate(12deg) scale(.8)}70%{transform:translate(65%,-159%) rotate(-10deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(-6deg) scale(1)}}
+@keyframes petal-fall-g4{0%{opacity:0;transform:translate(348%,-788%) rotate(0) scale(.55)}6%{opacity:1}35%{transform:translate(285%,-488%) rotate(-34deg) scale(.8)}70%{transform:translate(28%,-173%) rotate(27deg) scale(.95)}100%{opacity:1;transform:translate(0,0) rotate(17deg) scale(1)}}
+.leaf.is-turning .fall-petal{opacity:1}
+@media(prefers-reduced-motion:reduce){.page-bird,.page-bird>img,.fall-petal{opacity:1!important;animation:none!important;transform:none!important}.page-bird>.bird-flight,.page-bird>.bird-blossom{display:none}}
+
+/* Shahenshahi Parsi date under the date row, in the card's italic serif (owner asked for it as on the earlier card). */
+.print-details .print-parsi-date{display:block;left:6%;top:31.4%;width:88%;margin:0;font:italic 500 calc(3.75 * var(--w))/1.2 var(--serif);letter-spacing:.01em;color:var(--ink);text-align:center;white-space:nowrap}
+
+/* Down indicator under the card on every page but the last: tap it, or swipe up, to turn the page. */
+.leaf:not([data-page="4"]) .print-page{touch-action:none}
+.stage .swipe-hint{display:none}
+.turn-cue{position:absolute;left:50%;top:calc(100% + 6px);z-index:30;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px 0 14px;border:1px solid rgba(155,27,63,.35);border-radius:999px;background:rgba(255,250,244,.92);color:var(--ink);font:italic 600 14px/1 var(--serif);letter-spacing:.02em;transform:translateX(-50%);cursor:pointer;box-shadow:0 2px 6px rgba(90,40,50,.12);-webkit-tap-highlight-color:transparent;transition:opacity .4s}
+.turn-cue svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:turn-cue-bounce 1.6s ease-in-out infinite}
+@keyframes turn-cue-bounce{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+.stage.is-rsvp .turn-cue,body.is-sealed .turn-cue,body.is-playing-story .turn-cue{opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.turn-cue svg{animation:none}}
+
+/* RSVP: the one caricature of the couple, at a cafe table (coffee for him, matcha for her), painted from their Paris selfie.
+   The painting's white paper is turned into transparency so the card paper shows through. The bluebird flies in and perches on the table. */
+#rsvp .rs-couple{position:relative;width:fit-content;margin:calc(2.4 * var(--u)) auto 0;padding:0;line-height:0}
+#rsvp .rs-couple>img{display:block;height:calc(25 * var(--u));width:auto;max-width:100%;user-select:none;-webkit-user-select:none}
+#rsvp .rs-couple .page-bird--4{left:64.8%;top:69.5%;width:24%}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="false"] .page-bird--4{animation:page-bird-4 1.8s .7s cubic-bezier(.4,.1,.4,1) both}
+@keyframes page-bird-4{0%{opacity:1;transform:translate(-420%,-260%) rotate(-8deg)}40%{transform:translate(-230%,-190%) rotate(-4deg)}75%{transform:translate(-10%,-30%) rotate(2deg)}86%,100%{opacity:1;transform:none}}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="false"] .page-bird--4>.bird-flight{animation:bird-wingbeat .3s steps(4,jump-none) infinite,page-bird-flying 1.8s .7s step-end both}
+body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="false"] .page-bird--4>img{animation:page-bird-perched 1.8s .7s step-end both,bird-idle 5.2s 2.5s ease-in-out infinite}

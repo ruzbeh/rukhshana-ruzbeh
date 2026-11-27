@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7dfd9">
   <meta name="description" content="Rukhshana and Ruzbeh invite you to their wedding on Friday, 26 February 2027, 6 PM, Albless Baug, Mumbai.">
@@ -17,51 +18,48 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Rukhshana &amp; Ruzbeh</title>
   <link rel="icon" href="data:,">
-  <link rel="preload" href="assets/fonts/PinyonScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/card-1.webp" as="image">
+  <link rel="preload" href="../assets/fonts/PinyonScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/card-1.webp" as="image">
   <link rel="stylesheet" href="styles.css?v=dugli-guide-20261029-1">
   <link rel="stylesheet" href="card-layout.css?v=send-blockers-20261030-5">
   <link rel="stylesheet" href="rsvp.css?v=guest-reactions-20261029-1">
-  <script src="bird-delivery.js?v=rsvp-live-20261122" defer></script>
-  <link rel="stylesheet" href="bird-delivery.css?v=1">
+  <script src="app.js?v=rsvp-live-20261122" defer></script>
+  <link rel="stylesheet" href="parents-handover.css?v=parents-both-families-20261029-1">
 </head>
-<body class="is-sealed drop-version drop-envelope-pending">
+<body class="is-sealed">
 
   <div class="table" aria-hidden="true">
-    <img class="table-art table-art--top" src="assets/art/garland-top.webp" alt="">
-    <img class="table-art table-art--bottom" src="assets/art/garland-bottom.webp" alt="">
-    <img class="table-corner table-corner--bl" src="assets/art/corner-bl.webp" alt="">
-    <img class="table-corner table-corner--br" src="assets/art/corner-br.webp" alt="">
+    <img class="table-art table-art--top" src="../assets/art/garland-top.webp" alt="">
+    <img class="table-art table-art--bottom" src="../assets/art/garland-bottom.webp" alt="">
+    <img class="table-corner table-corner--bl" src="../assets/art/corner-bl.webp" alt="">
+    <img class="table-corner table-corner--br" src="../assets/art/corner-br.webp" alt="">
   </div>
 
   <div class="sealed" id="sealed">
     <div class="depth" aria-hidden="true">
-      <img class="float float--tl" data-depth="0.45" src="assets/art/corner-tl.webp" alt="">
-      <img class="float float--tr" data-depth="0.6" src="assets/art/corner-tr.webp" alt="">
-      <img class="float float--bl" data-depth="0.55" src="assets/art/corner-bl.webp" alt="">
-      <img class="float float--br" data-depth="0.8" src="assets/art/corner-br.webp" alt="">
-      <img class="float float--petals" data-depth="1.3" src="assets/art/petals.webp" alt="">
+      <img class="float float--tl" data-depth="0.45" src="../assets/art/corner-tl.webp" alt="">
+      <img class="float float--tr" data-depth="0.6" src="../assets/art/corner-tr.webp" alt="">
+      <img class="float float--bl" data-depth="0.55" src="../assets/art/corner-bl.webp" alt="">
+      <img class="float float--br" data-depth="0.8" src="../assets/art/corner-br.webp" alt="">
+      <img class="float float--petals" data-depth="1.3" src="../assets/art/petals.webp" alt="">
     </div>
     <div class="petals petals--far" id="petals-far" aria-hidden="true"></div>
 
-    <div class="bird delivery-bird" id="delivery-bird" aria-hidden="true" hidden><img class="bird-body" src="assets/art/hb-body-plain.webp" alt=""><img class="bird-wing" src="assets/art/hb-wing.webp" alt=""><img class="bird-wing bird-wing--blur" src="assets/art/hb-wing.webp" alt=""><span class="delivery-ribbon"></span></div>
-
     <header class="sealed-head" id="sealed-head" data-depth="0.2">
-      <img class="sealed-emblem" src="assets/art/farohar-embossed-gold.png" alt="">
+      <img class="sealed-emblem" src="../assets/art/farohar-embossed-gold.png" alt="">
       <p class="caps">Together with our families</p>
-      <div class="sealed-names" aria-label="Rukhshana and Ruzbeh"><img src="assets/art/name-rukhshana.webp" alt="Rukhshana"><span>and</span><img src="assets/art/name-ruzbeh.webp" alt="Ruzbeh"></div>
+      <div class="sealed-names" aria-label="Rukhshana and Ruzbeh"><img src="../assets/art/name-rukhshana.webp" alt="Rukhshana"><span>and</span><img src="../assets/art/name-ruzbeh.webp" alt="Ruzbeh"></div>
 
     </header>
 
     <div class="env-wrap" id="env-wrap">
-      <button id="drop-replay" class="drop-replay" type="button" hidden>Replay delivery</button>
       <video class="parents-delivery" id="parents-delivery" muted playsinline preload="auto" aria-label="The parents present your invitation" hidden><source type="video/mp4"></video>
       <button class="delivery-control" id="delivery-control" type="button" hidden>Skip handover</button>
       <img class="presenting-parents" id="presenting-parents" alt="The parents present your invitation" hidden>
       <button class="envelope" id="envelope" type="button" aria-label="Open your invitation">
         <span class="env-back" aria-hidden="true"></span>
-        <span class="env-window" aria-hidden="true"><img class="env-letter" id="env-letter" src="assets/card-1.webp" alt="" draggable="false"></span>
+        <span class="env-window" aria-hidden="true"><img class="env-letter" id="env-letter" src="../assets/card-1.webp" alt="" draggable="false"></span>
         <span class="env-front" aria-hidden="true"></span>
         <svg class="env-creases" viewBox="0 0 142 100" preserveAspectRatio="none" aria-hidden="true">
           <path d="M0 0 L71 48 L142 0" fill="none" stroke="#c9a263" stroke-width="1.1" vector-effect="non-scaling-stroke" opacity=".75"/>
@@ -75,11 +73,11 @@
           </span>
           <span class="flap-face flap-face--back"></span>
         </span>
-        <span class="env-seal" id="env-seal" aria-hidden="true"><img src="assets/art/seal-wax.webp" alt="" draggable="false"></span>
+        <span class="env-seal" id="env-seal" aria-hidden="true"><img src="../assets/art/seal-wax.webp" alt="" draggable="false"></span>
         <span class="env-to"><span class="env-title">Wedding invite</span>
           <span class="env-for" id="env-for" hidden>Specially for</span>
           <span class="env-name" id="env-name">Rukhshana &amp; Ruzbeh</span>
-          <img class="env-rule" src="assets/art/divider-with.webp" alt="" draggable="false">
+          <img class="env-rule" src="../assets/art/divider-with.webp" alt="" draggable="false">
         </span>
       </button>
     </div>
@@ -92,8 +90,8 @@
   <button class="chip chip--ghost opening-skip" id="skip-opening" type="button" hidden>Skip intro</button>
 
   <div class="film-screen" id="film-screen" hidden>
-    <video id="story-video" playsinline muted preload="none" poster="assets/story-mobile-poster-wc4.jpg" aria-label="Our story: Rukhshana, Ruzbeh, and the road they are taking together">
-      <source id="story-source" src="assets/our-story-mobile-wc7.mp4" type="video/mp4">
+    <video id="story-video" playsinline muted preload="none" poster="../assets/story-mobile-poster-wc4.jpg" aria-label="Our story: Rukhshana, Ruzbeh, and the road they are taking together">
+      <source id="story-source" src="../assets/our-story-mobile-wc7.mp4" type="video/mp4">
     </video>
     <div class="film-controls">
       <button class="chip chip--ghost" id="sound-toggle" type="button" aria-pressed="true">♪ Sound on</button>
@@ -110,12 +108,12 @@
         <div class="face face--front">
           <section class="page print-page" aria-label="Page 1 of 4">
             <div class="print-canvas print-invitation">
-              <img class="print-frame" src="assets/art/frame-unified-1.svg?v=farohar-1" alt="" draggable="false">
-              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
+              <img class="print-frame" src="../assets/art/frame-unified-1.svg?v=farohar-1" alt="" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="../assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
               <p class="print-intro"><span class="print-host-names">Naazlina and Zarir Patwa</span><br>invite <span id="p-guest">you</span> to share their joy<br>as they celebrate the wedding<br>of their daughter</p>
-              <h1 class="print-name print-name--bride"><img src="assets/art/name-rukhshana.webp" alt="Rukhshana" draggable="false"></h1>
+              <h1 class="print-name print-name--bride"><img src="../assets/art/name-rukhshana.webp" alt="Rukhshana" draggable="false"></h1>
               <p class="print-and"><span aria-hidden="true"></span>and<span aria-hidden="true"></span></p>
-              <h1 class="print-name print-name--groom"><img src="assets/art/name-ruzbeh.webp" alt="Ruzbeh" draggable="false"></h1>
+              <h1 class="print-name print-name--groom"><img src="../assets/art/name-ruzbeh.webp" alt="Ruzbeh" draggable="false"></h1>
               <p class="print-parents"><span class="print-parent-label">son of</span><span class="print-parent-names">Aban and Soli Irani</span></p>
             </div>
           </section>
@@ -126,9 +124,9 @@
         <div class="face face--front">
           <section class="page print-page" aria-label="Page 2 of 4">
             <div class="print-canvas print-details">
-              <img class="print-frame" src="assets/art/frame-unified-2.svg?v=farohar-1" alt="A floral garland, hummingbird, and traditional wedding ses." draggable="false">
-              <img class="print-hummingbird" src="assets/art/hummingbird.webp" alt="" draggable="false">
-              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
+              <img class="print-frame" src="../assets/art/frame-unified-2.svg?v=farohar-1" alt="A floral garland, hummingbird, and traditional wedding ses." draggable="false">
+              <img class="print-hummingbird" src="../assets/art/hummingbird.webp" alt="" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="../assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
               <p class="print-day">Friday</p>
               <p class="print-date"><span>February</span><b>26</b><span>2027</span></p>
               <p class="print-parsi-date" aria-label="Shahenshahi Parsi date: Roj Meher, Mah Meher, 1396 Yazdezardi">Roj Meher · Mah Meher · 1396 Y.Z.</p>
@@ -137,7 +135,7 @@
               <p class="print-address">Charni Road East, Mumbai</p>
               <p class="print-cocktails">Followed by cocktails and dinner</p>
               <div class="print-actions">
-                <a class="venue-action venue-action--calendar" href="assets/wedding.ics" download="Rukhshana-and-Ruzbeh-wedding.ics" aria-label="Save the date — Add to calendar">
+                <a class="venue-action venue-action--calendar" href="../assets/wedding.ics" download="Rukhshana-and-Ruzbeh-wedding.ics" aria-label="Save the date — Add to calendar">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4m9-4v4M3.5 10h17"/><path class="venue-action-heart" d="M12 18s-4-2.3-4-4.3c0-1.8 2.5-2.3 4-.4 1.5-1.9 4-1.4 4 .4 0 2-4 4.3-4 4.3Z"/></svg>
                   <span><b>Save the date</b></span>
                 </a>
@@ -155,23 +153,23 @@
         <div class="face face--front">
           <section class="page print-page" id="families" aria-label="Page 3 of 4">
             <div class="print-canvas print-families">
-              <img class="print-frame" src="assets/art/frame-unified-3.svg?v=farohar-1" alt="" draggable="false">
-              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
-              <h2 class="print-heading print-heading--blessings"><img src="assets/art/word-blessings.webp" alt="Blessings" draggable="false"></h2>
-              <img class="print-flourish print-flourish--blessings" src="assets/art/divider-flourish.webp" alt="" draggable="false">
+              <img class="print-frame" src="../assets/art/frame-unified-3.svg?v=farohar-1" alt="" draggable="false">
+              <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="../assets/art/farohar-embossed-gold.png" alt="" draggable="false"></button>
+              <h2 class="print-heading print-heading--blessings"><img src="../assets/art/word-blessings.webp" alt="Blessings" draggable="false"></h2>
+              <img class="print-flourish print-flourish--blessings" src="../assets/art/divider-flourish.webp" alt="" draggable="false">
             <ul class="print-people print-people--blessings">
-              <li class="person" data-photo="assets/family/jamshed-patwa.jpg"><span class="portrait" hidden></span>Jamshed Patwa</li>
-              <li class="person" data-photo="assets/family/banoo-rumi-mody.jpg"><span class="portrait" hidden></span>Banoo and Rumi Mody</li>
-              <li class="person" data-photo="assets/family/freny-sohrab-patwa.jpg"><span class="portrait" hidden></span>Freny and Sohrab Patwa</li>
-              <li class="person" data-photo="assets/family/piroja-behram-baria.jpg"><span class="portrait" hidden></span>Piroja and Behram Baria</li>
-              <li class="person" data-photo="assets/family/nariosang-navroje.jpg"><span class="portrait" hidden></span>Nariosang Navroje</li>
+              <li class="person" data-photo="../assets/family/jamshed-patwa.jpg"><span class="portrait" hidden></span>Jamshed Patwa</li>
+              <li class="person" data-photo="../assets/family/banoo-rumi-mody.jpg"><span class="portrait" hidden></span>Banoo and Rumi Mody</li>
+              <li class="person" data-photo="../assets/family/freny-sohrab-patwa.jpg"><span class="portrait" hidden></span>Freny and Sohrab Patwa</li>
+              <li class="person" data-photo="../assets/family/piroja-behram-baria.jpg"><span class="portrait" hidden></span>Piroja and Behram Baria</li>
+              <li class="person" data-photo="../assets/family/nariosang-navroje.jpg"><span class="portrait" hidden></span>Nariosang Navroje</li>
             </ul>
-              <h2 class="print-heading print-heading--compliments"><img src="assets/art/word-compliments.webp" alt="Compliments" draggable="false"></h2>
-              <img class="print-flourish print-flourish--compliments" src="assets/art/divider-flourish.webp" alt="" draggable="false">
+              <h2 class="print-heading print-heading--compliments"><img src="../assets/art/word-compliments.webp" alt="Compliments" draggable="false"></h2>
+              <img class="print-flourish print-flourish--compliments" src="../assets/art/divider-flourish.webp" alt="" draggable="false">
             <ul class="print-people print-people--compliments">
-              <li class="person" data-photo="assets/family/cyrus-goolcher-patwa.jpg"><span class="portrait" hidden></span>Goolcher and Cyrus Patwa</li>
-              <li class="person" data-photo="assets/family/jamshed-meherzin-patwa.jpg"><span class="portrait" hidden></span>Meherzin and Jamshed Patwa</li>
-              <li class="person" data-photo="assets/family/xerxes-mody.jpg"><span class="portrait" hidden></span>Xerxes Mody</li>
+              <li class="person" data-photo="../assets/family/cyrus-goolcher-patwa.jpg"><span class="portrait" hidden></span>Goolcher and Cyrus Patwa</li>
+              <li class="person" data-photo="../assets/family/jamshed-meherzin-patwa.jpg"><span class="portrait" hidden></span>Meherzin and Jamshed Patwa</li>
+              <li class="person" data-photo="../assets/family/xerxes-mody.jpg"><span class="portrait" hidden></span>Xerxes Mody</li>
             </ul>
             </div>
           </section>
@@ -181,9 +179,9 @@
       <div class="leaf" data-page="4" style="--i:3">
         <div class="face face--front">
           <section class="page page--rsvp" id="rsvp" aria-label="Page 4 of 4">
-            <img class="p-scene" src="assets/art/scene-4.webp" alt="The couple drive away together in their flower-covered blue car." draggable="false">
-            <img class="frame frame--petals" data-depth="0.5" src="assets/art/petals-4.webp" alt="" draggable="false">
-            <div class="rs-masthead"><img class="rs-card-emblem" src="assets/art/farohar-embossed-gold.png" alt="" draggable="false"><span>Rukhshana &amp; Ruzbeh</span></div>
+            <img class="p-scene" src="../assets/art/scene-4.webp" alt="The couple drive away together in their flower-covered blue car." draggable="false">
+            <img class="frame frame--petals" data-depth="0.5" src="../assets/art/petals-4.webp" alt="" draggable="false">
+            <div class="rs-masthead"><img class="rs-card-emblem" src="../assets/art/farohar-embossed-gold.png" alt="" draggable="false"><span>Rukhshana &amp; Ruzbeh</span></div>
             <div class="rs-progress" aria-label="RSVP progress"><span class="is-current">Reply</span><span>Guests</span><span>Meals</span></div>
             <h2 class="p-rsvp-head" id="rs-heading" tabindex="-1">Will you join us?</h2>
             <p id="party-reaction" class="party-reaction" role="status" aria-live="polite" aria-atomic="true" hidden></p>
@@ -224,7 +222,7 @@
               <p class="p-line" id="rsvp-done-text"></p>
               <pre class="p-copy" id="rsvp-copy" hidden></pre>
               <div class="p-actions" id="rsvp-done-actions"></div>
-              <a class="original-invitation" href="assets/original-invitation.pdf" target="_blank" rel="noopener">View original invitation (PDF)</a>
+              <a class="original-invitation" href="../assets/original-invitation.pdf" target="_blank" rel="noopener">View original invitation (PDF)</a>
             </div>
           </section>
         </div>
@@ -247,18 +245,18 @@
   </main>
 
   <div class="turn-upright" aria-hidden="true">
-    <img class="turn-upright-corner turn-upright-corner--tl" src="assets/art/corner-tl.webp" alt="">
-    <img class="turn-upright-corner turn-upright-corner--tr" src="assets/art/corner-tr.webp" alt="">
-    <img class="turn-upright-corner turn-upright-corner--bl" src="assets/art/corner-bl.webp" alt="">
-    <img class="turn-upright-corner turn-upright-corner--br" src="assets/art/corner-br.webp" alt="">
-    <img class="turn-upright-emblem" src="assets/art/farohar-embossed-gold.png" alt="">
-    <img class="turn-upright-names" src="assets/art/names-block.webp?v=18" alt="">
+    <img class="turn-upright-corner turn-upright-corner--tl" src="../assets/art/corner-tl.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--tr" src="../assets/art/corner-tr.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--bl" src="../assets/art/corner-bl.webp" alt="">
+    <img class="turn-upright-corner turn-upright-corner--br" src="../assets/art/corner-br.webp" alt="">
+    <img class="turn-upright-emblem" src="../assets/art/farohar-embossed-gold.png" alt="">
+    <img class="turn-upright-names" src="../assets/art/names-block.webp?v=18" alt="">
     <p class="caps">Please turn your phone upright</p>
   </div>
 
   <div class="guide-actor" id="guide-actor" aria-hidden="true" hidden><span class="guide-reach" id="guide-reach"></span><i class="guide-tap-ripple"></i></div>
 
-  <audio id="score" src="assets/score.m4a?v=15" preload="auto"></audio>
+  <audio id="score" src="../assets/score.m4a?v=15" preload="auto"></audio>
   <div class="sr-only" id="live" aria-live="polite"></div>
 </body>
 </html>

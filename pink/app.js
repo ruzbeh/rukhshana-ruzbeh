@@ -131,7 +131,7 @@
         person.textContent = name;
         if (familyPortraits[name]) {
           const portrait = document.createElement('img');
-          portrait.src = `assets/family/${familyPortraits[name]}`;
+          portrait.src = `../assets/family/${familyPortraits[name]}`;
           portrait.alt = '';
           portrait.className = 'family-cameo';
           person.classList.add('person--cameo');
@@ -150,7 +150,7 @@
     ]);
     const groomFamilies = document.querySelector('.print-families');
     groomFamilies.classList.add('print-families--groom');
-    groomFamilies.querySelector('.print-frame').src = 'assets/art/frame-unified-3-groom.svg?v=1';
+    groomFamilies.querySelector('.print-frame').src = '../assets/art/frame-unified-3-groom.svg?v=1';
     // The printed PDF carries the Patwa hosting wording.
     document.querySelector('.original-invitation').remove();
   }
@@ -158,20 +158,20 @@
   const parentPresentations = {
     ruzbeh: {
       name: 'Ruzbeh',
-      poster: 'assets/guides/parents-approach-poster.png',
-      video: 'assets/guides/parents-approach-v1.mp4',
-      still: 'assets/guides/parents-presenting-v1.png',
+      poster: '../assets/guides/parents-approach-poster.png',
+      video: '../assets/guides/parents-approach-v1.mp4',
+      still: '../assets/guides/parents-presenting-v1.png',
       bounds: [.14, .449, .738, .247]
     },
     rukhshana: {
       name: 'Rukhshana',
-      poster: 'assets/guides/rukhshana-parents-approach-poster.png',
-      video: 'assets/guides/rukhshana-parents-approach-v1.mp4',
-      still: 'assets/guides/rukhshana-parents-approach-poster.png',
+      poster: '../assets/guides/rukhshana-parents-approach-poster.png',
+      video: '../assets/guides/rukhshana-parents-approach-v1.mp4',
+      still: '../assets/guides/rukhshana-parents-approach-poster.png',
       bounds: [.085, .412, .855, .31]
     }
   };
-  const parentPresentation = null;
+  const parentPresentation = parentPresentations[host];
   const parentsPresenting = Boolean(parentPresentation);
   body.classList.toggle('has-presenting-parents', parentsPresenting);
   const parentsStill = $('presenting-parents');
@@ -229,7 +229,8 @@
   }
   function showOpeningGuide() {
     hideGuide();
-    requestAnimationFrame(startBirdDelivery);
+    if (parentsPresenting) { startParentDelivery(); return; }
+    showSealGuide();
   }
   function showSealGuide() {
     if (!host) return;
@@ -368,84 +369,6 @@
     if (deliveryPlaying) receiveParentEnvelope();
     else startParentDelivery();
   });
-
-  const dropBird = $('delivery-bird');
-  const dropReplay = $('drop-replay');
-  let dropRun = 0;
-
-  async function startBirdDelivery() {
-    if (state !== 'sealed') return;
-    const run = ++dropRun;
-    hideGuide();
-    dropReplay.hidden = true;
-    envelope.disabled = true;
-    settleSealedDepth();
-    body.classList.remove('drop-envelope-pending');
-    if (reducedMotion.matches) {
-      envelope.disabled = false;
-      showSealGuide();
-      return;
-    }
-    const rect = envelope.getBoundingClientRect();
-    const birdWidth = Math.min(130, innerWidth * .28);
-    dropBird.style.width = `${birdWidth}px`;
-    // The bird's beak holds the short gold ribbon at the envelope's top centre.
-    dropBird.style.left = `${rect.left + rect.width / 2 - birdWidth * .17}px`;
-    dropBird.style.top = `${rect.top - birdWidth * .50 - 20}px`;
-    dropBird.hidden = false;
-    dropBird.querySelector('.delivery-ribbon').style.opacity = '1';
-    const startX = innerWidth * .65;
-    const startY = -innerHeight * .85;
-    const carried = [
-      {transform: `translate(${startX}px,${startY}px) rotate(8deg) scale(.5)`, opacity: 0},
-      {transform: 'translate(65px,-190px) rotate(-5deg) scale(.85)', opacity: 1, offset: .62},
-      {transform: 'translate(0,-110px) rotate(-2deg) scale(1)', opacity: 1}
-    ];
-    const flight = animate(envelope, carried, {duration: 2300, easing: 'cubic-bezier(.25,.65,.3,1)'});
-    const birdFlight = animate(dropBird, carried, {duration: 2300, easing: 'cubic-bezier(.25,.65,.3,1)'});
-    try {
-      await flight.finished;
-      await wait(350);
-      if (run !== dropRun || state !== 'sealed') return;
-      dropBird.querySelector('.delivery-ribbon').style.opacity = '0';
-      const departure = animate(dropBird, [
-        {transform: 'translate(0,-110px) rotate(-2deg) scale(1)', opacity: 1},
-        {transform: `translate(${-innerWidth * .7}px,${-innerHeight * .65}px) rotate(-12deg) scale(.65)`, opacity: 0}
-      ], {duration: 1300, easing: 'ease-in'});
-      const landing = animate(envelope, [
-        {transform: 'translate(0,-110px) rotate(-2deg)', opacity: 1},
-        {transform: 'translate(0,6px) rotate(1deg)', offset: .72},
-        {transform: 'translate(0,-3px) rotate(-.4deg)', offset: .88},
-        {transform: 'translate(0,0) rotate(0deg)', opacity: 1}
-      ], {duration: 950, easing: 'cubic-bezier(.4,0,.65,1)'});
-      await landing.finished;
-      if (run !== dropRun || state !== 'sealed') return;
-      flight.cancel();
-      landing.cancel();
-      envelope.disabled = false;
-      parallax.on = !reducedMotion.matches;
-      dropReplay.hidden = false;
-      showSealGuide();
-      live.textContent = 'Your invitation has arrived. Tap the gold seal to open it.';
-      await departure.finished;
-      if (run === dropRun) {
-        dropBird.hidden = true;
-        birdFlight.cancel();
-        departure.cancel();
-      }
-    } catch (_) {
-      if (run === dropRun && state === 'sealed') {
-        flight.cancel();
-        birdFlight.cancel();
-        dropBird.hidden = true;
-        envelope.disabled = false;
-        parallax.on = !reducedMotion.matches;
-        dropReplay.hidden = false;
-        showSealGuide();
-      }
-    }
-  }
-  dropReplay.addEventListener('click', startBirdDelivery);
 
   $('env-seal').classList.add('seal-invitation');
   showOpeningGuide();
@@ -587,9 +510,9 @@
 
   function chooseStoryLayout() {
     const portrait = window.innerHeight >= window.innerWidth;
-    const wanted = portrait ? 'assets/our-story-mobile-wc7.mp4' : 'assets/our-story-wc7.mp4';
+    const wanted = portrait ? '../assets/our-story-mobile-wc7.mp4' : '../assets/our-story-wc7.mp4';
     filmScreen.dataset.layout = portrait ? 'portrait' : 'landscape';
-    storyVideo.poster = portrait ? 'assets/story-mobile-poster-wc4.jpg' : 'assets/story-poster-wc4.jpg';
+    storyVideo.poster = portrait ? '../assets/story-mobile-poster-wc4.jpg' : '../assets/story-poster-wc4.jpg';
     if (storySource.getAttribute('src') !== wanted && storyVideo.paused) {
       storySource.setAttribute('src', wanted);
       storyVideo.load();
@@ -625,9 +548,9 @@
     bird.style.setProperty('--flap', `${plan.flap}ms`);
     bird.style.setProperty('--phase', `${-Math.round(Math.random() * plan.flap)}ms`);
     bird.style.setProperty('--sway', `${plan.lead ? 1.5 : 2.5}deg`);
-    bird.innerHTML = `<img class="bird-body" src="assets/art/${plan.lead ? 'hb-body' : 'hb-body-plain'}.webp" alt="" draggable="false">` +
-      '<img class="bird-wing" src="assets/art/hb-wing.webp" alt="" draggable="false">' +
-      '<img class="bird-wing bird-wing--blur" src="assets/art/hb-wing.webp" alt="" draggable="false">';
+    bird.innerHTML = `<img class="bird-body" src="../assets/art/${plan.lead ? 'hb-body' : 'hb-body-plain'}.webp" alt="" draggable="false">` +
+      '<img class="bird-wing" src="../assets/art/hb-wing.webp" alt="" draggable="false">' +
+      '<img class="bird-wing bird-wing--blur" src="../assets/art/hb-wing.webp" alt="" draggable="false">';
     flock.appendChild(bird);
     return {element: bird, plan};
   });
@@ -663,7 +586,6 @@
     hideGuide();
     state = 'opening';
     deliveryControl.hidden = true;
-    dropReplay.hidden = true;
     $('skip-opening').hidden = false;
     envelope.disabled = true;
     startScore();
