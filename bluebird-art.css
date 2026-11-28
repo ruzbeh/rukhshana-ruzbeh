@@ -105,3 +105,26 @@ body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="fa
 @keyframes page-bird-4{0%{opacity:1;transform:translate(-420%,-260%) rotate(-8deg)}40%{transform:translate(-230%,-190%) rotate(-4deg)}75%{transform:translate(-10%,-30%) rotate(2deg)}86%,100%{opacity:1;transform:none}}
 body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="false"] .page-bird--4>.bird-flight{animation:bird-wingbeat .3s steps(4,jump-none) infinite,page-bird-flying 1.8s .7s step-end both}
 body:not(.is-sealed):not(.is-playing-story) .leaf[data-page="4"][aria-hidden="false"] .page-bird--4>img{animation:page-bird-perched 1.8s .7s step-end both,bird-idle 5.2s 2.5s ease-in-out infinite}
+
+/* The flap lining is shown by app.js only once the flap has turned past upright (see openEnvelope). */
+.cover-card .flap-face--back{opacity:0}
+
+/* Until the envelope art has loaded (or 8 s pass), keep the envelope and its hint out of sight and untappable. */
+.cover-card .env-wrap,.cover-card .env-to,.cover-card .tap-hint{transition:opacity .6s ease}
+body:not(.cover-ready) .cover-card :is(.env-wrap,.env-to){opacity:0;pointer-events:none}
+body:not(.cover-ready) .cover-card .tap-hint{visibility:hidden}
+
+/* A long single guest name wraps to two lines: tighten page 1 the same way as a multi-guest link, so the parents'
+   line stays clear of the bottom-right flowers. */
+.print-invitation:has(#p-guest.is-long) .print-name{--name-scale:.72}
+.print-invitation:has(#p-guest.is-long){padding-top:calc(37.5 * var(--w))}
+.print-invitation:has(#p-guest.is-long) .print-intro{line-height:1.38!important}
+.print-invitation:has(#p-guest.is-long) .print-name--bride{margin-top:calc(2.6 * var(--w))!important}
+.print-invitation:has(#p-guest.is-long) .print-parents{margin-top:calc(4.8 * var(--w))!important}
+
+/* On the RSVP page the Next cue gives way to a Previous cue, so a guest can always get back to the card. */
+.turn-cue.turn-cue--back{opacity:0;pointer-events:none;padding:0 14px 0 12px}
+.turn-cue--back svg{animation-name:turn-cue-bounce-up}
+@keyframes turn-cue-bounce-up{0%,100%{transform:translateY(2px)}50%{transform:translateY(-3px)}}
+.stage.is-rsvp .turn-cue.turn-cue--back{opacity:1;pointer-events:auto}
+body.is-sealed .turn-cue.turn-cue--back,body.is-playing-story .turn-cue.turn-cue--back{opacity:0;pointer-events:none}

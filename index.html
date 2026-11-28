@@ -26,9 +26,9 @@
   <link rel="stylesheet" href="parents-handover.css?v=bluebird-4">
   <link rel="stylesheet" href="real-flowers.css?v=bluebird-4">
   <link rel="stylesheet" href="bluebird.css?v=bluebird-6">
-  <link rel="stylesheet" href="bluebird-art.css?v=bluebird-14">
+  <link rel="stylesheet" href="bluebird-art.css?v=bluebird-20">
   <link rel="stylesheet" href="bluebird-rsvp.css?v=rsvp-2">
-  <script src="app.js?v=bluebird-11" defer></script>
+  <script src="app.js?v=bluebird-20" defer></script>
 </head>
 <body class="is-sealed theme-bluebird" data-handover="off" data-page-guide="off">
 
@@ -54,7 +54,7 @@
         <img class="presenting-parents" id="presenting-parents" alt="" hidden>
         <button class="envelope" id="envelope" type="button" aria-label="Open your invitation">
           <span class="env-back" aria-hidden="true"></span>
-          <span class="env-window" aria-hidden="true"><img class="env-letter" id="env-letter" src="assets/art/bluebird/card-1.webp?v=bluebird-7" alt="" draggable="false"></span>
+          <span class="env-window" aria-hidden="true"><img class="env-letter" id="env-letter" fetchpriority="low" src="assets/art/bluebird/card-1.webp?v=bluebird-7" alt="" draggable="false"></span>
           <span class="env-front" aria-hidden="true"></span>
           <span class="env-glow" id="env-glow" aria-hidden="true"></span>
           <span class="env-sparkles" id="env-sparkles" aria-hidden="true"></span>
@@ -101,7 +101,7 @@
         <div class="face face--front">
           <section class="page print-page" aria-label="Page 1 of 4">
             <div class="print-canvas print-invitation">
-              <img class="print-frame" src="assets/art/bluebird/frame-names.webp?v=bluebird-7" alt="" draggable="false">
+              <img class="print-frame" fetchpriority="low" decoding="async" src="assets/art/bluebird/frame-names.webp?v=bluebird-7" alt="" draggable="false">
               <span class="page-bird page-bird--1" aria-hidden="true"><img src="assets/art/bluebird/env-bird.webp?v=bluebird-6" alt="" draggable="false"><span class="bird-flight"></span></span>
               <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/bluebird/farohar-gold.webp?v=bluebird-7" alt="" draggable="false"></button>
               <p class="print-intro"><span class="print-host-names">Naazlina and Zarir Patwa</span><span class="print-invite-line">invite <span id="p-guest">you</span> to share their joy</span><span class="print-celebrate">as they celebrate the wedding</span> <span class="print-of">of their daughter</span></p>
@@ -118,7 +118,7 @@
         <div class="face face--front">
           <section class="page print-page" aria-label="Page 2 of 4">
             <div class="print-canvas print-details">
-              <img class="print-frame" src="assets/art/bluebird/frame-venue.webp?v=bluebird-10" alt="Watercolour of Albless Baug framed by bougainvillea and hydrangeas." draggable="false">
+              <img class="print-frame" fetchpriority="low" decoding="async" src="assets/art/bluebird/frame-venue.webp?v=bluebird-10" alt="Watercolour of Albless Baug framed by bougainvillea and hydrangeas." draggable="false">
               <span class="page-bird page-bird--2" aria-hidden="true"><img src="assets/art/bluebird/env-bird.webp?v=bluebird-6" alt="" draggable="false"><span class="bird-flight"></span></span>
               <button class="print-emblem card-luck" type="button" aria-label="Gold Farohar — a little wedding surprise"><img src="assets/art/bluebird/farohar-gold.webp?v=bluebird-7" alt="" draggable="false"></button>
               <a class="print-when" draggable="false" href="assets/wedding.ics" download="Rukhshana-and-Ruzbeh-wedding.ics" aria-label="Friday, 26 February 2027 at 6 PM. Add to calendar">
@@ -149,7 +149,7 @@
         <div class="face face--front">
           <section class="page print-page" id="families" aria-label="Page 3 of 4">
             <div class="print-canvas print-families">
-              <img class="print-frame" src="assets/art/bluebird/frame-families.webp?v=bluebird-10" data-groom-src="assets/art/bluebird/frame-families-groom.webp?v=bluebird-7" alt="Watercolour of the silver ses tray with flowers." draggable="false">
+              <img class="print-frame" fetchpriority="low" decoding="async" src="assets/art/bluebird/frame-families.webp?v=bluebird-10" data-groom-src="assets/art/bluebird/frame-families-groom.webp?v=bluebird-7" alt="Watercolour of the silver ses tray with flowers." draggable="false">
               <span class="page-bird page-bird--3" aria-hidden="true"><img src="assets/art/bluebird/env-bird.webp?v=bluebird-6" alt="" draggable="false"><span class="bird-flight"></span><img class="bird-blossom" src="assets/art/bluebird/blossom.webp?v=bluebird-11" alt="" draggable="false"></span>
               <img class="fall-petal fall-petal--1" src="assets/art/bluebird/petal-1.webp?v=bluebird-11" alt="" draggable="false">
               <img class="fall-petal fall-petal--2" src="assets/art/bluebird/petal-2.webp?v=bluebird-11" alt="" draggable="false">
@@ -194,7 +194,7 @@
                 <label class="p-choice"><input type="radio" name="attending" value="yes" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9ZM10 21h4M12 1v2M2 5 4 7M22 5l-2 2"/></svg><span><b>We’ll be there</b><small>Count us in</small></span></label>
                 <label class="p-choice"><input type="radio" name="attending" value="no" required><svg class="attendance-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0l-1 1-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span><b>Can’t make it</b><small>Sending our love</small></span></label>
               </div>
-              <figure class="rs-couple"><img src="assets/art/bluebird/couple-cafe.webp?v=bluebird-13" alt="Rukhshana and Ruzbeh at a little cafe table, coffee for him and matcha for her" draggable="false"><span class="page-bird page-bird--4" aria-hidden="true"><img src="assets/art/bluebird/env-bird.webp?v=bluebird-6" alt="" draggable="false"><span class="bird-flight"></span></span></figure>
+              <figure class="rs-couple"><img fetchpriority="low" decoding="async" src="assets/art/bluebird/couple-cafe.webp?v=bluebird-13" alt="Rukhshana and Ruzbeh at a little cafe table, coffee for him and matcha for her" draggable="false"><span class="page-bird page-bird--4" aria-hidden="true"><img src="assets/art/bluebird/env-bird.webp?v=bluebird-6" alt="" draggable="false"><span class="bird-flight"></span></span></figure>
               </section>
               <section class="rs-step" data-step="1" aria-label="Your party" hidden>
                 <div class="p-more" id="attending-fields">
@@ -238,8 +238,9 @@
       <button class="bar-button" id="story-button" type="button">▸<span>Our story</span></button>
     </div>
     <button class="turn-cue" id="turn-cue" type="button" aria-label="Turn to the next page"><span>Next page</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></button>
+    <button class="turn-cue turn-cue--back" id="turn-back" type="button" aria-label="Back to the previous page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14.5l6-6 6 6"/></svg><span>Previous page</span></button>
     <div class="bottombar">
-      <p class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe up or tap ↓ to turn the page</p>
+      <p class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe up or tap ↓ for the next page, swipe down to go back</p>
       <div class="bottombar-row">
         <div class="deck-dots" id="deck-dots" role="tablist" aria-label="Card pages"></div>
         <button hidden class="chip chip--primary bar-rsvp" id="rsvp-button" type="button">RSVP</button>
@@ -255,7 +256,7 @@
 
   <div class="guide-actor" id="guide-actor" aria-hidden="true" hidden><span class="guide-reach" id="guide-reach"></span><i class="guide-tap-ripple"></i></div>
 
-  <audio id="score" src="assets/score.m4a?v=15" preload="auto"></audio>
+  <audio id="score" src="assets/score.m4a?v=15" preload="none"></audio>
   <div class="sr-only" id="live" aria-live="polite"></div>
 </body>
 </html>

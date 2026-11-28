@@ -13,6 +13,11 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const body = document.body;
+  // Show the envelope (and the tap hint) only once its art has arrived, so a slow phone never shows a hint with no envelope.
+  const coverArt = [...document.querySelectorAll('#cover-card img:not(.env-letter)')].map(image => image.currentSrc || image.src)
+    .concat([...document.querySelectorAll('.env-front, .flap-face--front')].map(layer => (getComputedStyle(layer).backgroundImage.match(/url\("?(.*?)"?\)/) || [])[1]).filter(Boolean));
+  const coverLoaded = coverArt.map(source => new Promise(resolve => { const probe = new Image(); probe.onload = probe.onerror = resolve; probe.src = source; }));
+  Promise.race([Promise.all(coverLoaded), new Promise(resolve => setTimeout(resolve, 8000))]).then(() => body.classList.add('cover-ready'));
   const sealed = $('sealed');
   const envelope = $('envelope');
   const envWrap = $('env-wrap');
@@ -659,6 +664,11 @@
         {transform: 'rotateX(-172deg)', opacity: 1, offset: 0.9},
         {transform: 'rotateX(-180deg)', opacity: 0}
       ], {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'});
+      // Show the flap's lining only once the flap has turned past upright, instead of relying on backface-visibility,
+      // which some Safari builds ignore inside the filtered (flattened) envelope.
+      const flapLining = flap.querySelector('.flap-face--back');
+      if (flapLining) animate(flapLining, [{opacity: 0}, {opacity: 0, offset: 0.52}, {opacity: 1, offset: 0.56}, {opacity: 1}],
+        {duration: 1900, delay: 350, easing: 'cubic-bezier(.3,.3,.15,1)'});
       await wait(1700);
       if (state !== 'opening') return;
 
@@ -893,6 +903,7 @@
     body.classList.remove('parents-handing-over');
     const flap = $('env-flap'), letter = $('env-letter'), seal = $('env-seal');
     [sealed, envelope, envWrap, flap, letter, seal, $('env-glow'), $('sealed-head'), perchedBird, perchedBirdArt, ...birds.map(bird => bird.element), ...sealedLayers].filter(Boolean).forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
+    flap.getAnimations({subtree: true}).forEach(animation => animation.cancel());
     removeCarryingBirds();
     perchedBird.style.visibility = '';
     perchedBirdArt.style.transformOrigin = '';
@@ -1120,7 +1131,7 @@
   book.addEventListener('pointerdown', event => {
     cancelPageHint();
     if (state !== 'deck' || event.button !== 0 || turn.pointerId !== null || flights.size > 0) return;
-    if (event.target.closest('input, textarea, select, fieldset, button, a:not(.print-when):not(.print-where), label, .topbar, .bottombar, .p-copy')) return;
+    if (event.target.closest('input, textarea, select, button, a:not(.print-when):not(.print-where), .topbar, .bottombar, .p-copy')) return;
     hideGuide();
     turn.pointerId = event.pointerId;
     turn.startX = event.clientX;
@@ -1141,8 +1152,16 @@
     if (!turn.active) {
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
       if (Math.abs(dy) > Math.abs(dx)) {
-        // A swipe up turns to the next page, matching the down arrow under the card.
-        if (dy < 0 && currentPage < pageCount) { turn.vertical = true; turn.lastY = event.clientY; event.preventDefault(); return; }
+        // Swipe up for the next page (matching the arrow under the card), swipe down to go back. The RSVP page keeps
+        // vertical drags for its form, and page 1 has nothing before it.
+        const vertical = dy < 0 ? currentPage < pageCount : currentPage > 1 && currentPage < pageCount;
+        if (vertical) {
+          turn.vertical = true;
+          turn.lastY = event.clientY;
+          try { book.setPointerCapture(event.pointerId); } catch (error) { /* pointer already gone */ }
+          event.preventDefault();
+          return;
+        }
         turn.pointerId = null; schedulePageHint(5000); return;
       }
       turn.forward = dx < 0;
@@ -1170,7 +1189,11 @@
     turn.pointerId = null;
     if (turn.vertical) {
       turn.vertical = false;
-      if (event.type !== 'pointercancel' && turn.lastY - turn.startY < -48) { pageGuideLearned = true; goToPage(currentPage + 1); }
+      turn.endedAt = performance.now();
+      const travel = turn.lastY - turn.startY;
+      if (event.type === 'pointercancel' || Math.abs(travel) < 48) return;
+      pageGuideLearned = true;
+      goToPage(currentPage + (travel < 0 ? 1 : -1));
       return;
     }
     if (!turn.active || (!turn.closing && turn.index < 0)) { schedulePageHint(5000); return; }
@@ -1199,8 +1222,9 @@
     });
     if (complete) setActivePage(currentPage + (turn.forward ? 1 : -1));
   };
-  book.addEventListener('pointerup', endTurn);
-  book.addEventListener('pointercancel', endTurn);
+  // On the window, so a finger or mouse released outside the card still ends the turn (otherwise paging locks up).
+  window.addEventListener('pointerup', endTurn);
+  window.addEventListener('pointercancel', endTurn);
   book.addEventListener('click', event => { if (turn.active || performance.now() - (turn.endedAt || 0) < 400) event.preventDefault(); }, true);
   function turnFromPageControl(direction) {
     if (direction < 0 && currentPage === 1) { closeCard(); return; }
@@ -1210,6 +1234,10 @@
   }
   $('deck-prev').addEventListener('click', () => turnFromPageControl(-1));
   $('deck-next').addEventListener('click', () => turnFromPageControl(1));
+  $('turn-back').addEventListener('click', () => {
+    if (state !== 'deck' || currentPage <= 1) return;
+    goToPage(currentPage - 1);
+  });
   const turnCue = $('turn-cue');
   if (turnCue) turnCue.addEventListener('click', () => {
     if (state !== 'deck' || currentPage >= pageCount) return;
@@ -1469,9 +1497,17 @@
 
   async function sendToEndpoint(reply) {
     // text/plain keeps this a simple CORS request; Google Apps Script cannot answer a preflight.
-    const response = await fetch(RSVP_ENDPOINT, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(reply)});
-    if (!response.ok) throw new Error(`RSVP endpoint responded ${response.status}`);
-    const result = await response.json();
+    // A stalled request would leave the button on "Sending…" for minutes; give up after 20 s so the guest can retry.
+    const stop = new AbortController();
+    const giveUp = setTimeout(() => stop.abort(), 20000);
+    let result;
+    try {
+      const response = await fetch(RSVP_ENDPOINT, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(reply), signal: stop.signal});
+      if (!response.ok) throw new Error(`RSVP endpoint responded ${response.status}`);
+      result = await response.json();
+    } finally {
+      clearTimeout(giveUp);
+    }
     if (!result.ok) throw new Error(result.error || 'RSVP endpoint refused the reply');
   }
 
